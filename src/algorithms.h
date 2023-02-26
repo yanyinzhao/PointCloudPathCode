@@ -133,12 +133,12 @@ void calculate_terrain_exact_all_poi_knn(
 }
 
 // point Cloud on-the-fly Oracle
-void CO(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-        std::unordered_map<int, double> &distance_poi_to_poi_map,
-        std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> &path_poi_to_poi_map,
-        std::unordered_map<int, int> &non_exact_source_poi_map,
-        std::unordered_map<int, int> &exact_source_poi_process_order_map,
-        double &construction_time, double &memory_usage, double &index_size)
+void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                     std::unordered_map<int, double> &distance_poi_to_poi_map,
+                     std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> &path_poi_to_poi_map,
+                     std::unordered_map<int, int> &non_exact_source_poi_map,
+                     std::unordered_map<int, int> &exact_source_poi_process_order_map,
+                     double &construction_time, double &memory_usage, double &index_size)
 {
     auto start_construction_time = std::chrono::high_resolution_clock::now();
 
@@ -826,13 +826,13 @@ void TO(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<
 }
 
 // Terrain on-the-fly build triangle pass Terrain Eaxct Oracle
-void TTEO(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-          std::unordered_map<int, double> &distance_poi_to_poi_map,
-          std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &path_poi_to_poi_map,
-          std::unordered_map<int, int> &non_exact_source_poi_map,
-          std::unordered_map<int, int> &exact_source_poi_process_order_map,
-          double &point_cloud_to_terrain_time, double &construction_time,
-          double &point_cloud_to_terrain_memory_usage, double &memory_usage, double &index_size)
+void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                         std::unordered_map<int, double> &distance_poi_to_poi_map,
+                         std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &path_poi_to_poi_map,
+                         std::unordered_map<int, int> &non_exact_source_poi_map,
+                         std::unordered_map<int, int> &exact_source_poi_process_order_map,
+                         double &point_cloud_to_terrain_time, double &construction_time,
+                         double &point_cloud_to_terrain_memory_usage, double &memory_usage, double &index_size)
 {
     geodesic::Mesh mesh;
     point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
@@ -1166,10 +1166,10 @@ void TTEO(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vecto
 }
 
 // point Cloud on-the-fly Oracle Naive
-void CO_N(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-          std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
-          std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> &pairwise_path_poi_to_poi_map,
-          double &construction_time, double &memory_usage, double &index_size)
+void RC_Oracle_Naive_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                           std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
+                           std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> &pairwise_path_poi_to_poi_map,
+                           double &construction_time, double &memory_usage, double &index_size)
 {
     auto start_construction_time = std::chrono::high_resolution_clock::now();
 
@@ -1298,11 +1298,11 @@ void TO_N(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vecto
 }
 
 // Terrain on-the-fly build triangle pass Terrain Exact Oracle Naive
-void TTEO_N(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-            std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
-            std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &pairwise_path_poi_to_poi_map,
-            double &point_cloud_to_terrain_time, double &construction_time,
-            double &point_cloud_to_terrain_memory_usage, double &memory_usage, double &index_size)
+void RC_Oracle_Naive_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                               std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
+                               std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &pairwise_path_poi_to_poi_map,
+                               double &point_cloud_to_terrain_time, double &construction_time,
+                               double &point_cloud_to_terrain_memory_usage, double &memory_usage, double &index_size)
 {
     geodesic::Mesh mesh;
     point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
@@ -1360,12 +1360,12 @@ void TTEO_N(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vec
     construction_time = duration_construction_time.count();
 }
 
-void CO_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
-              std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> &path_poi_to_poi_map,
-              std::unordered_map<int, int> &non_exact_source_poi_map,
-              std::unordered_map<int, int> &exact_source_poi_process_order_map,
-              int source_poi_index, int destination_poi_index, double &distance_result,
-              std::vector<point_cloud_geodesic::PathPoint> &path_result, double &query_time)
+void RC_Oracle_Point_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
+                           std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> &path_poi_to_poi_map,
+                           std::unordered_map<int, int> &non_exact_source_poi_map,
+                           std::unordered_map<int, int> &exact_source_poi_process_order_map,
+                           int source_poi_index, int destination_poi_index, double &distance_result,
+                           std::vector<point_cloud_geodesic::PathPoint> &path_result, double &query_time)
 {
     auto start_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1518,10 +1518,10 @@ void CO_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_
     query_time /= 1000000;
 }
 
-void CO_N_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
-                std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> &pairwise_path_poi_to_poi_map,
-                int source_poi_index, int destination_poi_index, double &distance_result,
-                std::vector<point_cloud_geodesic::PathPoint> &path_result, double &query_time)
+void RC_Oracle_Naive_Point_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
+                                 std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> &pairwise_path_poi_to_poi_map,
+                                 int source_poi_index, int destination_poi_index, double &distance_result,
+                                 std::vector<point_cloud_geodesic::PathPoint> &path_result, double &query_time)
 {
     auto start_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1726,10 +1726,10 @@ void TO_N_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_
     query_time /= 1000000;
 }
 
-void CO_and_TO_all_poi_knn_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
-                                 std::unordered_map<int, int> &non_exact_source_poi_map,
-                                 std::unordered_map<int, int> &exact_source_poi_process_order_map,
-                                 int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
+void RC_Oracle_Point_and_TO_all_poi_knn_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
+                                              std::unordered_map<int, int> &non_exact_source_poi_map,
+                                              std::unordered_map<int, int> &exact_source_poi_process_order_map,
+                                              int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
 {
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1857,8 +1857,8 @@ void CO_and_TO_all_poi_knn_query(int poi_num, std::unordered_map<int, double> &d
     knn_query_time /= 1000000;
 }
 
-void CO_N_and_TO_N_all_poi_knn_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
-                                     int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
+void RC_Oracle_Naive_Point_and_TO_N_all_poi_knn_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
+                                                      int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
 {
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1893,11 +1893,11 @@ void CO_N_and_TO_N_all_poi_knn_query(int poi_num, std::unordered_map<int, double
 }
 
 // point Cloud on-the-fly Space Efficient Oracle
-void CSEO(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-          int source_poi_index, int destination_poi_index, double &construction_time,
-          double &query_time, double &memory_usage, double &index_size, double &distance_result,
-          std::vector<point_cloud_geodesic::PathPoint> &path_result, bool run_knn, int k_value,
-          double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
+void SE_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                     int source_poi_index, int destination_poi_index, double &construction_time,
+                     double &query_time, double &memory_usage, double &index_size, double &distance_result,
+                     std::vector<point_cloud_geodesic::PathPoint> &path_result, bool run_knn, int k_value,
+                     double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
 {
     auto start_construction_time = std::chrono::high_resolution_clock::now();
 
@@ -2118,13 +2118,13 @@ void TSEO(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vecto
 }
 
 // Terrain on-the-fly build triangle pass Terrain Exact Space Efficient Oracle
-void TTESEO(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-            int source_poi_index, int destination_poi_index,
-            double &point_cloud_to_terrain_time, double &construction_time,
-            double &query_time, double &point_cloud_to_terrain_memory_usage,
-            double &memory_usage, double &index_size, double &distance_result,
-            std::vector<geodesic::SurfacePoint> &path_result, bool run_knn, int k_value,
-            double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
+void SE_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                         int source_poi_index, int destination_poi_index,
+                         double &point_cloud_to_terrain_time, double &construction_time,
+                         double &query_time, double &point_cloud_to_terrain_memory_usage,
+                         double &memory_usage, double &index_size, double &distance_result,
+                         std::vector<geodesic::SurfacePoint> &path_result, bool run_knn, int k_value,
+                         double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
 {
     geodesic::Mesh mesh;
     point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
@@ -2228,10 +2228,10 @@ void TTESEO(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vec
 }
 
 // point Cloud on-the-Fly
-void CF(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-        int source_poi_index, int destination_poi_index,
-        double &query_time, double &memory_usage, double &distance_result,
-        std::vector<point_cloud_geodesic::PathPoint> &path_result)
+void Fly_Point(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+               int source_poi_index, int destination_poi_index,
+               double &query_time, double &memory_usage, double &distance_result,
+               std::vector<point_cloud_geodesic::PathPoint> &path_result)
 {
     auto start_query_time = std::chrono::high_resolution_clock::now();
 
@@ -2304,10 +2304,10 @@ void TF(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_lis
 }
 
 // Terrain on-the-Fly build triangle pass Terrain Exact
-void TFTE(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-          int source_poi_index, int destination_poi_index, double &point_cloud_to_terrain_time,
-          double &query_time, double &point_cloud_to_terrain_memory_usage, double &memory_usage,
-          double &distance_result, std::vector<geodesic::SurfacePoint> &path_result)
+void Fly_FaceExact(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                   int source_poi_index, int destination_poi_index, double &point_cloud_to_terrain_time,
+                   double &query_time, double &point_cloud_to_terrain_memory_usage, double &memory_usage,
+                   double &distance_result, std::vector<geodesic::SurfacePoint> &path_result)
 {
     geodesic::Mesh mesh;
     point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
@@ -2333,8 +2333,8 @@ void TFTE(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_l
     query_time /= 1000;
 }
 
-void CF_all_poi_knn(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-                    int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
+void Fly_Point_all_poi_knn(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                           int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
 {
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -2414,8 +2414,8 @@ void TF_all_poi_knn(point_cloud_geodesic::PointCloud *point_cloud, std::vector<i
     knn_query_time /= 1000000;
 }
 
-void TFTE_all_poi_knn(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-                      int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
+void Fly_FaceExact_all_poi_knn(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                               int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
 {
     double point_cloud_to_terrain_time = 0;
     double point_cloud_to_terrain_memory_usage = 0;
@@ -2483,11 +2483,11 @@ void TFT(geodesic::Mesh *mesh, std::vector<int> &poi_list,
 }
 */
 
-void CO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                    int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                    double terrain_exact_distance, bool run_knn, int k_value,
-                    std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                    std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void RC_Oracle_Point_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                 int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                 double terrain_exact_distance, bool run_knn, int k_value,
+                                 std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                 std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     std::unordered_map<int, double> distance_poi_to_poi_map;
     std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> path_poi_to_poi_map;
@@ -2507,13 +2507,13 @@ void CO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, 
     path_result.clear();
     all_poi_knn_list.clear();
 
-    CO(poi_num, point_cloud, poi_list, epsilon, distance_poi_to_poi_map, path_poi_to_poi_map,
-       non_exact_source_poi_map, exact_source_poi_process_order_map, construction_time, memory_usage, index_size);
-    CO_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
-             source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+    RC_Oracle_Point(poi_num, point_cloud, poi_list, epsilon, distance_poi_to_poi_map, path_poi_to_poi_map,
+                    non_exact_source_poi_map, exact_source_poi_process_order_map, construction_time, memory_usage, index_size);
+    RC_Oracle_Point_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
+                          source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        CO_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Point_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2530,7 +2530,7 @@ void CO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, 
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== CO ==\n";
+    ofs << "== RC_Oracle_Point ==\n";
     ofs << write_file_header << "\t"
         << 0 << "\t"
         << construction_time << "\t"
@@ -2546,11 +2546,11 @@ void CO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, 
     ofs.close();
 }
 
-void TVO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                     int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                     double terrain_exact_distance, bool run_knn, int k_value,
-                     std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                     std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void RC_Oracle_Vertex_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                  int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                  double terrain_exact_distance, bool run_knn, int k_value,
+                                  std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                  std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     std::unordered_map<int, double> distance_poi_to_poi_map;
     std::unordered_map<int, std::vector<geodesic::SurfacePoint>> path_poi_to_poi_map;
@@ -2579,7 +2579,7 @@ void TVO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
              source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        CO_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Point_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2598,7 +2598,7 @@ void TVO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TVO ==\n";
+    ofs << "== RC_Oracle_Vertex ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
@@ -2614,11 +2614,11 @@ void TVO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
     ofs.close();
 }
 
-void TTAO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                      int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                      double terrain_exact_distance, bool run_knn, int k_value,
-                      std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                      std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void RC_Oracle_FaceAppr_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                    int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                    double terrain_exact_distance, bool run_knn, int k_value,
+                                    std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                    std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     std::unordered_map<int, double> distance_poi_to_poi_map;
     std::unordered_map<int, std::vector<geodesic::SurfacePoint>> path_poi_to_poi_map;
@@ -2647,7 +2647,7 @@ void TTAO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
              source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        CO_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Point_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2666,7 +2666,7 @@ void TTAO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TTAO ==\n";
+    ofs << "== RC_Oracle_FaceAppr ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
@@ -2682,11 +2682,11 @@ void TTAO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     ofs.close();
 }
 
-void TTEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                      int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                      double terrain_exact_distance, bool run_knn, int k_value,
-                      std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                      std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void RC_Oracle_FaceExact_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                     int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                     double terrain_exact_distance, bool run_knn, int k_value,
+                                     std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                     std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     std::unordered_map<int, double> distance_poi_to_poi_map;
     std::unordered_map<int, std::vector<geodesic::SurfacePoint>> path_poi_to_poi_map;
@@ -2708,14 +2708,14 @@ void TTEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     path_result.clear();
     all_poi_knn_list.clear();
 
-    TTEO(poi_num, point_cloud, poi_list, epsilon, distance_poi_to_poi_map, path_poi_to_poi_map,
-         non_exact_source_poi_map, exact_source_poi_process_order_map, point_cloud_to_terrain_time,
-         construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
+    RC_Oracle_FaceExact(poi_num, point_cloud, poi_list, epsilon, distance_poi_to_poi_map, path_poi_to_poi_map,
+                        non_exact_source_poi_map, exact_source_poi_process_order_map, point_cloud_to_terrain_time,
+                        construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
     TO_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
              source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        CO_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Point_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2734,7 +2734,7 @@ void TTEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TTEO ==\n";
+    ofs << "== RC_Oracle_FaceExact ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
@@ -2750,11 +2750,11 @@ void TTEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     ofs.close();
 }
 
-void CO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-                      int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                      double terrain_exact_distance, bool run_knn, int k_value,
-                      std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                      std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void RC_Oracle_Naive_Point_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                                       int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                       double terrain_exact_distance, bool run_knn, int k_value,
+                                       std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                       std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     std::unordered_map<int, double> pairwise_distance_poi_to_poi_map;
     std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> pairwise_path_poi_to_poi_map;
@@ -2772,13 +2772,13 @@ void CO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     path_result.clear();
     all_poi_knn_list.clear();
 
-    CO_N(poi_num, point_cloud, poi_list, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
-         construction_time, memory_usage, index_size);
-    CO_N_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
-               source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+    RC_Oracle_Naive_Point(poi_num, point_cloud, poi_list, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
+                          construction_time, memory_usage, index_size);
+    RC_Oracle_Naive_Point_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
+                                source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        CO_N_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Naive_Point_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2795,7 +2795,7 @@ void CO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== CO_N ==\n";
+    ofs << "== RC_Oracle_Naive_Point ==\n";
     ofs << write_file_header << "\t"
         << 0 << "\t"
         << construction_time << "\t"
@@ -2811,11 +2811,11 @@ void CO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     ofs.close();
 }
 
-void TVO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-                       int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                       double terrain_exact_distance, bool run_knn, int k_value,
-                       std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                       std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void RC_Oracle_Naive_Vertex_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                                        int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                        double terrain_exact_distance, bool run_knn, int k_value,
+                                        std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                        std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     std::unordered_map<int, double> pairwise_distance_poi_to_poi_map;
     std::unordered_map<int, std::vector<geodesic::SurfacePoint>> pairwise_path_poi_to_poi_map;
@@ -2841,7 +2841,7 @@ void TVO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clou
                source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        CO_N_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Naive_Point_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2860,7 +2860,7 @@ void TVO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clou
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TVO_N ==\n";
+    ofs << "== RC_Oracle_Naive_Vertex ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
@@ -2876,11 +2876,11 @@ void TVO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clou
     ofs.close();
 }
 
-void TTAO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                        int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                        double terrain_exact_distance, bool run_knn, int k_value,
-                        std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                        std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void RC_Oracle_Naive_FaceAppr_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                          int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                          double terrain_exact_distance, bool run_knn, int k_value,
+                                          std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                          std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     std::unordered_map<int, double> pairwise_distance_poi_to_poi_map;
     std::unordered_map<int, std::vector<geodesic::SurfacePoint>> pairwise_path_poi_to_poi_map;
@@ -2906,7 +2906,7 @@ void TTAO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
                source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        CO_N_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Naive_Point_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2925,7 +2925,7 @@ void TTAO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TTAO_N ==\n";
+    ofs << "== RC_Oracle_Naive_FaceAppr ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
@@ -2941,11 +2941,11 @@ void TTAO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
     ofs.close();
 }
 
-void TTEO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-                        int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                        double terrain_exact_distance, bool run_knn, int k_value,
-                        std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                        std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void RC_Oracle_Naive_FaceExact_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                                           int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                           double terrain_exact_distance, bool run_knn, int k_value,
+                                           std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                           std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     std::unordered_map<int, double> pairwise_distance_poi_to_poi_map;
     std::unordered_map<int, std::vector<geodesic::SurfacePoint>> pairwise_path_poi_to_poi_map;
@@ -2965,13 +2965,13 @@ void TTEO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
     path_result.clear();
     all_poi_knn_list.clear();
 
-    TTEO_N(poi_num, point_cloud, poi_list, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
-           point_cloud_to_terrain_time, construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
+    RC_Oracle_Naive_FaceExact(poi_num, point_cloud, poi_list, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
+                              point_cloud_to_terrain_time, construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
     TO_N_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
                source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        CO_N_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Naive_Point_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2990,7 +2990,7 @@ void TTEO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TTEO_N ==\n";
+    ofs << "== RC_Oracle_Naive_FaceExact ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
@@ -3006,11 +3006,11 @@ void TTEO_N_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
     ofs.close();
 }
 
-void CSEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                      int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                      double terrain_exact_distance, bool run_knn, int k_value,
-                      std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                      std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void SE_Oracle_Point_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                 int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                 double terrain_exact_distance, bool run_knn, int k_value,
+                                 std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                 std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     double construction_time = 0;
     double query_time = 0;
@@ -3025,8 +3025,8 @@ void CSEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     path_result.clear();
     all_poi_knn_list.clear();
 
-    CSEO(poi_num, point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, construction_time,
-         query_time, memory_usage, index_size, distance_result, path_result, run_knn, k_value, knn_query_time, all_poi_knn_list);
+    SE_Oracle_Point(poi_num, point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, construction_time,
+                    query_time, memory_usage, index_size, distance_result, path_result, run_knn, k_value, knn_query_time, all_poi_knn_list);
     if (run_knn)
     {
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
@@ -3045,7 +3045,7 @@ void CSEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== CSEO ==\n";
+    ofs << "== SE_Oracle_Point ==\n";
     ofs << write_file_header << "\t"
         << 0 << "\t"
         << construction_time << "\t"
@@ -3061,11 +3061,11 @@ void CSEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud
     ofs.close();
 }
 
-void TVSEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                       int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                       double terrain_exact_distance, bool run_knn, int k_value,
-                       std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                       std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void SE_Oracle_Vertex_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                  int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                  double terrain_exact_distance, bool run_knn, int k_value,
+                                  std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                  std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     double point_cloud_to_terrain_time = 0;
     double construction_time = 0;
@@ -3105,7 +3105,7 @@ void TVSEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clou
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TVSEO ==\n";
+    ofs << "== SE_Oracle_Vertex ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
@@ -3121,11 +3121,11 @@ void TVSEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clou
     ofs.close();
 }
 
-void TTASEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                        int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                        double terrain_exact_distance, bool run_knn, int k_value,
-                        std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                        std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void SE_Oracle_FaceAppr_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                    int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                    double terrain_exact_distance, bool run_knn, int k_value,
+                                    std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                    std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     double point_cloud_to_terrain_time = 0;
     double construction_time = 0;
@@ -3165,7 +3165,7 @@ void TTASEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TTASEO ==\n";
+    ofs << "== SE_Oracle_FaceAppr ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
@@ -3181,11 +3181,11 @@ void TTASEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
     ofs.close();
 }
 
-void TTESEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                        int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                        double terrain_exact_distance, bool run_knn, int k_value,
-                        std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                        std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void SE_Oracle_FaceExact_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                     int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                     double terrain_exact_distance, bool run_knn, int k_value,
+                                     std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                                     std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     double point_cloud_to_terrain_time = 0;
     double construction_time = 0;
@@ -3202,9 +3202,9 @@ void TTESEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
     path_result.clear();
     all_poi_knn_list.clear();
 
-    TTESEO(poi_num, point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index,
-           point_cloud_to_terrain_time, construction_time, query_time, point_cloud_to_terrain_memory_usage,
-           memory_usage, index_size, distance_result, path_result, run_knn, k_value, knn_query_time, all_poi_knn_list);
+    SE_Oracle_FaceExact(poi_num, point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index,
+                        point_cloud_to_terrain_time, construction_time, query_time, point_cloud_to_terrain_memory_usage,
+                        memory_usage, index_size, distance_result, path_result, run_knn, k_value, knn_query_time, all_poi_knn_list);
     if (run_knn)
     {
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
@@ -3225,7 +3225,7 @@ void TTESEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TTESEO ==\n";
+    ofs << "== SE_Oracle_FaceExact ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
@@ -3241,11 +3241,11 @@ void TTESEO_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_clo
     ofs.close();
 }
 
-void CF_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-                    int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                    double terrain_exact_distance, bool run_knn, int k_value,
-                    std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                    std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void Fly_Point_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                           int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                           double terrain_exact_distance, bool run_knn, int k_value,
+                           std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                           std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     double query_time = 0;
     double knn_query_time = 0;
@@ -3258,11 +3258,11 @@ void CF_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<i
     path_result.clear();
     all_poi_knn_list.clear();
 
-    CF(point_cloud, poi_list, source_poi_index, destination_poi_index,
-       query_time, memory_usage, distance_result, path_result);
+    Fly_Point(point_cloud, poi_list, source_poi_index, destination_poi_index,
+              query_time, memory_usage, distance_result, path_result);
     if (run_knn)
     {
-        CF_all_poi_knn(point_cloud, poi_list, k_value, knn_query_time, all_poi_knn_list);
+        Fly_Point_all_poi_knn(point_cloud, poi_list, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -3277,7 +3277,7 @@ void CF_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<i
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== CF ==\n";
+    ofs << "== Fly_Point ==\n";
     ofs << write_file_header << "\t"
         << 0 << "\t"
         << 0 << "\t"
@@ -3293,11 +3293,11 @@ void CF_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<i
     ofs.close();
 }
 
-void TFV_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-                     int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                     double terrain_exact_distance, bool run_knn, int k_value,
-                     std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                     std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void Fly_Vertex_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                            int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                            double terrain_exact_distance, bool run_knn, int k_value,
+                            std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                            std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     double point_cloud_to_terrain_time = 0;
     double query_time = 0;
@@ -3334,7 +3334,7 @@ void TFV_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TFV ==\n";
+    ofs << "== Fly_Vertex ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << 0 << "\t"
@@ -3350,12 +3350,12 @@ void TFV_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<
     ofs.close();
 }
 
-void TFTA_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                      int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                      double terrain_exact_distance, bool run_knn, int k_value,
-                      std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                      std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list,
-                      std::string write_file_header)
+void Fly_FaceAppr_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                              int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                              double terrain_exact_distance, bool run_knn, int k_value,
+                              std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                              std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list,
+                              std::string write_file_header)
 {
     double point_cloud_to_terrain_time = 0;
     double query_time = 0;
@@ -3392,7 +3392,7 @@ void TFTA_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TFTA ==\n";
+    ofs << "== Fly_FaceAppr ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << 0 << "\t"
@@ -3408,11 +3408,11 @@ void TFTA_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector
     ofs.close();
 }
 
-void TFTE_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
-                      int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                      double terrain_exact_distance, bool run_knn, int k_value,
-                      std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
-                      std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
+void Fly_FaceExact_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                               int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                               double terrain_exact_distance, bool run_knn, int k_value,
+                               std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_list,
+                               std::vector<std::vector<int>> &terrain_exact_all_poi_knn_list, std::string write_file_header)
 {
     double point_cloud_to_terrain_time = 0;
     double query_time = 0;
@@ -3427,12 +3427,12 @@ void TFTE_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector
     path_result.clear();
     all_poi_knn_list.clear();
 
-    TFTE(point_cloud, poi_list, source_poi_index, destination_poi_index,
-         point_cloud_to_terrain_time, query_time, point_cloud_to_terrain_memory_usage,
-         memory_usage, distance_result, path_result);
+    Fly_FaceExact(point_cloud, poi_list, source_poi_index, destination_poi_index,
+                  point_cloud_to_terrain_time, query_time, point_cloud_to_terrain_memory_usage,
+                  memory_usage, distance_result, path_result);
     if (run_knn)
     {
-        TFTE_all_poi_knn(point_cloud, poi_list, k_value, knn_query_time, all_poi_knn_list);
+        Fly_FaceExact_all_poi_knn(point_cloud, poi_list, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -3449,7 +3449,7 @@ void TFTE_with_output(point_cloud_geodesic::PointCloud *point_cloud, std::vector
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== TFTE ==\n";
+    ofs << "== Fly_FaceExact ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << 0 << "\t"

@@ -6,30 +6,30 @@ This project provides the implementation of the algorithm for calculating a shor
 
 We divide the comparison algorithms into two types, i.e., (1) our algorithm / oracle that the calculated path passes on point cloud and the algorithm / oracle that the calculated path passes on the implicit terrain surface, i.e., path on point cloud & terrain surface, and (2) our algorithm / oracle that the calculated path passes on point cloud and the algorithm / oracle that the calculated path passes on vertex of the implicit terrain surface, i.e., path on point cloud & vertex of terrain surface. 
 
-- For the first type, our oracle CO, our on-the-fly algorithm CF, and the baselines, i.e., TTE-SEO, TTA-SEO, C-SEO, TTEO-N, TTAO-N, CO-N, TTEO, TTAO, TFTE, and TFTA are studied in the experiments. We include C-SEO, TTEO-N, TTAO-N, CO-N, TTEO, and TTAO for ablation test.
+- For the first type, our oracle RC-Oracle(Point), our on-the-fly algorithm Fly(Point), and the baselines, i.e., SE-Oracle(FaceExact), SE-Oracle(FaceAppr), SE-Oracle(Point), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), Fly(FaceExact), and Fly(FaceAppr) are studied in the experiments. We include SE-Oracle(Point), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), and RC-Oracle(FaceAppr) for ablation test.
 
-- For the second type, our oracle CO, our on-the-fly algorithm CF, and the baselines, i.e., TV-SEO, C-SEO, TVO-N, CO-N, TVO, and TFV are studied in the experiments. We include TV-SEO, C-SEO, TVO-N, CO-N, and TVO for ablation test. 
+- For the second type, our oracle RC-Oracle(Point), our on-the-fly algorithm Fly(Point), and the baselines, i.e., SE-Oracle(Vertex), SE-Oracle(Point), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point), RC-Oracle(Vertex), and Fly(Vertex) are studied in the experiments. We include SE-Oracle(Vertex), SE-Oracle(Point), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point), and RC-Oracle(Vertex) for ablation test. 
 
 We refer the readers to our paper for more details.
 
 In total, we compared 16 algorithms as follows:
 
-- TTE-SEO (oracle based baseline)
-- TTA-SEO (oracle based baseline)
-- TV-SEO (variation oracle)
-- C-SEO (variation oracle)
-- TTEO-N (variation oracle)
-- TTAO-N (variation oracle)
-- TVO-N (variation oracle)
-- CO-N (variation oracle)
-- TTEO (variation oracle)
-- TTAO (variation oracle)
-- TVO (variation oracle)
-- CO (our oracle)
-- TFTE (on-the-fly baseline)
-- TFTA (on-the-fly baseline)
-- TFV (variation on-the-fly)
-- CF (our on-the-fly)
+- SE-Oracle(FaceExact) (oracle based baseline)
+- SE-Oracle(FaceAppr) (oracle based baseline)
+- SE-Oracle(Vertex) (variation oracle)
+- SE-Oracle(Point) (variation oracle)
+- RC-Oracle-Naive(FaceExact) (variation oracle)
+- RC-Oracle-Naive(FaceAppr) (variation oracle)
+- RC-Oracle-Naive(Vertex) (variation oracle)
+- RC-Oracle-Naive(Point) (variation oracle)
+- RC-Oracle(FaceExact) (variation oracle)
+- RC-Oracle(FaceAppr) (variation oracle)
+- RC-Oracle(Vertex) (variation oracle)
+- RC-Oracle(Point) (our oracle)
+- Fly(FaceExact) (on-the-fly baseline)
+- Fly(FaceAppr) (on-the-fly baseline)
+- Fly(Vertex) (variation on-the-fly)
+- Fly(Point) (our on-the-fly)
 
 Make sure there is a folder called "input/" and a folder called "output/" under the working directory. They will be used for storing the input/output files.
 
@@ -260,7 +260,7 @@ For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index
 | 71 | RM | 2000832 | 500 |
 | 72 | RM | 2502075 | 500 |
 
-As mentioned in our paper, TTE-SEO, TTA-SEO, TTEO-N, TTAO-N are very time consuming (they are only feasible on small-version dataset), and TV-SEO, C-SEO, TVO-N, CO-N are also time consuming (they are only feasible on small-verion dataset and large-version dataset with small-version POIs). So the project will run TTE-SEO, TTA-SEO, TV-SEO, C-SEO, TTEO-N, TTAO-N, TVO-N, CO-N, TTEO, TTAO, TVO, CO, TFTE, TFTA, TFV and CF on small-version dataset ([point_cloud_data_and_point_number_and_poi_number_map_index] <= 18). The project will run TV-SEO, C-SEO, TVO-N, CO-N, TTEO, TTAO, TVO, CO, TFTE, TFTA, TFV and CF on large-version dataset with small-version POIs (18 < [point_cloud_data_and_point_number_and_poi_number_map_index] <= 45). The project will run TTEO, TTAO, TVO, CO, TFTE, TFTA, TFV and CF on large-version dataset with large-version POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 45).
+As mentioned in our paper, SE-Oracle(FaceExact), SE-Oracle(FaceAppr), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr) are very time consuming (they are only feasible on small-version dataset), and SE-Oracle(Vertex), SE-Oracle(Point), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point) are also time consuming (they are only feasible on small-verion dataset and large-version dataset with small-version POIs). So the project will run SE-Oracle(FaceExact), SE-Oracle(FaceAppr), SE-Oracle(Vertex), SE-Oracle(Point), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Vertex), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Vertex) and Fly(Point) on small-version dataset ([point_cloud_data_and_point_number_and_poi_number_map_index] <= 18). The project will run SE-Oracle(Vertex), SE-Oracle(Point), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Vertex), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Vertex) and Fly(Point) on large-version dataset with small-version POIs (18 < [point_cloud_data_and_point_number_and_poi_number_map_index] <= 45). The project will run RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Vertex), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Vertex) and Fly(Point) on large-version dataset with large-version POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 45).
 
 In addition, we strongly encourage you to set [run_knn] to 0 if you are not conducting experiments. Otherwise, it will take a very long time to run calculate the knn of all POIs. 
 
@@ -270,7 +270,7 @@ An example:
 ./main 0 0.5 0
 ```
 
-In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, and it will not run all POIs knn query. It will run 16 algorithms, i.e., TTE-SEO, TTA-SEO, TV-SEO, C-SEO, TTEO-N, TTAO-N, TVO-N, CO-N, TTEO, TTAO, TVO, CO, TFTE, TFTA, TFV and CF.
+In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, and it will not run all POIs knn query. It will run 16 algorithms, i.e., SE-Oracle(FaceExact), SE-Oracle(FaceAppr), SE-Oracle(Vertex), SE-Oracle(Point), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Vertex), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Vertex) and Fly(Point).
 
 ## Output
 

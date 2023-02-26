@@ -166,109 +166,109 @@ int main(int argc, char **argv)
 
        if (input_file_index >= 0 && input_file_index <= 18)
        {
-              std::cout << "== TTESEO ==" << std::endl;
-              TTESEO_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                                 terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                                 write_file_header);
+              std::cout << "== SE_Oracle_FaceExact ==" << std::endl;
+              SE_Oracle_FaceExact_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                              terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                              write_file_header);
               std::cout << std::endl;
 
-              std::cout << "== TTASEO ==" << std::endl;
-              TTASEO_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                                 terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                                 write_file_header);
+              std::cout << "== SE_Oracle_FaceAppr ==" << std::endl;
+              SE_Oracle_FaceAppr_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                             terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                             write_file_header);
               std::cout << std::endl;
        }
 
        if (input_file_index >= 0 && input_file_index <= 45)
        {
-              std::cout << "== TVSEO ==" << std::endl;
-              TVSEO_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                                terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                                write_file_header);
+              std::cout << "== SE_Oracle_Vertex ==" << std::endl;
+              SE_Oracle_Vertex_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                           terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                           write_file_header);
               std::cout << std::endl;
 
-              std::cout << "== CSEO ==" << std::endl;
-              CSEO_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                               terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                               write_file_header);
+              std::cout << "== SE_Oracle_Point ==" << std::endl;
+              SE_Oracle_Point_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                          terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                          write_file_header);
               std::cout << std::endl;
        }
 
        if (input_file_index >= 0 && input_file_index <= 18)
        {
-              std::cout << "== TTEO_N ==" << std::endl;
-              TTEO_N_with_output(poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                                 terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                                 write_file_header);
+              std::cout << "== RC_Oracle_Naive_FaceExact ==" << std::endl;
+              RC_Oracle_Naive_FaceExact_with_output(poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                                    terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                                    write_file_header);
               std::cout << std::endl;
 
-              std::cout << "== TTAO_N ==" << std::endl;
-              TTAO_N_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                                 terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                                 write_file_header);
+              std::cout << "== RC_Oracle_Naive_FaceAppr ==" << std::endl;
+              RC_Oracle_Naive_FaceAppr_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                                   terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                                   write_file_header);
               std::cout << std::endl;
        }
 
        if (input_file_index >= 0 && input_file_index <= 45)
        {
-              std::cout << "== TVO_N ==" << std::endl;
-              TVO_N_with_output(poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                                terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                                write_file_header);
+              std::cout << "== RC_Oracle_Naive_Vertex ==" << std::endl;
+              RC_Oracle_Naive_Vertex_with_output(poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                                 terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                                 write_file_header);
               std::cout << std::endl;
 
-              std::cout << "== CO_N ==" << std::endl;
-              CO_N_with_output(poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                               terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                               write_file_header);
+              std::cout << "== RC_Oracle_Naive_Point ==" << std::endl;
+              RC_Oracle_Naive_Point_with_output(poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                                terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                                write_file_header);
               std::cout << std::endl;
        }
 
-       std::cout << "== TTEO ==" << std::endl;
-       TTEO_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                        terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                        write_file_header);
+       std::cout << "== RC_Oracle_FaceExact ==" << std::endl;
+       RC_Oracle_FaceExact_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                       terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                       write_file_header);
        std::cout << std::endl;
 
-       std::cout << "== TTAO ==" << std::endl;
-       TTAO_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                        terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                        write_file_header);
+       std::cout << "== RC_Oracle_FaceAppr ==" << std::endl;
+       RC_Oracle_FaceAppr_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                      terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                      write_file_header);
        std::cout << std::endl;
 
-       std::cout << "== TVO ==" << std::endl;
-       TVO_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                       terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                       write_file_header);
+       std::cout << "== RC_Oracle_Vertex ==" << std::endl;
+       RC_Oracle_Vertex_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                    terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                    write_file_header);
        std::cout << std::endl;
 
-       std::cout << "== CO ==" << std::endl;
-       CO_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                      terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                      write_file_header);
+       std::cout << "== RC_Oracle_Point ==" << std::endl;
+       RC_Oracle_Point_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                   terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                   write_file_header);
        std::cout << std::endl;
 
-       std::cout << "== TFTE ==" << std::endl;
-       TFTE_with_output(&point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                        terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                        write_file_header);
+       std::cout << "== Fly_FaceExact ==" << std::endl;
+       Fly_FaceExact_with_output(&point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                 terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                 write_file_header);
        std::cout << std::endl;
 
-       std::cout << "== TFTA ==" << std::endl;
-       TFTA_with_output(&point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                        terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                        write_file_header);
+       std::cout << "== Fly_FaceAppr ==" << std::endl;
+       Fly_FaceAppr_with_output(&point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                                write_file_header);
        std::cout << std::endl;
 
-       std::cout << "== TFV ==" << std::endl;
-       TFV_with_output(&point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                       terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                       write_file_header);
+       std::cout << "== Fly_Vertex ==" << std::endl;
+       Fly_Vertex_with_output(&point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                              terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                              write_file_header);
        std::cout << std::endl;
 
-       std::cout << "== CF ==" << std::endl;
-       CF_with_output(&point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                      terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
-                      write_file_header);
+       std::cout << "== Fly_Point ==" << std::endl;
+       Fly_Point_with_output(&point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                             terrain_exact_distance, run_knn, k_value, point_cloud_exact_all_poi_knn_list, terrain_exact_all_poi_knn_list,
+                             write_file_header);
        std::cout << std::endl;
 }
