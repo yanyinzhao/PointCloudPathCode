@@ -473,13 +473,13 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
 
 // Terrain on-the-fly build triangle pass Vertex Oracle
 // Terrain on-the-fly build triangle pass Terrain Approximate Oracle
-void TO(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-        bool pass_point_and_not_pass_terrain, std::unordered_map<int, double> &distance_poi_to_poi_map,
-        std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &path_poi_to_poi_map,
-        std::unordered_map<int, int> &non_exact_source_poi_map,
-        std::unordered_map<int, int> &exact_source_poi_process_order_map,
-        double &point_cloud_to_terrain_time, double &construction_time,
-        double &point_cloud_to_terrain_memory_usage, double &memory_usage, double &index_size)
+void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                               bool pass_point_and_not_pass_terrain, std::unordered_map<int, double> &distance_poi_to_poi_map,
+                               std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &path_poi_to_poi_map,
+                               std::unordered_map<int, int> &non_exact_source_poi_map,
+                               std::unordered_map<int, int> &exact_source_poi_process_order_map,
+                               double &point_cloud_to_terrain_time, double &construction_time,
+                               double &point_cloud_to_terrain_memory_usage, double &memory_usage, double &index_size)
 {
     geodesic::Mesh mesh;
     point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
@@ -1226,11 +1226,11 @@ void RC_Oracle_Naive_Point(int poi_num, point_cloud_geodesic::PointCloud *point_
 
 // Terrain on-the-fly build triangle pass Vertex Oracle Naive
 // Terrain on-the-fly build triangle pass Terrain Approximate Oracle Naive
-void TO_N(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-          bool pass_point_and_not_pass_terrain, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
-          std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &pairwise_path_poi_to_poi_map,
-          double &point_cloud_to_terrain_time, double &construction_time,
-          double &point_cloud_to_terrain_memory_usage, double &memory_usage, double &index_size)
+void RC_Oracle_Naive_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                     bool pass_point_and_not_pass_terrain, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
+                                     std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &pairwise_path_poi_to_poi_map,
+                                     double &point_cloud_to_terrain_time, double &construction_time,
+                                     double &point_cloud_to_terrain_memory_usage, double &memory_usage, double &index_size)
 {
     geodesic::Mesh mesh;
     point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
@@ -1543,12 +1543,12 @@ void RC_Oracle_Naive_Point_query(int poi_num, std::unordered_map<int, double> &p
     query_time /= 1000000;
 }
 
-void TO_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
-              std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &path_poi_to_poi_map,
-              std::unordered_map<int, int> &non_exact_source_poi_map,
-              std::unordered_map<int, int> &exact_source_poi_process_order_map,
-              int source_poi_index, int destination_poi_index, double &distance_result,
-              std::vector<geodesic::SurfacePoint> &path_result, double &query_time)
+void RC_Oracle_Vertex_FaceAppr_FaceExact_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
+                                               std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &path_poi_to_poi_map,
+                                               std::unordered_map<int, int> &non_exact_source_poi_map,
+                                               std::unordered_map<int, int> &exact_source_poi_process_order_map,
+                                               int source_poi_index, int destination_poi_index, double &distance_result,
+                                               std::vector<geodesic::SurfacePoint> &path_result, double &query_time)
 {
     auto start_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1701,10 +1701,10 @@ void TO_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_
     query_time /= 1000000;
 }
 
-void TO_N_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
-                std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &pairwise_path_poi_to_poi_map,
-                int source_poi_index, int destination_poi_index, double &distance_result,
-                std::vector<geodesic::SurfacePoint> &path_result, double &query_time)
+void RC_Oracle_Naive_Vertex_FaceAppr_FaceExact_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
+                                                     std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &pairwise_path_poi_to_poi_map,
+                                                     int source_poi_index, int destination_poi_index, double &distance_result,
+                                                     std::vector<geodesic::SurfacePoint> &path_result, double &query_time)
 {
     auto start_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1726,10 +1726,10 @@ void TO_N_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_
     query_time /= 1000000;
 }
 
-void RC_Oracle_Point_and_TO_all_poi_knn_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
-                                              std::unordered_map<int, int> &non_exact_source_poi_map,
-                                              std::unordered_map<int, int> &exact_source_poi_process_order_map,
-                                              int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
+void RC_Oracle_all_poi_knn_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
+                                 std::unordered_map<int, int> &non_exact_source_poi_map,
+                                 std::unordered_map<int, int> &exact_source_poi_process_order_map,
+                                 int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
 {
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1857,8 +1857,8 @@ void RC_Oracle_Point_and_TO_all_poi_knn_query(int poi_num, std::unordered_map<in
     knn_query_time /= 1000000;
 }
 
-void RC_Oracle_Naive_Point_and_TO_N_all_poi_knn_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
-                                                      int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
+void RC_Oracle_Naive_all_poi_knn_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
+                                       int k_value, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_list)
 {
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -2513,7 +2513,7 @@ void RC_Oracle_Point_with_output(int poi_num, point_cloud_geodesic::PointCloud *
                           source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        RC_Oracle_Point_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2572,14 +2572,14 @@ void RC_Oracle_Vertex_with_output(int poi_num, point_cloud_geodesic::PointCloud 
     path_result.clear();
     all_poi_knn_list.clear();
 
-    TO(poi_num, point_cloud, poi_list, epsilon, true, distance_poi_to_poi_map, path_poi_to_poi_map,
-       non_exact_source_poi_map, exact_source_poi_process_order_map, point_cloud_to_terrain_time,
-       construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
-    TO_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
-             source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+    RC_Oracle_Vertex_FaceAppr(poi_num, point_cloud, poi_list, epsilon, true, distance_poi_to_poi_map, path_poi_to_poi_map,
+                              non_exact_source_poi_map, exact_source_poi_process_order_map, point_cloud_to_terrain_time,
+                              construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
+    RC_Oracle_Vertex_FaceAppr_FaceExact_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
+                                              source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        RC_Oracle_Point_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2640,14 +2640,14 @@ void RC_Oracle_FaceAppr_with_output(int poi_num, point_cloud_geodesic::PointClou
     path_result.clear();
     all_poi_knn_list.clear();
 
-    TO(poi_num, point_cloud, poi_list, epsilon, false, distance_poi_to_poi_map, path_poi_to_poi_map,
-       non_exact_source_poi_map, exact_source_poi_process_order_map, point_cloud_to_terrain_time,
-       construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
-    TO_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
-             source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+    RC_Oracle_Vertex_FaceAppr(poi_num, point_cloud, poi_list, epsilon, false, distance_poi_to_poi_map, path_poi_to_poi_map,
+                              non_exact_source_poi_map, exact_source_poi_process_order_map, point_cloud_to_terrain_time,
+                              construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
+    RC_Oracle_Vertex_FaceAppr_FaceExact_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
+                                              source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        RC_Oracle_Point_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2711,11 +2711,11 @@ void RC_Oracle_FaceExact_with_output(int poi_num, point_cloud_geodesic::PointClo
     RC_Oracle_FaceExact(poi_num, point_cloud, poi_list, epsilon, distance_poi_to_poi_map, path_poi_to_poi_map,
                         non_exact_source_poi_map, exact_source_poi_process_order_map, point_cloud_to_terrain_time,
                         construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
-    TO_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
-             source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+    RC_Oracle_Vertex_FaceAppr_FaceExact_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
+                                              source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        RC_Oracle_Point_and_TO_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_all_poi_knn_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2778,7 +2778,7 @@ void RC_Oracle_Naive_Point_with_output(int poi_num, point_cloud_geodesic::PointC
                                 source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        RC_Oracle_Naive_Point_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Naive_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2835,13 +2835,13 @@ void RC_Oracle_Naive_Vertex_with_output(int poi_num, point_cloud_geodesic::Point
     path_result.clear();
     all_poi_knn_list.clear();
 
-    TO_N(poi_num, point_cloud, poi_list, -1, true, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
-         point_cloud_to_terrain_time, construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
-    TO_N_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
-               source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+    RC_Oracle_Naive_Vertex_FaceAppr(poi_num, point_cloud, poi_list, -1, true, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
+                                    point_cloud_to_terrain_time, construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
+    RC_Oracle_Naive_Vertex_FaceAppr_FaceExact_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
+                                                    source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        RC_Oracle_Naive_Point_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Naive_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2900,13 +2900,13 @@ void RC_Oracle_Naive_FaceAppr_with_output(int poi_num, point_cloud_geodesic::Poi
     path_result.clear();
     all_poi_knn_list.clear();
 
-    TO_N(poi_num, point_cloud, poi_list, epsilon, false, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
-         point_cloud_to_terrain_time, construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
-    TO_N_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
-               source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+    RC_Oracle_Naive_Vertex_FaceAppr(poi_num, point_cloud, poi_list, epsilon, false, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
+                                    point_cloud_to_terrain_time, construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
+    RC_Oracle_Naive_Vertex_FaceAppr_FaceExact_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
+                                                    source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        RC_Oracle_Naive_Point_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Naive_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
@@ -2967,11 +2967,11 @@ void RC_Oracle_Naive_FaceExact_with_output(int poi_num, point_cloud_geodesic::Po
 
     RC_Oracle_Naive_FaceExact(poi_num, point_cloud, poi_list, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
                               point_cloud_to_terrain_time, construction_time, point_cloud_to_terrain_memory_usage, memory_usage, index_size);
-    TO_N_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
-               source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+    RC_Oracle_Naive_Vertex_FaceAppr_FaceExact_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
+                                                    source_poi_index, destination_poi_index, distance_result, path_result, query_time);
     if (run_knn)
     {
-        RC_Oracle_Naive_Point_and_TO_N_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
+        RC_Oracle_Naive_all_poi_knn_query(poi_num, pairwise_distance_poi_to_poi_map, k_value, knn_query_time, all_poi_knn_list);
         calculate_knn_error(point_cloud_exact_all_poi_knn_list, all_poi_knn_list, point_cloud_knn_error);
         calculate_knn_error(terrain_exact_all_poi_knn_list, all_poi_knn_list, terrain_knn_error);
     }
