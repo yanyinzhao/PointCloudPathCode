@@ -31,59 +31,82 @@ void modify_path(std::vector<geodesic::SurfacePoint> &internal_path)
     }
 }
 
-void knn(int k_value, std::vector<std::vector<std::pair<double, int>>> &poi_to_other_poi_distance_and_index_list,
-         std::vector<std::vector<int>> &all_poi_knn_list)
+void knn_or_range_query(int knn_one_range_two, int k_value, double range,
+                        std::vector<std::vector<std::pair<double, int>>> &poi_to_other_poi_distance_and_index_list,
+                        std::vector<std::vector<int>> &all_poi_knn_or_range_list)
 {
-    std::vector<int> one_poi_knn_list;
-    for (int i = 0; i < poi_to_other_poi_distance_and_index_list.size(); i++)
+    if (knn_one_range_two == 1)
     {
-        int count = 0;
-        one_poi_knn_list.clear();
-        for (int j = 0; j < poi_to_other_poi_distance_and_index_list.size(); j++)
+        std::vector<int> one_poi_knn_list;
+        for (int i = 0; i < poi_to_other_poi_distance_and_index_list.size(); i++)
         {
-            if (count >= k_value)
+            int count = 0;
+            one_poi_knn_list.clear();
+            for (int j = 0; j < poi_to_other_poi_distance_and_index_list.size(); j++)
             {
-                break;
+                if (count >= k_value)
+                {
+                    break;
+                }
+                if (poi_to_other_poi_distance_and_index_list[i][j].first != 0)
+                {
+                    one_poi_knn_list.push_back(poi_to_other_poi_distance_and_index_list[i][j].second);
+                    count++;
+                    // std::cout << poi_to_other_poi_distance_and_index_list[i][j].second << " ";
+                }
             }
-            if (poi_to_other_poi_distance_and_index_list[i][j].first != 0)
-            {
-                one_poi_knn_list.push_back(poi_to_other_poi_distance_and_index_list[i][j].second);
-                count++;
-                // std::cout << poi_to_other_poi_distance_and_index_list[i][j].second << " ";
-            }
+            all_poi_knn_or_range_list.push_back(one_poi_knn_list);
+            // std::cout << std::endl;
         }
-        all_poi_knn_list.push_back(one_poi_knn_list);
-        // std::cout << std::endl;
+    }
+    else if (knn_one_range_two == 2)
+    {
+        std::vector<int> one_poi_range_list;
+        for (int i = 0; i < poi_to_other_poi_distance_and_index_list.size(); i++)
+        {
+            one_poi_range_list.clear();
+            for (int j = 0; j < poi_to_other_poi_distance_and_index_list.size(); j++)
+            {
+                if (poi_to_other_poi_distance_and_index_list[i][j].first != 0 &&
+                    poi_to_other_poi_distance_and_index_list[i][j].first <= range)
+                {
+                    one_poi_range_list.push_back(poi_to_other_poi_distance_and_index_list[i][j].second);
+                    // std::cout << poi_to_other_poi_distance_and_index_list[i][j].second << " ";
+                }
+            }
+            all_poi_knn_or_range_list.push_back(one_poi_range_list);
+            // std::cout << std::endl;
+        }
     }
 }
 
-void calculate_knn_error(std::vector<std::vector<int>> &exact_all_poi_knn_list,
-                         std::vector<std::vector<int>> &calculated_all_poi_knn_list,
-                         double &knn_error)
+void calculate_knn_or_range_query_error(std::vector<std::vector<int>> &exact_all_poi_knn_or_range_list,
+                                        std::vector<std::vector<int>> &calculated_all_poi_knn_or_range_list,
+                                        double &knn_or_range_error)
 {
-    int error_count = 0;
-    assert(exact_all_poi_knn_list.size() == calculated_all_poi_knn_list.size());
-    for (int i = 0; i < exact_all_poi_knn_list.size(); i++)
+    int knn_or_range_error_count = 0;
+    assert(exact_all_poi_knn_or_range_list.size() == calculated_all_poi_knn_or_range_list.size());
+    for (int i = 0; i < exact_all_poi_knn_or_range_list.size(); i++)
     {
-        assert(exact_all_poi_knn_list[i].size() == calculated_all_poi_knn_list[i].size());
+        assert(exact_all_poi_knn_or_range_list[i].size() == calculated_all_poi_knn_or_range_list[i].size());
         std::vector<int> a;
         std::vector<int> b;
-        for (int j = 0; j < exact_all_poi_knn_list[i].size(); j++)
+        for (int j = 0; j < exact_all_poi_knn_or_range_list[i].size(); j++)
         {
-            a.push_back(exact_all_poi_knn_list[i][j]);
-            b.push_back(calculated_all_poi_knn_list[i][j]);
+            a.push_back(exact_all_poi_knn_or_range_list[i][j]);
+            b.push_back(calculated_all_poi_knn_or_range_list[i][j]);
         }
         std::sort(a.begin(), a.end());
         std::sort(b.begin(), b.end());
-        for (int j = 0; j < exact_all_poi_knn_list[i].size(); j++)
+        for (int j = 0; j < exact_all_poi_knn_or_range_list[i].size(); j++)
         {
             if (a[j] != b[j])
             {
-                error_count++;
+                knn_or_range_error_count++;
             }
         }
     }
-    knn_error = (double)error_count / (double)(exact_all_poi_knn_list.size() * exact_all_poi_knn_list[0].size());
+    knn_or_range_error = (double)knn_or_range_error_count / (double)(exact_all_poi_knn_or_range_list.size() * exact_all_poi_knn_or_range_list[0].size());
 }
 
 class GeoNode
@@ -1060,11 +1083,12 @@ double query_geo_T(int geo_tree_node_id, GeoNode &x, GeoNode &y,
     return query_geo_T(geo_tree_node_id, *x.parent, *y.parent, geopairs, poi_unordered_map, path_result);
 }
 
-void all_poi_knn_query_geo_C(int poi_num, int geo_tree_node_id,
-                             std::unordered_map<int, GeoNode *> &geo_node_in_partition_tree_unordered_map,
-                             std::vector<GeoNode *> &all_poi, std::unordered_map<int, GeoPair_C *> &geopairs,
-                             std::unordered_map<int, int> &poi_unordered_map,
-                             int k_value, std::vector<std::vector<int>> &all_poi_knn_list)
+void all_poi_knn_or_range_query_geo_C(int poi_num, int geo_tree_node_id,
+                                      std::unordered_map<int, GeoNode *> &geo_node_in_partition_tree_unordered_map,
+                                      std::vector<GeoNode *> &all_poi, std::unordered_map<int, GeoPair_C *> &geopairs,
+                                      std::unordered_map<int, int> &poi_unordered_map,
+                                      int knn_one_range_two, int k_value, double range,
+                                      std::vector<std::vector<int>> &all_poi_knn_or_range_list)
 {
     std::vector<std::vector<std::pair<double, int>>> poi_to_other_poi_distance_and_index_list;
     poi_to_other_poi_distance_and_index_list.clear();
@@ -1082,14 +1106,15 @@ void all_poi_knn_query_geo_C(int poi_num, int geo_tree_node_id,
         std::sort(one_poi_to_other_poi_distance_and_index_list.begin(), one_poi_to_other_poi_distance_and_index_list.end());
         poi_to_other_poi_distance_and_index_list.push_back(one_poi_to_other_poi_distance_and_index_list);
     }
-    knn(k_value, poi_to_other_poi_distance_and_index_list, all_poi_knn_list);
+    knn_or_range_query(knn_one_range_two, k_value, range, poi_to_other_poi_distance_and_index_list, all_poi_knn_or_range_list);
 }
 
-void all_poi_knn_query_geo_T(int poi_num, int geo_tree_node_id,
-                             std::unordered_map<int, GeoNode *> &geo_node_in_partition_tree_unordered_map,
-                             std::vector<GeoNode *> &all_poi, std::unordered_map<int, GeoPair_T *> &geopairs,
-                             std::unordered_map<int, int> &poi_unordered_map,
-                             int k_value, std::vector<std::vector<int>> &all_poi_knn_list)
+void all_poi_knn_or_range_query_geo_T(int poi_num, int geo_tree_node_id,
+                                      std::unordered_map<int, GeoNode *> &geo_node_in_partition_tree_unordered_map,
+                                      std::vector<GeoNode *> &all_poi, std::unordered_map<int, GeoPair_T *> &geopairs,
+                                      std::unordered_map<int, int> &poi_unordered_map,
+                                      int knn_one_range_two, int k_value, double range,
+                                      std::vector<std::vector<int>> &all_poi_knn_or_range_list)
 {
     std::vector<std::vector<std::pair<double, int>>> poi_to_other_poi_distance_and_index_list;
     poi_to_other_poi_distance_and_index_list.clear();
@@ -1107,7 +1132,7 @@ void all_poi_knn_query_geo_T(int poi_num, int geo_tree_node_id,
         std::sort(one_poi_to_other_poi_distance_and_index_list.begin(), one_poi_to_other_poi_distance_and_index_list.end());
         poi_to_other_poi_distance_and_index_list.push_back(one_poi_to_other_poi_distance_and_index_list);
     }
-    knn(k_value, poi_to_other_poi_distance_and_index_list, all_poi_knn_list);
+    knn_or_range_query(knn_one_range_two, k_value, range, poi_to_other_poi_distance_and_index_list, all_poi_knn_or_range_list);
 }
 
 void sort_min_to_max_and_get_original_index(std::vector<double> &vec, std::vector<std::pair<double, int>> &vp)

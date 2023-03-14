@@ -173,14 +173,15 @@ g++ -o main main.cpp -std=c++11
 ## Run command
 
 ```
-./main [point_cloud_data_and_point_number_and_poi_number_map_index] [epsilon] [run_knn]
+./main [point_cloud_data_and_point_number_and_poi_number_map_index] [epsilon] [run_knn_query] [run_range_query]
 ```
 
 The meaning for each parameter is as follows:
 
 - [point_cloud_data_and_point_number_and_poi_number_map_index]: an index for the map of point cloud data and dataset size and poi number (a integer from 0 to 72)
 - [epsilon]: the epsilon value (0 < epsilon <= 1)
-- [run_knn]: whether to run all POIs knn query (0 means not running knn query, 1 means running knn query)
+- [run_knn_query]: whether to run all POIs knn query (0 means not running knn query, 1 means running knn query)
+- [run_range_query]: whether to run all POIs range query (0 means not running range query, 1 means running range query)
 
 For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index value corresponding to a point cloud data, the dataset size of the point cloud and the poi number on the terrain, their relationships are as follows:
 
@@ -267,10 +268,10 @@ In addition, we strongly encourage you to set [run_knn] to 0 if you are not cond
 An example:
 
 ```
-./main 0 0.5 0
+./main 0 0.5 0 0
 ```
 
-In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, and it will not run all POIs knn query. It will run 16 algorithms, i.e., SE-Oracle(FaceExact), SE-Oracle(FaceAppr), SE-Oracle(Vertex), SE-Oracle(Point), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Vertex), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Vertex) and Fly(Point).
+In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run 16 algorithms, i.e., SE-Oracle(FaceExact), SE-Oracle(FaceAppr), SE-Oracle(Vertex), SE-Oracle(Point), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Vertex), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Vertex) and Fly(Point).
 
 ## Output
 
@@ -278,7 +279,7 @@ The output will be stored in "output/output.txt" file. The format will be as fol
 
 ```
 
-[dataset] [point_num] [poi_num] [epsilon] [point_cloud_to_terrain_time (ms)] [construction_time (ms)] [query_time (ms)] [point_cloud_to_terrain_memroy_usage (MB)] [memory_usage (MB)] [index_size (MB)] [distance_error_point_cloud] [distance_error_terrain] [knn_query_time] [knn_error_point_cloud] [knn_error_terrain]
+[dataset] [point_num] [poi_num] [epsilon] [point_cloud_to_terrain_time (ms)] [construction_time (ms)] [query_time (ms)] [point_cloud_to_terrain_memroy_usage (MB)] [memory_usage (MB)] [index_size (MB)] [distance_error_point_cloud] [distance_error_terrain] [knn_query_time] [knn_error_point_cloud] [knn_error_terrain] [range_query_time] [range_error_point_cloud] [range_error_terrain]
 
 ```
 
