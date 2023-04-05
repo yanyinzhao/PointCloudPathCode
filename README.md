@@ -1,8 +1,8 @@
-# Path Oracle on Point Cloud
+# Rapid Construction Path Oracle on Point Cloud
 
 ## Overview
 
-This project provides the implementation of the algorithm for calculating a shortest path oracle on point cloud.
+This project provides the implementation of the algorithm for calculating a rapid construction path oracle on point cloud.
 
 We divide the comparison algorithms into two types, i.e., (1) our algorithm / oracle that the calculated path passes on point cloud and the algorithm / oracle that the calculated path passes on the implicit terrain surface, i.e., path on point cloud & terrain surface, and (2) our algorithm / oracle that the calculated path passes on point cloud and the algorithm / oracle that the calculated path passes on vertex of the implicit terrain surface, i.e., path on point cloud & vertex of terrain surface. 
 
