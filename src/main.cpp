@@ -44,6 +44,16 @@ int main(int argc, char **argv)
        input_file.push_back(input_struct("EP_30098.xyz", "EP_50_poi_on_30098.txt", 0, 1));
        input_file.push_back(input_struct("EP_40076.xyz", "EP_50_poi_on_40076.txt", 0, 1));
        input_file.push_back(input_struct("EP_50373.xyz", "EP_50_poi_on_50373.txt", 0, 1));
+       input_file.push_back(input_struct("GF_10092.xyz", "GF_50_poi_on_10092.txt", 0, 1));
+       input_file.push_back(input_struct("GF_10092.xyz", "GF_100_poi_on_10092.txt", 0, 1));
+       input_file.push_back(input_struct("GF_10092.xyz", "GF_150_poi_on_10092.txt", 0, 1));
+       input_file.push_back(input_struct("GF_10092.xyz", "GF_200_poi_on_10092.txt", 0, 1));
+       input_file.push_back(input_struct("GF_10092.xyz", "GF_250_poi_on_10092.txt", 0, 1));
+       input_file.push_back(input_struct("LM_10092.xyz", "LM_50_poi_on_10092.txt", 0, 1));
+       input_file.push_back(input_struct("LM_10092.xyz", "LM_100_poi_on_10092.txt", 0, 1));
+       input_file.push_back(input_struct("LM_10092.xyz", "LM_150_poi_on_10092.txt", 0, 1));
+       input_file.push_back(input_struct("LM_10092.xyz", "LM_200_poi_on_10092.txt", 0, 1));
+       input_file.push_back(input_struct("LM_10092.xyz", "LM_250_poi_on_10092.txt", 0, 1));
        input_file.push_back(input_struct("RM_10092.xyz", "RM_50_poi_on_10092.txt", 0, 1));
        input_file.push_back(input_struct("RM_10092.xyz", "RM_100_poi_on_10092.txt", 0, 1));
        input_file.push_back(input_struct("RM_10092.xyz", "RM_150_poi_on_10092.txt", 0, 1));
@@ -68,6 +78,24 @@ int main(int argc, char **argv)
        input_file.push_back(input_struct("EP_1501578.xyz", "EP_50_poi_on_1501578.txt", 0, 1));
        input_file.push_back(input_struct("EP_2001536.xyz", "EP_50_poi_on_2001536.txt", 0, 1));
        input_file.push_back(input_struct("EP_2500560.xyz", "EP_50_poi_on_2500560.txt", 0, 1));
+       input_file.push_back(input_struct("GF_500208.xyz", "GF_50_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("GF_500208.xyz", "GF_100_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("GF_500208.xyz", "GF_150_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("GF_500208.xyz", "GF_200_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("GF_500208.xyz", "GF_250_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("GF_1000518.xyz", "GF_50_poi_on_1000518.txt", 0, 1));
+       input_file.push_back(input_struct("GF_1501668.xyz", "GF_50_poi_on_1501668.txt", 0, 1));
+       input_file.push_back(input_struct("GF_2000832.xyz", "GF_50_poi_on_2000832.txt", 0, 1));
+       input_file.push_back(input_struct("GF_2502075.xyz", "GF_50_poi_on_2502075.txt", 0, 1));
+       input_file.push_back(input_struct("LM_500208.xyz", "LM_50_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("LM_500208.xyz", "LM_100_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("LM_500208.xyz", "LM_150_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("LM_500208.xyz", "LM_200_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("LM_500208.xyz", "LM_250_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("LM_1000518.xyz", "LM_50_poi_on_1000518.txt", 0, 1));
+       input_file.push_back(input_struct("LM_1501668.xyz", "LM_50_poi_on_1501668.txt", 0, 1));
+       input_file.push_back(input_struct("LM_2000832.xyz", "LM_50_poi_on_2000832.txt", 0, 1));
+       input_file.push_back(input_struct("LM_2502075.xyz", "LM_50_poi_on_2502075.txt", 0, 1));
        input_file.push_back(input_struct("RM_500208.xyz", "RM_50_poi_on_500208.txt", 0, 1));
        input_file.push_back(input_struct("RM_500208.xyz", "RM_100_poi_on_500208.txt", 0, 1));
        input_file.push_back(input_struct("RM_500208.xyz", "RM_150_poi_on_500208.txt", 0, 1));
@@ -96,6 +124,24 @@ int main(int argc, char **argv)
        input_file.push_back(input_struct("EP_1501578.xyz", "EP_500_poi_on_1501578.txt", 0, 1));
        input_file.push_back(input_struct("EP_2001536.xyz", "EP_500_poi_on_2001536.txt", 0, 1));
        input_file.push_back(input_struct("EP_2500560.xyz", "EP_500_poi_on_2500560.txt", 0, 1));
+       input_file.push_back(input_struct("GF_500208.xyz", "GF_500_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("GF_500208.xyz", "GF_1000_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("GF_500208.xyz", "GF_1500_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("GF_500208.xyz", "GF_2000_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("GF_500208.xyz", "GF_2500_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("GF_1000518.xyz", "GF_500_poi_on_1000518.txt", 0, 1));
+       input_file.push_back(input_struct("GF_1501668.xyz", "GF_500_poi_on_1501668.txt", 0, 1));
+       input_file.push_back(input_struct("GF_2000832.xyz", "GF_500_poi_on_2000832.txt", 0, 1));
+       input_file.push_back(input_struct("GF_2502075.xyz", "GF_500_poi_on_2502075.txt", 0, 1));
+       input_file.push_back(input_struct("LM_500208.xyz", "LM_500_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("LM_500208.xyz", "LM_1000_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("LM_500208.xyz", "LM_1500_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("LM_500208.xyz", "LM_2000_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("LM_500208.xyz", "LM_2500_poi_on_500208.txt", 0, 1));
+       input_file.push_back(input_struct("LM_1000518.xyz", "LM_500_poi_on_1000518.txt", 0, 1));
+       input_file.push_back(input_struct("LM_1501668.xyz", "LM_500_poi_on_1501668.txt", 0, 1));
+       input_file.push_back(input_struct("LM_2000832.xyz", "LM_500_poi_on_2000832.txt", 0, 1));
+       input_file.push_back(input_struct("LM_2502075.xyz", "LM_500_poi_on_2502075.txt", 0, 1));
        input_file.push_back(input_struct("RM_500208.xyz", "RM_500_poi_on_500208.txt", 0, 1));
        input_file.push_back(input_struct("RM_500208.xyz", "RM_1000_poi_on_500208.txt", 0, 1));
        input_file.push_back(input_struct("RM_500208.xyz", "RM_1500_poi_on_500208.txt", 0, 1));
@@ -180,7 +226,7 @@ int main(int argc, char **argv)
               calculate_terrain_exact_all_poi_knn_or_range_query(&point_cloud, poi_list, 2, k_value, range, terrain_exact_all_poi_range_query_list);
        }
 
-       if (input_file_index >= 0 && input_file_index <= 18)
+       if (input_file_index >= 0 && input_file_index <= 28)
        {
               std::cout << "== SE_Oracle_FaceExact ==" << std::endl;
               SE_Oracle_FaceExact_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
@@ -211,7 +257,7 @@ int main(int argc, char **argv)
               std::cout << std::endl;
        }
 
-       if (input_file_index >= 0 && input_file_index <= 45)
+       if (input_file_index >= 0 && input_file_index <= 73)
        {
               std::cout << "== SE_Oracle_Vertex ==" << std::endl;
               SE_Oracle_Vertex_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
@@ -242,7 +288,7 @@ int main(int argc, char **argv)
               std::cout << std::endl;
        }
 
-       if (input_file_index >= 0 && input_file_index <= 18)
+       if (input_file_index >= 0 && input_file_index <= 28)
        {
               std::cout << "== RC_Oracle_Naive_FaceExact ==" << std::endl;
               RC_Oracle_Naive_FaceExact_with_output(poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
@@ -259,7 +305,7 @@ int main(int argc, char **argv)
               std::cout << std::endl;
        }
 
-       if (input_file_index >= 0 && input_file_index <= 45)
+       if (input_file_index >= 0 && input_file_index <= 73)
        {
               std::cout << "== RC_Oracle_Naive_Vertex ==" << std::endl;
               RC_Oracle_Naive_Vertex_with_output(poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
