@@ -377,4 +377,6 @@ int main(int argc, char **argv)
                              terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
                              write_file_header);
        std::cout << std::endl;
+
+       input.close();
 }
