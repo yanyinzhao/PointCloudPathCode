@@ -542,256 +542,135 @@ namespace point_cloud_geodesic
                 int top_index = i + (j + 1) * x_point_num;
                 int top_right_index = (i + 1) + (j + 1) * x_point_num;
 
-                if (true) // 8 neighbour exact path on the point
-                // if (false) // 6 terrain Dijkstra path
+                if (i == 0 && j == 0)
                 {
-                    if (i == 0 && j == 0)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[top_right_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[top_right_index]);
-                    }
-                    else if (i == x_point_num - 1 && j == 0)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[top_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                    }
-                    else if (i == 0 && j == y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                    }
-                    else if (i == x_point_num - 1 && j == y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                    }
-                    else if (i != 0 && i != x_point_num - 1 && j == 0)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(5), 5);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(5), 5);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[top_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[top_right_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[top_right_index]);
-                    }
-                    else if (i == 0 && j != 0 && j != y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(5), 5);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(5), 5);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[top_right_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[top_right_index]);
-                    }
-                    else if (i == x_point_num - 1 && j != 0 && j != y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(5), 5);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(5), 5);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[top_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                    }
-                    else if (i != 0 && i != x_point_num - 1 && j == y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(5), 5);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(5), 5);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[bottom_right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                    }
-                    else if (i != 0 && i != x_point_num - 1 && j != 0 && j != y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(8), 8);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(8), 8);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[bottom_right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[5] = &m_pc_points[top_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[6] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points()[7] = &m_pc_points[top_right_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[5] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[6] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[7] = m_pc_points[center_index].distance(&m_pc_points[top_right_index]);
-                    }
-                    else
-                    {
-                        std::cout << "adjacent pc points error!" << std::endl;
-                        exit(0);
-                    }
+                    m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(3), 3);
+                    m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(3), 3);
+                    m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[right_index];
+                    m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[top_index];
+                    m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[top_right_index];
+                    m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[top_right_index]);
+                }
+                else if (i == x_point_num - 1 && j == 0)
+                {
+                    m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(3), 3);
+                    m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(3), 3);
+                    m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[top_left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[top_index];
+                    m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
+                }
+                else if (i == 0 && j == y_point_num - 1)
+                {
+                    m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(3), 3);
+                    m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(3), 3);
+                    m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_index];
+                    m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_right_index];
+                    m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[right_index];
+                    m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
+                }
+                else if (i == x_point_num - 1 && j == y_point_num - 1)
+                {
+                    m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(3), 3);
+                    m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(3), 3);
+                    m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_index];
+                    m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[left_index];
+                    m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
+                }
+                else if (i != 0 && i != x_point_num - 1 && j == 0)
+                {
+                    m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(5), 5);
+                    m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(5), 5);
+                    m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[right_index];
+                    m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[top_left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[top_index];
+                    m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[top_right_index];
+                    m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[top_right_index]);
+                }
+                else if (i == 0 && j != 0 && j != y_point_num - 1)
+                {
+                    m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(5), 5);
+                    m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(5), 5);
+                    m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_index];
+                    m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_right_index];
+                    m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[right_index];
+                    m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[top_index];
+                    m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[top_right_index];
+                    m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[top_right_index]);
+                }
+                else if (i == x_point_num - 1 && j != 0 && j != y_point_num - 1)
+                {
+                    m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(5), 5);
+                    m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(5), 5);
+                    m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_index];
+                    m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[top_left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[top_index];
+                    m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
+                }
+                else if (i != 0 && i != x_point_num - 1 && j == y_point_num - 1)
+                {
+                    m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(5), 5);
+                    m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(5), 5);
+                    m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_index];
+                    m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[bottom_right_index];
+                    m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[right_index];
+                    m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
+                }
+                else if (i != 0 && i != x_point_num - 1 && j != 0 && j != y_point_num - 1)
+                {
+                    m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(8), 8);
+                    m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(8), 8);
+                    m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_index];
+                    m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[bottom_right_index];
+                    m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[right_index];
+                    m_pc_points[center_index].adjacent_pc_points()[5] = &m_pc_points[top_left_index];
+                    m_pc_points[center_index].adjacent_pc_points()[6] = &m_pc_points[top_index];
+                    m_pc_points[center_index].adjacent_pc_points()[7] = &m_pc_points[top_right_index];
+                    m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[5] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[6] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
+                    m_pc_points[center_index].adjacent_pc_points_distance()[7] = m_pc_points[center_index].distance(&m_pc_points[top_right_index]);
                 }
                 else
                 {
-                    if (i == 0 && j == 0)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(2), 2);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(2), 2);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                    }
-                    else if (i == x_point_num - 1 && j == 0)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[top_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                    }
-                    else if (i == 0 && j == y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(3), 3);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                    }
-                    else if (i == x_point_num - 1 && j == y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(2), 2);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(2), 2);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                    }
-                    else if (i != 0 && i != x_point_num - 1 && j == 0)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(4), 4);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(4), 4);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[top_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                    }
-                    else if (i == 0 && j != 0 && j != y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(4), 4);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(4), 4);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                    }
-                    else if (i == x_point_num - 1 && j != 0 && j != y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(4), 4);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(4), 4);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[top_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                    }
-                    else if (i != 0 && i != x_point_num - 1 && j == y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(4), 4);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(4), 4);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                    }
-                    else if (i != 0 && i != x_point_num - 1 && j != 0 && j != y_point_num - 1)
-                    {
-                        m_pc_points[center_index].adjacent_pc_points().set_allocation(allocate_pointers(6), 6);
-                        m_pc_points[center_index].adjacent_pc_points_distance().set_allocation(allocate_pointers(6), 6);
-                        m_pc_points[center_index].adjacent_pc_points()[0] = &m_pc_points[bottom_index];
-                        m_pc_points[center_index].adjacent_pc_points()[1] = &m_pc_points[bottom_right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[2] = &m_pc_points[left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[3] = &m_pc_points[right_index];
-                        m_pc_points[center_index].adjacent_pc_points()[4] = &m_pc_points[top_left_index];
-                        m_pc_points[center_index].adjacent_pc_points()[5] = &m_pc_points[top_index];
-                        m_pc_points[center_index].adjacent_pc_points_distance()[0] = m_pc_points[center_index].distance(&m_pc_points[bottom_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[1] = m_pc_points[center_index].distance(&m_pc_points[bottom_right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[2] = m_pc_points[center_index].distance(&m_pc_points[left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[3] = m_pc_points[center_index].distance(&m_pc_points[right_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[4] = m_pc_points[center_index].distance(&m_pc_points[top_left_index]);
-                        m_pc_points[center_index].adjacent_pc_points_distance()[5] = m_pc_points[center_index].distance(&m_pc_points[top_index]);
-                    }
-                    else
-                    {
-                        std::cout << "adjacent pc points error!" << std::endl;
-                        exit(0);
-                    }
+                    std::cout << "adjacent pc points error!" << std::endl;
+                    exit(0);
                 }
             }
         }
