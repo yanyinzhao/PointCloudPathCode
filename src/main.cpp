@@ -30,6 +30,7 @@ int main(int argc, char **argv)
        std::string input_poi_folder = "../input/";
 
        std::vector<input_struct> input_file;
+       input_file.push_back(input_struct("BH_1014.xyz", "BH_50_poi_on_1014.txt", 0, 1));
        input_file.push_back(input_struct("BH_10086.xyz", "BH_50_poi_on_10086.txt", 0, 1));
        input_file.push_back(input_struct("BH_10086.xyz", "BH_100_poi_on_10086.txt", 0, 1));
        input_file.push_back(input_struct("BH_10086.xyz", "BH_150_poi_on_10086.txt", 0, 1));
@@ -226,7 +227,7 @@ int main(int argc, char **argv)
               calculate_terrain_exact_all_poi_knn_or_range_query(&point_cloud, poi_list, 2, k_value, range, terrain_exact_all_poi_range_query_list);
        }
 
-       if (input_file_index >= 0 && input_file_index <= 28)
+       if (input_file_index >= 0 && input_file_index <= 29)
        {
               std::cout << "== SE_Oracle_FaceExact ==" << std::endl;
               SE_Oracle_FaceExact_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
@@ -257,7 +258,7 @@ int main(int argc, char **argv)
               std::cout << std::endl;
        }
 
-       if (input_file_index >= 0 && input_file_index <= 73)
+       if (input_file_index >= 0 && input_file_index <= 74)
        {
               std::cout << "== SE_Oracle_Vertex ==" << std::endl;
               SE_Oracle_Vertex_with_output(poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
@@ -288,7 +289,7 @@ int main(int argc, char **argv)
               std::cout << std::endl;
        }
 
-       if (input_file_index >= 0 && input_file_index <= 28)
+       if (input_file_index >= 0 && input_file_index <= 29)
        {
               std::cout << "== RC_Oracle_Naive_FaceExact ==" << std::endl;
               RC_Oracle_Naive_FaceExact_with_output(poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
@@ -305,7 +306,7 @@ int main(int argc, char **argv)
               std::cout << std::endl;
        }
 
-       if (input_file_index >= 0 && input_file_index <= 73)
+       if (input_file_index >= 0 && input_file_index <= 74)
        {
               std::cout << "== RC_Oracle_Naive_Vertex ==" << std::endl;
               RC_Oracle_Naive_Vertex_with_output(poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
