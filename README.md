@@ -1,4 +1,4 @@
-# Proximity Path Queries on Point Cloud using Rapid Construction Path Oracle
+# Proximity Path Queries on Point Clouds using Rapid Construction Path Oracle
 
 ## Overview
 
