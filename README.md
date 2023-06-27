@@ -8,11 +8,11 @@ We compared 20 algorithms as follows:
 
 - SE-Oracle(FaceExact) (oracle based baseline)
 - SE-Oracle(FaceAppr) (oracle based baseline)
-- SE-Oracle(Vertex) (variation oracle)
+- SE-Oracle(Vertex) (oracle based baseline)
 - SE-Oracle(Point) (variation oracle)
 - SE-Oracle-Adapt(FaceExact) (oracle based baseline)
 - SE-Oracle-Adapt(FaceAppr) (oracle based baseline)
-- SE-Oracle-Adapt(Vertex) (variation oracle)
+- SE-Oracle-Adapt(Vertex) (oracle based baseline)
 - SE-Oracle-Adapt(Point) (variation oracle)
 - RC-Oracle-Naive(FaceExact) (variation oracle)
 - RC-Oracle-Naive(FaceAppr) (variation oracle)
@@ -24,7 +24,7 @@ We compared 20 algorithms as follows:
 - RC-Oracle(Point) (our oracle)
 - Fly(FaceExact) (on-the-fly baseline)
 - Fly(FaceAppr) (on-the-fly baseline)
-- Fly(Vertex) (variation on-the-fly)
+- Fly(Vertex) (on-the-fly baseline)
 - Fly(Point) (our on-the-fly)
 
 Make sure there is a folder called "input/" and a folder called "output/" under the working directory. They will be used for storing the input/output files.
