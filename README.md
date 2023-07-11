@@ -1,30 +1,26 @@
-# Proximity Path Queries on Point Clouds using Rapid Construction Path Oracle
+# Proximity Queries on Point Clouds using Rapid Construction Path Oracle
 
 ## Overview
 
-This project provides the implementation for proximity path queries on point cloud using rapid construction path oracle. We refer the readers to our paper for more details.
+This project provides the implementation for proximity queries on point cloud using rapid construction path oracle. We refer the readers to our paper for more details.
 
 We compared 20 algorithms as follows:
 
 - SE-Oracle(FaceExact) (oracle based baseline)
 - SE-Oracle(FaceAppr) (oracle based baseline)
-- SE-Oracle(Vertex) (oracle based baseline)
+- SE-Oracle(Edge) (oracle based baseline)
 - SE-Oracle(Point) (variation oracle)
-- SE-Oracle-Adapt(FaceExact) (oracle based baseline)
-- SE-Oracle-Adapt(FaceAppr) (oracle based baseline)
-- SE-Oracle-Adapt(Vertex) (oracle based baseline)
-- SE-Oracle-Adapt(Point) (variation oracle)
 - RC-Oracle-Naive(FaceExact) (variation oracle)
 - RC-Oracle-Naive(FaceAppr) (variation oracle)
-- RC-Oracle-Naive(Vertex) (variation oracle)
+- RC-Oracle-Naive(Edge) (variation oracle)
 - RC-Oracle-Naive(Point) (variation oracle)
 - RC-Oracle(FaceExact) (variation oracle)
 - RC-Oracle(FaceAppr) (variation oracle)
-- RC-Oracle(Vertex) (variation oracle)
+- RC-Oracle(Edge) (variation oracle)
 - RC-Oracle(Point) (our oracle)
 - Fly(FaceExact) (on-the-fly baseline)
 - Fly(FaceAppr) (on-the-fly baseline)
-- Fly(Vertex) (on-the-fly baseline)
+- Fly(Edge) (on-the-fly baseline)
 - Fly(Point) (our on-the-fly)
 
 Make sure there is a folder called "input/" and a folder called "output/" under the working directory. They will be used for storing the input/output files.
@@ -364,7 +360,7 @@ For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index
 | 118 | RM | 2000832 | 500 |
 | 119 | RM | 2502075 | 500 |
 
-As mentioned in our paper, SE-Oracle(FaceExact), SE-Oracle(FaceAppr), SE-Oracle-Adapt(FaceExact), SE-Oracle-Adapt(FaceAppr), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr) are very time consuming (they are only feasible on small-version dataset), and SE-Oracle(Vertex), SE-Oracle(Point), SE-Oracle-Adapt(Vertex), SE-Oracle-Adapt(Point), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point) are also time consuming (they are only feasible on small-verion dataset and large-version dataset with small-version POIs). So the project will run SE-Oracle(FaceExact), SE-Oracle(FaceAppr), SE-Oracle(Vertex), SE-Oracle(Point), SE-Oracle-Adapt(FaceExact), SE-Oracle-Adapt(FaceAppr), SE-Oracle-Adapt(Vertex), SE-Oracle-Adapt(Point), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Vertex), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Vertex) and Fly(Point) on small-version dataset ([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run SE-Oracle(Vertex), SE-Oracle(Point), SE-Oracle-Adapt(Vertex), SE-Oracle-Adapt(Point), RC-Oracle-Naive(Vertex), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Vertex), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Vertex) and Fly(Point) on large-version dataset with small-version POIs (29 < [point_cloud_data_and_point_number_and_poi_number_map_index] <= 74). The project will run RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Vertex), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Vertex) and Fly(Point) on large-version dataset with large-version POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 74).
+As mentioned in our paper, SE-Oracle(FaceExact), SE-Oracle(FaceAppr), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr) are very time consuming (they are only feasible on small-version dataset), and SE-Oracle(Edge), SE-Oracle(Point), RC-Oracle-Naive(Edge), RC-Oracle-Naive(Point) are also time consuming (they are only feasible on small-verion dataset and large-version dataset with small-version POIs). So the project will run SE-Oracle(FaceExact), SE-Oracle(FaceAppr), SE-Oracle(Edge), SE-Oracle(Point), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr), RC-Oracle-Naive(Edge), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Edge), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Edge) and Fly(Point) on small-version dataset ([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run SE-Oracle(Edge), SE-Oracle(Point), RC-Oracle-Naive(Edge), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Edge), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Edge) and Fly(Point) on large-version dataset with small-version POIs (29 < [point_cloud_data_and_point_number_and_poi_number_map_index] <= 74). The project will run RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Edge), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Edge) and Fly(Point) on large-version dataset with large-version POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 74).
 
 In addition, we strongly encourage you to set [run_knn] to 0 if you are not conducting experiments. Otherwise, it will take a very long time to run calculate the knn of all POIs. 
 
