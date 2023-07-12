@@ -52,11 +52,9 @@ void knn_or_range_query(int knn_one_range_two, int k_value, double range,
                 {
                     one_poi_knn_list.push_back(poi_to_other_poi_distance_and_index_list[i][j].second);
                     count++;
-                    // std::cout << poi_to_other_poi_distance_and_index_list[i][j].second << " ";
                 }
             }
             all_poi_knn_or_range_list.push_back(one_poi_knn_list);
-            // std::cout << std::endl;
         }
     }
     else if (knn_one_range_two == 2)
@@ -71,11 +69,9 @@ void knn_or_range_query(int knn_one_range_two, int k_value, double range,
                     poi_to_other_poi_distance_and_index_list[i][j].first <= range)
                 {
                     one_poi_range_list.push_back(poi_to_other_poi_distance_and_index_list[i][j].second);
-                    // std::cout << poi_to_other_poi_distance_and_index_list[i][j].second << " ";
                 }
             }
             all_poi_knn_or_range_list.push_back(one_poi_range_list);
-            // std::cout << std::endl;
         }
     }
 }
@@ -476,7 +472,6 @@ void sort_min_to_max_and_get_original_index(std::vector<double> &vec, std::vecto
 
 double euclidean_distance(double x_1, double y_1, double x_2, double y_2)
 {
-    // std::cout << x_1 << " " << y_1 << " " << x_2 << " " << y_2 << std::endl;
     return sqrt(pow(x_1 - x_2, 2) + pow(y_1 - y_2, 2));
 }
 
@@ -530,7 +525,6 @@ void pre_compute_Point(int poi_num, point_cloud_geodesic::PointCloud *point_clou
         {
             destinations_poi_list.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[poi_list[j]]));
         }
-        // algorithm.propagate(one_source_poi_list, &destinations_poi_list);
         algorithm.propagate(one_source_poi_list, distance_limit);
         for (int j = i; j < poi_num; j++)
         {
@@ -574,7 +568,6 @@ void pre_compute_Vertex_FaceAppr(int poi_num, geodesic::Mesh *mesh, std::vector<
         {
             destinations_poi_list.push_back(geodesic::SurfacePoint(&mesh->vertices()[poi_list[j]]));
         }
-        // algorithm.propagate(one_source_poi_list, &destinations_poi_list);
         algorithm.propagate(one_source_poi_list, distance_limit);
         for (int j = i; j < poi_num; j++)
         {
@@ -617,7 +610,6 @@ void pre_compute_FaceExact(int poi_num, geodesic::Mesh *mesh, std::vector<int> &
         {
             destinations_poi_list.push_back(geodesic::SurfacePoint(&mesh->vertices()[poi_list[j]]));
         }
-        // algorithm.propagate(one_source_poi_list, &destinations_poi_list);
         algorithm.propagate(one_source_poi_list, distance_limit);
         for (int j = i; j < poi_num; j++)
         {

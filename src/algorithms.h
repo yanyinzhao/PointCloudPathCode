@@ -15,13 +15,11 @@ void point_cloud_to_terrain_and_initialize_terrain(
 {
     auto start_point_cloud_to_terrain_time = std::chrono::high_resolution_clock::now();
 
-    // std::vector<std::string> terrain;
     std::string terrain_write_path = "temp_terrain.off";
     point_cloud->point_cloud_to_terrain(point_cloud_to_terrain_memory_usage);
     std::vector<double> terrain_points;
     std::vector<unsigned> terrain_faces;
     geodesic::read_mesh_from_file(&terrain_write_path[0], terrain_points, terrain_faces);
-    // geodesic::read_mesh_from_point_cloud(terrain, terrain_points, terrain_faces);
     mesh->initialize_mesh_data(terrain_points, terrain_faces);
     remove(&terrain_write_path[0]);
 
@@ -41,11 +39,9 @@ void calculate_point_cloud_exact_distance(
     point_cloud_geodesic::PathPoint destination(&point_cloud->pc_points()[poi_list[destination_poi_index]]);
     std::vector<point_cloud_geodesic::PathPoint> one_source_poi_list(1, source);
     std::vector<point_cloud_geodesic::PathPoint> one_destination_poi_list(1, destination);
-    // algorithm.propagate(one_source_poi_list, &one_destination_poi_list);
     algorithm.propagate(one_source_poi_list, distance_limit);
     algorithm.best_source(destination, point_cloud_exact_distance);
     point_cloud_exact_distance = round(point_cloud_exact_distance * 1000000000.0) / 1000000000.0;
-    // std::cout << "Point cloud exact distance: " << point_cloud_exact_distance << std::endl;
 }
 
 void calculate_terrain_exact_distance(
@@ -66,7 +62,6 @@ void calculate_terrain_exact_distance(
     algorithm.propagate(one_source_poi_list, distance_limit);
     algorithm.best_source(destination, terrain_exact_distance);
     terrain_exact_distance = round(terrain_exact_distance * 1000000000.0) / 1000000000.0;
-    // std::cout << "Terrain exact distance: " << terrain_exact_distance << std::endl;
 }
 
 void calculate_point_cloud_exact_all_poi_knn_or_range_query(
@@ -147,9 +142,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
     distance_poi_to_poi_map.clear();
     path_poi_to_poi_map.clear();
     non_exact_source_poi_map.clear();
-    // std::unordered_map<int, bool> exact_pairwise_path_poi_to_poi_map;
-    // exact_pairwise_path_poi_to_poi_map.clear();
-    // int pairwise_path_poi_to_poi_size = 0;
     int index_path_size = 0;
     int index_path_num = 0;
     std::vector<point_cloud_geodesic::PathPoint> parent_one_source_poi_list;
@@ -157,7 +149,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
     std::vector<double> poi_x_or_y_coordinate_list(poi_num, 0);
     std::vector<std::pair<double, int>> sorted_poi_x_or_y_coordinate_and_original_index_list;
     sorted_poi_x_or_y_coordinate_and_original_index_list.clear();
-    // double min_side_length = 0;
     double max_increment = 0;
 
     // sort poi based on their x coordinate, since the point cloud in x-axis is larger
@@ -167,7 +158,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
         {
             poi_x_or_y_coordinate_list[i] = point_cloud->pc_points()[poi_list[i]].getx();
         }
-        // min_side_length = point_cloud->m_ylength;
         max_increment = point_cloud->m_xincrement;
     }
     // sort poi based on their y coordinate, since the point cloud in y-axis is larger
@@ -177,7 +167,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
         {
             poi_x_or_y_coordinate_list[i] = point_cloud->pc_points()[poi_list[i]].gety();
         }
-        // min_side_length = point_cloud->m_xlength;
         max_increment = point_cloud->m_yincrement;
     }
     sort_min_to_max_and_get_original_index(poi_x_or_y_coordinate_list, sorted_poi_x_or_y_coordinate_and_original_index_list);
@@ -203,14 +192,12 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
         int current_parent_source_poi_index = sorted_poi_x_or_y_coordinate_and_original_index_list[i].second;
         if (processed_poi_index_unordered_map.count(current_parent_source_poi_index) == 0)
         {
-            // std::cout << "current_parent_source_poi_index: " << current_parent_source_poi_index << std::endl;
             exact_source_poi_process_order_map[current_parent_source_poi_index] = exact_source_poi_process_order;
             exact_source_poi_process_order++;
 
             processed_poi_index_unordered_map[current_parent_source_poi_index] = current_parent_source_poi_index;
             parent_one_source_poi_list.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[poi_list[current_parent_source_poi_index]]));
 
-            // store the other poi as parent destination poi in SSAD
             for (int j = 0; j < poi_num; j++)
             {
                 int other_parent_destination_poi_index = sorted_poi_x_or_y_coordinate_and_original_index_list[j].second;
@@ -228,8 +215,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
                 int other_parent_destination_poi_index = sorted_poi_x_or_y_coordinate_and_original_index_list[j].second;
                 if (processed_poi_index_unordered_map.count(other_parent_destination_poi_index) == 0)
                 {
-                    // std::cout << "  other_parent_destination_poi_index: " << other_parent_destination_poi_index << std::endl;
-
                     std::vector<point_cloud_geodesic::PathPoint> path;
                     point_cloud_geodesic::PathPoint one_destination(&point_cloud->pc_points()[poi_list[other_parent_destination_poi_index]]);
                     algorithm.trace_back(one_destination, path);
@@ -246,8 +231,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
                     }
                     distance_poi_to_poi_map[parent_src_parent_dest_index] = length(path);
                     path_poi_to_poi_map[parent_src_parent_dest_index] = path;
-                    // exact_pairwise_path_poi_to_poi_map[parent_src_parent_dest_index] = true;
-                    // pairwise_path_poi_to_poi_size += path.size();
                     index_path_size += path.size();
                     index_path_num++;
                     distance_of_current_parent_poi_to_non_precessed_poi_list[other_parent_destination_poi_index] = length(path);
@@ -272,7 +255,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
                 {
                     continue;
                 }
-                // if (sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first <= min_side_length * pow(epsilon, 0.25))
                 if (sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first <= max_increment * 7)
                 {
                     children_one_source_poi_list.clear();
@@ -282,7 +264,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
                     int current_children_source_poi_index = sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].second;
                     if (processed_poi_index_unordered_map.count(current_children_source_poi_index) == 0)
                     {
-                        // std::cout << "  current_children_source_poi_index: " << current_children_source_poi_index << ", distance to parent source: " << sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first << std::endl;
                         processed_poi_index_unordered_map[current_children_source_poi_index] = current_children_source_poi_index;
                         children_one_source_poi_list.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[poi_list[current_children_source_poi_index]]));
 
@@ -305,7 +286,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
                             hash_function_two_keys_to_one_key(poi_num, current_parent_source_poi_index, current_children_source_poi_index, children_src_parent_src_index);
                             reverse_path_children_src_parent_src = true;
                         }
-                        // assert(exact_pairwise_path_poi_to_poi_map[children_src_parent_src_index]);
                         children_src_parent_src_distance = distance_poi_to_poi_map[children_src_parent_src_index];
                         children_src_parent_src_path = path_poi_to_poi_map[children_src_parent_src_index];
                         if (reverse_path_children_src_parent_src)
@@ -331,8 +311,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
                                 double other_children_destination_poi_y = point_cloud->pc_points()[poi_list[other_children_destination_poi_index]].gety();
                                 double euclidean_distance_curr_children_other_children = euclidean_distance(current_children_source_poi_x, current_children_source_poi_y, other_children_destination_poi_x, other_children_destination_poi_y);
 
-                                // std::cout << "    other_children_destination_poi_index: " << other_children_destination_poi_index << ", distance to parent source: " << sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[k].first << ", ED: " << euclidean_distance_curr_children_other_children << std::endl;
-
                                 // no need run SSAD to this children destination poi since it is far away from current children source poi
                                 if (euclidean_distance_curr_children_other_children > 2 * sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first / pow(epsilon, 0.25))
                                 {
@@ -355,7 +333,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
                                             hash_function_two_keys_to_one_key(poi_num, other_children_destination_poi_index, current_parent_source_poi_index, parent_src_children_dest_index);
                                             reverse_path_parent_src_children_dest = true;
                                         }
-                                        // assert(exact_pairwise_path_poi_to_poi_map[parent_src_children_dest_index]);
                                         parent_src_children_dest_distance = distance_poi_to_poi_map[parent_src_children_dest_index];
                                         parent_src_children_dest_path = path_poi_to_poi_map[parent_src_children_dest_index];
                                         if (reverse_path_parent_src_children_dest)
@@ -381,14 +358,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
                                         assert(parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getx() == children_src_parent_src_path[0].getx() &&
                                                parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].gety() == children_src_parent_src_path[0].gety() &&
                                                parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getz() == children_src_parent_src_path[0].getz());
-                                        // std::cout << "parent src in longer path "
-                                        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getx() << " "
-                                        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].gety() << " "
-                                        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getz() << " "
-                                        //           << "parent src in shorter path "
-                                        //           << children_src_parent_src_path[0].getx() << " "
-                                        //           << children_src_parent_src_path[0].gety() << " "
-                                        //           << children_src_parent_src_path[0].getz() << " " << std::endl;
                                         children_src_children_dest_distance = children_src_parent_src_distance + parent_src_children_dest_distance;
                                         for (int m = 0; m < parent_src_children_dest_path.size(); m++)
                                         {
@@ -402,17 +371,13 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
                                         {
                                             std::reverse(children_src_children_dest_path.begin(), children_src_children_dest_path.end());
                                         }
-                                        // std::cout << "      ^^ approximate path: short " << children_src_parent_src_distance << " + long: " << parent_src_children_dest_distance << std::endl;
                                         distance_poi_to_poi_map[children_src_children_dest_index] = children_src_children_dest_distance;
                                         path_poi_to_poi_map[children_src_children_dest_index] = children_src_children_dest_path;
-                                        // exact_pairwise_path_poi_to_poi_map[children_src_children_dest_index] = false;
-                                        // pairwise_path_poi_to_poi_size += children_src_children_dest_path.size();
                                     }
                                 }
                                 // store this children destination poi and need to run SSAD
                                 else
                                 {
-                                    // std::cout << "      ^^ exact path" << std::endl;
                                     children_destinations_poi_list.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[poi_list[other_children_destination_poi_index]]));
                                     children_destinations_poi_index_list.push_back(other_children_destination_poi_index);
                                 }
@@ -423,7 +388,6 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
 
                         for (int k = 0; k < children_destinations_poi_index_list.size(); k++)
                         {
-                            // std::cout << "        **" << children_destinations_poi_index_list[k];
                             std::vector<point_cloud_geodesic::PathPoint> path;
                             point_cloud_geodesic::PathPoint one_destination(&point_cloud->pc_points()[poi_list[children_destinations_poi_index_list[k]]]);
                             algorithm.trace_back(one_destination, path);
@@ -440,28 +404,14 @@ void RC_Oracle_Point(int poi_num, point_cloud_geodesic::PointCloud *point_cloud,
                             }
                             distance_poi_to_poi_map[children_src_children_dest_index2] = length(path);
                             path_poi_to_poi_map[children_src_children_dest_index2] = path;
-                            // exact_pairwise_path_poi_to_poi_map[children_src_children_dest_index2] = true;
-                            // pairwise_path_poi_to_poi_size += path.size();
                             index_path_size += path.size();
                             index_path_num++;
                         }
-                        // std::cout << std::endl;
                     }
                 }
             }
         }
     }
-
-    // for (int i = 0; i < poi_num; i++)
-    // {
-    //     for (int j = i; j < poi_num; j++)
-    //     {
-    //         int i_j;
-    //         hash_function_two_keys_to_one_key(poi_num, i, j, i_j);
-    //         // assert(std::abs(distance_poi_to_poi_map[i_j] - length(path_poi_to_poi_map[i_j])) < 0.0000000001);
-    //         std::cout << "i " << i << ", j " << j << " - distance: " << distance_poi_to_poi_map[i_j] << ", length(path): " << length(path_poi_to_poi_map[i_j]) << std::endl;
-    //     }
-    // }
 
     memory_usage += algorithm.get_memory() + index_path_num * sizeof(double) + index_path_size * sizeof(point_cloud_geodesic::PathPoint); //+ 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(point_cloud_geodesic::PathPoint);
     index_size += index_path_num * sizeof(double) + index_path_size * sizeof(point_cloud_geodesic::PathPoint);
@@ -495,9 +445,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
     double const distance_limit = geodesic::GEODESIC_INF;
     distance_poi_to_poi_map.clear();
     path_poi_to_poi_map.clear();
-    // std::unordered_map<int, bool> exact_pairwise_path_poi_to_poi_map;
-    // exact_pairwise_path_poi_to_poi_map.clear();
-    // int pairwise_path_poi_to_poi_size = 0;
     int index_path_size = 0;
     int index_path_num = 0;
     std::vector<geodesic::SurfacePoint> parent_one_source_poi_list;
@@ -505,7 +452,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
     std::vector<double> poi_x_or_y_coordinate_list(poi_num, 0);
     std::vector<std::pair<double, int>> sorted_poi_x_or_y_coordinate_and_original_index_list;
     sorted_poi_x_or_y_coordinate_and_original_index_list.clear();
-    // double min_side_length = 0;
     double max_increment = 0;
 
     // sort poi based on their x coordinate, since the point cloud in x-axis is larger
@@ -515,7 +461,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
         {
             poi_x_or_y_coordinate_list[i] = point_cloud->pc_points()[poi_list[i]].getx();
         }
-        // min_side_length = point_cloud->m_ylength;
         max_increment = point_cloud->m_xincrement;
     }
     // sort poi based on their y coordinate, since the point cloud in y-axis is larger
@@ -525,7 +470,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
         {
             poi_x_or_y_coordinate_list[i] = point_cloud->pc_points()[poi_list[i]].gety();
         }
-        // min_side_length = point_cloud->m_xlength;
         max_increment = point_cloud->m_yincrement;
     }
     sort_min_to_max_and_get_original_index(poi_x_or_y_coordinate_list, sorted_poi_x_or_y_coordinate_and_original_index_list);
@@ -551,7 +495,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
         int current_parent_source_poi_index = sorted_poi_x_or_y_coordinate_and_original_index_list[i].second;
         if (processed_poi_index_unordered_map.count(current_parent_source_poi_index) == 0)
         {
-            // std::cout << "current_parent_source_poi_index: " << current_parent_source_poi_index << std::endl;
             exact_source_poi_process_order_map[current_parent_source_poi_index] = exact_source_poi_process_order;
             exact_source_poi_process_order++;
 
@@ -596,8 +539,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
                     }
                     distance_poi_to_poi_map[parent_src_parent_dest_index] = length(path);
                     path_poi_to_poi_map[parent_src_parent_dest_index] = path;
-                    // exact_pairwise_path_poi_to_poi_map[parent_src_parent_dest_index] = true;
-                    // pairwise_path_poi_to_poi_size += path.size();
                     index_path_size += path.size();
                     index_path_num++;
                     distance_of_current_parent_poi_to_non_precessed_poi_list[other_parent_destination_poi_index] = length(path);
@@ -622,7 +563,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
                 {
                     continue;
                 }
-                // if (sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first <= min_side_length * pow(oracle_epsilon, 0.25))
                 if (sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first <= max_increment * 7)
                 {
                     children_one_source_poi_list.clear();
@@ -632,7 +572,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
                     int current_children_source_poi_index = sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].second;
                     if (processed_poi_index_unordered_map.count(current_children_source_poi_index) == 0)
                     {
-                        // std::cout << "  current_children_source_poi_index: " << current_children_source_poi_index << ", distance to parent source: " << sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first << std::endl;
                         processed_poi_index_unordered_map[current_children_source_poi_index] = current_children_source_poi_index;
                         children_one_source_poi_list.push_back(geodesic::SurfacePoint(&mesh.vertices()[poi_list[current_children_source_poi_index]]));
 
@@ -655,7 +594,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
                             hash_function_two_keys_to_one_key(poi_num, current_parent_source_poi_index, current_children_source_poi_index, children_src_parent_src_index);
                             reverse_path_children_src_parent_src = true;
                         }
-                        // assert(exact_pairwise_path_poi_to_poi_map[children_src_parent_src_index]);
                         children_src_parent_src_distance = distance_poi_to_poi_map[children_src_parent_src_index];
                         children_src_parent_src_path = path_poi_to_poi_map[children_src_parent_src_index];
                         if (reverse_path_children_src_parent_src)
@@ -681,8 +619,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
                                 double other_children_destination_poi_y = mesh.vertices()[poi_list[other_children_destination_poi_index]].gety();
                                 double euclidean_distance_curr_children_other_children = euclidean_distance(current_children_source_poi_x, current_children_source_poi_y, other_children_destination_poi_x, other_children_destination_poi_y);
 
-                                // std::cout << "    other_children_destination_poi_index: " << other_children_destination_poi_index << ", distance to parent source: " << sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[k].first << ", ED: " << euclidean_distance_curr_children_other_children << std::endl;
-
                                 // no need run SSAD to this children destination poi since it is far away from current children source poi
                                 if (euclidean_distance_curr_children_other_children > 2 * sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first / pow(epsilon, 0.25))
                                 {
@@ -705,7 +641,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
                                             hash_function_two_keys_to_one_key(poi_num, other_children_destination_poi_index, current_parent_source_poi_index, parent_src_children_dest_index);
                                             reverse_path_parent_src_children_dest = true;
                                         }
-                                        // assert(exact_pairwise_path_poi_to_poi_map[parent_src_children_dest_index]);
                                         parent_src_children_dest_distance = distance_poi_to_poi_map[parent_src_children_dest_index];
                                         parent_src_children_dest_path = path_poi_to_poi_map[parent_src_children_dest_index];
                                         if (reverse_path_parent_src_children_dest)
@@ -731,14 +666,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
                                         assert(parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getx() == children_src_parent_src_path[0].getx() &&
                                                parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].gety() == children_src_parent_src_path[0].gety() &&
                                                parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getz() == children_src_parent_src_path[0].getz());
-                                        // std::cout << "parent src in longer path "
-                                        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getx() << " "
-                                        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].gety() << " "
-                                        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getz() << " "
-                                        //           << "parent src in shorter path "
-                                        //           << children_src_parent_src_path[0].getx() << " "
-                                        //           << children_src_parent_src_path[0].gety() << " "
-                                        //           << children_src_parent_src_path[0].getz() << " " << std::endl;
                                         children_src_children_dest_distance = children_src_parent_src_distance + parent_src_children_dest_distance;
                                         for (int m = 0; m < parent_src_children_dest_path.size(); m++)
                                         {
@@ -752,17 +679,13 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
                                         {
                                             std::reverse(children_src_children_dest_path.begin(), children_src_children_dest_path.end());
                                         }
-                                        // std::cout << "      ^^ approximate path: short " << children_src_parent_src_distance << " + long: " << parent_src_children_dest_distance << std::endl;
                                         distance_poi_to_poi_map[children_src_children_dest_index] = children_src_children_dest_distance;
                                         path_poi_to_poi_map[children_src_children_dest_index] = children_src_children_dest_path;
-                                        // exact_pairwise_path_poi_to_poi_map[children_src_children_dest_index] = false;
-                                        // pairwise_path_poi_to_poi_size += children_src_children_dest_path.size();
                                     }
                                 }
                                 // store this children destination poi and need to run SSAD
                                 else
                                 {
-                                    // std::cout << "      ^^ exact path" << std::endl;
                                     children_destinations_poi_list.push_back(geodesic::SurfacePoint(&mesh.vertices()[poi_list[other_children_destination_poi_index]]));
                                     children_destinations_poi_index_list.push_back(other_children_destination_poi_index);
                                 }
@@ -773,7 +696,6 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
 
                         for (int k = 0; k < children_destinations_poi_index_list.size(); k++)
                         {
-                            // std::cout << "        **" << children_destinations_poi_index_list[k];
                             std::vector<geodesic::SurfacePoint> path;
                             geodesic::SurfacePoint one_destination(&mesh.vertices()[poi_list[children_destinations_poi_index_list[k]]]);
                             algorithm.trace_back(one_destination, path);
@@ -794,28 +716,14 @@ void RC_Oracle_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointCloud *po
                             }
                             distance_poi_to_poi_map[children_src_children_dest_index2] = length(path);
                             path_poi_to_poi_map[children_src_children_dest_index2] = path;
-                            // exact_pairwise_path_poi_to_poi_map[children_src_children_dest_index2] = true;
-                            // pairwise_path_poi_to_poi_size += path.size();
                             index_path_size += path.size();
                             index_path_num++;
                         }
-                        // std::cout << std::endl;
                     }
                 }
             }
         }
     }
-
-    // for (int i = 0; i < poi_num; i++)
-    // {
-    //     for (int j = i; j < poi_num; j++)
-    //     {
-    //         int i_j;
-    //         hash_function_two_keys_to_one_key(poi_num, i, j, i_j);
-    //         // assert(std::abs(distance_poi_to_poi_map[i_j] - length(path_poi_to_poi_map[i_j])) < 0.0000000001);
-    //         std::cout << "i " << i << ", j " << j << " - distance: " << distance_poi_to_poi_map[i_j] << ", length(path): " << length(path_poi_to_poi_map[i_j]) << std::endl;
-    //     }
-    // }
 
     memory_usage += algorithm.get_memory() + index_path_num * sizeof(double) + index_path_size * sizeof(geodesic::SurfacePoint); //+ 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
     index_size += index_path_num * sizeof(double) + index_path_size * sizeof(geodesic::SurfacePoint);
@@ -843,9 +751,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
     double const distance_limit = geodesic::GEODESIC_INF;
     distance_poi_to_poi_map.clear();
     path_poi_to_poi_map.clear();
-    // std::unordered_map<int, bool> exact_pairwise_path_poi_to_poi_map;
-    // exact_pairwise_path_poi_to_poi_map.clear();
-    // int pairwise_path_poi_to_poi_size = 0;
     int index_path_size = 0;
     int index_path_num = 0;
     std::vector<geodesic::SurfacePoint> parent_one_source_poi_list;
@@ -853,7 +758,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
     std::vector<double> poi_x_or_y_coordinate_list(poi_num, 0);
     std::vector<std::pair<double, int>> sorted_poi_x_or_y_coordinate_and_original_index_list;
     sorted_poi_x_or_y_coordinate_and_original_index_list.clear();
-    // double min_side_length = 0;
     double max_increment = 0;
 
     // sort poi based on their x coordinate, since the point cloud in x-axis is larger
@@ -863,7 +767,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
         {
             poi_x_or_y_coordinate_list[i] = point_cloud->pc_points()[poi_list[i]].getx();
         }
-        // min_side_length = point_cloud->m_ylength;
         max_increment = point_cloud->m_xincrement;
     }
     // sort poi based on their y coordinate, since the point cloud in y-axis is larger
@@ -873,7 +776,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
         {
             poi_x_or_y_coordinate_list[i] = point_cloud->pc_points()[poi_list[i]].gety();
         }
-        // min_side_length = point_cloud->m_xlength;
         max_increment = point_cloud->m_yincrement;
     }
     sort_min_to_max_and_get_original_index(poi_x_or_y_coordinate_list, sorted_poi_x_or_y_coordinate_and_original_index_list);
@@ -899,7 +801,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
         int current_parent_source_poi_index = sorted_poi_x_or_y_coordinate_and_original_index_list[i].second;
         if (processed_poi_index_unordered_map.count(current_parent_source_poi_index) == 0)
         {
-            // std::cout << "current_parent_source_poi_index: " << current_parent_source_poi_index << std::endl;
             exact_source_poi_process_order_map[current_parent_source_poi_index] = exact_source_poi_process_order;
             exact_source_poi_process_order++;
 
@@ -940,8 +841,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
                     }
                     distance_poi_to_poi_map[parent_src_parent_dest_index] = length(path);
                     path_poi_to_poi_map[parent_src_parent_dest_index] = path;
-                    // exact_pairwise_path_poi_to_poi_map[parent_src_parent_dest_index] = true;
-                    // pairwise_path_poi_to_poi_size += path.size();
                     index_path_size += path.size();
                     index_path_num++;
                     distance_of_current_parent_poi_to_non_precessed_poi_list[other_parent_destination_poi_index] = length(path);
@@ -966,7 +865,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
                 {
                     continue;
                 }
-                // if (sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first <= min_side_length * pow(oracle_epsilon, 0.25))
                 if (sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first <= max_increment * 7)
                 {
                     children_one_source_poi_list.clear();
@@ -976,7 +874,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
                     int current_children_source_poi_index = sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].second;
                     if (processed_poi_index_unordered_map.count(current_children_source_poi_index) == 0)
                     {
-                        // std::cout << "  current_children_source_poi_index: " << current_children_source_poi_index << ", distance to parent source: " << sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first << std::endl;
                         processed_poi_index_unordered_map[current_children_source_poi_index] = current_children_source_poi_index;
                         children_one_source_poi_list.push_back(geodesic::SurfacePoint(&mesh.vertices()[poi_list[current_children_source_poi_index]]));
 
@@ -999,7 +896,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
                             hash_function_two_keys_to_one_key(poi_num, current_parent_source_poi_index, current_children_source_poi_index, children_src_parent_src_index);
                             reverse_path_children_src_parent_src = true;
                         }
-                        // assert(exact_pairwise_path_poi_to_poi_map[children_src_parent_src_index]);
                         children_src_parent_src_distance = distance_poi_to_poi_map[children_src_parent_src_index];
                         children_src_parent_src_path = path_poi_to_poi_map[children_src_parent_src_index];
                         if (reverse_path_children_src_parent_src)
@@ -1025,8 +921,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
                                 double other_children_destination_poi_y = point_cloud->pc_points()[poi_list[other_children_destination_poi_index]].gety();
                                 double euclidean_distance_curr_children_other_children = euclidean_distance(current_children_source_poi_x, current_children_source_poi_y, other_children_destination_poi_x, other_children_destination_poi_y);
 
-                                // std::cout << "    other_children_destination_poi_index: " << other_children_destination_poi_index << ", distance to parent source: " << sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[k].first << ", ED: " << euclidean_distance_curr_children_other_children << std::endl;
-
                                 // no need run SSAD to this children destination poi since it is far away from current children source poi
                                 if (euclidean_distance_curr_children_other_children > 2 * sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first / pow(epsilon, 0.25))
                                 {
@@ -1049,7 +943,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
                                             hash_function_two_keys_to_one_key(poi_num, other_children_destination_poi_index, current_parent_source_poi_index, parent_src_children_dest_index);
                                             reverse_path_parent_src_children_dest = true;
                                         }
-                                        // assert(exact_pairwise_path_poi_to_poi_map[parent_src_children_dest_index]);
                                         parent_src_children_dest_distance = distance_poi_to_poi_map[parent_src_children_dest_index];
                                         parent_src_children_dest_path = path_poi_to_poi_map[parent_src_children_dest_index];
                                         if (reverse_path_parent_src_children_dest)
@@ -1075,14 +968,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
                                         assert(parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getx() == children_src_parent_src_path[0].getx() &&
                                                parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].gety() == children_src_parent_src_path[0].gety() &&
                                                parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getz() == children_src_parent_src_path[0].getz());
-                                        // std::cout << "parent src in longer path "
-                                        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getx() << " "
-                                        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].gety() << " "
-                                        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getz() << " "
-                                        //           << "parent src in shorter path "
-                                        //           << children_src_parent_src_path[0].getx() << " "
-                                        //           << children_src_parent_src_path[0].gety() << " "
-                                        //           << children_src_parent_src_path[0].getz() << " " << std::endl;
                                         children_src_children_dest_distance = children_src_parent_src_distance + parent_src_children_dest_distance;
                                         for (int m = 0; m < parent_src_children_dest_path.size(); m++)
                                         {
@@ -1096,17 +981,13 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
                                         {
                                             std::reverse(children_src_children_dest_path.begin(), children_src_children_dest_path.end());
                                         }
-                                        // std::cout << "      ^^ approximate path: short " << children_src_parent_src_distance << " + long: " << parent_src_children_dest_distance << std::endl;
                                         distance_poi_to_poi_map[children_src_children_dest_index] = children_src_children_dest_distance;
                                         path_poi_to_poi_map[children_src_children_dest_index] = children_src_children_dest_path;
-                                        // exact_pairwise_path_poi_to_poi_map[children_src_children_dest_index] = false;
-                                        // pairwise_path_poi_to_poi_size += children_src_children_dest_path.size();
                                     }
                                 }
                                 // store this children destination poi and need to run SSAD
                                 else
                                 {
-                                    // std::cout << "      ^^ exact path" << std::endl;
                                     children_destinations_poi_list.push_back(geodesic::SurfacePoint(&mesh.vertices()[poi_list[other_children_destination_poi_index]]));
                                     children_destinations_poi_index_list.push_back(other_children_destination_poi_index);
                                 }
@@ -1117,7 +998,6 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
 
                         for (int k = 0; k < children_destinations_poi_index_list.size(); k++)
                         {
-                            // std::cout << "        **" << children_destinations_poi_index_list[k];
                             std::vector<geodesic::SurfacePoint> path;
                             geodesic::SurfacePoint one_destination(&mesh.vertices()[poi_list[children_destinations_poi_index_list[k]]]);
                             algorithm.trace_back(one_destination, path);
@@ -1134,28 +1014,14 @@ void RC_Oracle_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *point_cl
                             }
                             distance_poi_to_poi_map[children_src_children_dest_index2] = length(path);
                             path_poi_to_poi_map[children_src_children_dest_index2] = path;
-                            // exact_pairwise_path_poi_to_poi_map[children_src_children_dest_index2] = true;
-                            // pairwise_path_poi_to_poi_size += path.size();
                             index_path_size += path.size();
                             index_path_num++;
                         }
-                        // std::cout << std::endl;
                     }
                 }
             }
         }
     }
-
-    // for (int i = 0; i < poi_num; i++)
-    // {
-    //     for (int j = i; j < poi_num; j++)
-    //     {
-    //         int i_j;
-    //         hash_function_two_keys_to_one_key(poi_num, i, j, i_j);
-    //         // assert(std::abs(pairwise_distance_poi_to_poi_map[i_j] - length(pairwise_path_poi_to_poi_map[i_j])) < 0.0000000001);
-    //         std::cout << "i " << i << ", j " << j << " - distance: " << pairwise_distance_poi_to_poi_map[i_j] << ", length(path): " << length(pairwise_path_poi_to_poi_map[i_j]) << std::endl;
-    //     }
-    // }
 
     memory_usage += algorithm.get_memory() + index_path_num * sizeof(double) + index_path_size * sizeof(geodesic::SurfacePoint); //+ 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
     index_size += index_path_num * sizeof(double) + index_path_size * sizeof(geodesic::SurfacePoint);
@@ -1190,7 +1056,6 @@ void RC_Oracle_Naive_Point(int poi_num, point_cloud_geodesic::PointCloud *point_
         {
             destinations_poi_list.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[poi_list[j]]));
         }
-        // algorithm.propagate(one_source_poi_list, &destinations_poi_list);
         algorithm.propagate(one_source_poi_list, distance_limit);
         for (int j = i; j < poi_num; j++)
         {
@@ -1204,17 +1069,6 @@ void RC_Oracle_Naive_Point(int poi_num, point_cloud_geodesic::PointCloud *point_
             pairwise_path_poi_to_poi_size += path.size();
         }
     }
-
-    // for (int i = 0; i < poi_num; i++)
-    // {
-    //     for (int j = i; j < poi_num; j++)
-    //     {
-    //         int i_j;
-    //         hash_function_two_keys_to_one_key(poi_num, i, j, i_j);
-    //         assert(std::abs(pairwise_distance_poi_to_poi_map[i_j] - length(pairwise_path_poi_to_poi_map[i_j])) < 0.0000000001);
-    //         std::cout << "i " << i << ", j " << j << " - distance: " << pairwise_distance_poi_to_poi_map[i_j] << ", length(path): " << length(pairwise_path_poi_to_poi_map[i_j]) << std::endl;
-    //     }
-    // }
 
     memory_usage += algorithm.get_memory() + 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(point_cloud_geodesic::PathPoint);
     index_size += 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(point_cloud_geodesic::PathPoint);
@@ -1259,7 +1113,6 @@ void RC_Oracle_Naive_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointClo
         {
             destinations_poi_list.push_back(geodesic::SurfacePoint(&mesh.vertices()[poi_list[j]]));
         }
-        // algorithm.propagate(one_source_poi_list, &destinations_poi_list);
         algorithm.propagate(one_source_poi_list, distance_limit);
         for (int j = i; j < poi_num; j++)
         {
@@ -1277,17 +1130,6 @@ void RC_Oracle_Naive_Vertex_FaceAppr(int poi_num, point_cloud_geodesic::PointClo
             pairwise_path_poi_to_poi_size += path.size();
         }
     }
-
-    // for (int i = 0; i < poi_num; i++)
-    // {
-    //     for (int j = i; j < poi_num; j++)
-    //     {
-    //         int i_j;
-    //         hash_function_two_keys_to_one_key(poi_num, i, j, i_j);
-    //         assert(std::abs(pairwise_distance_poi_to_poi_map[i_j] - length(pairwise_path_poi_to_poi_map[i_j])) < 0.0000000001);
-    //         std::cout << "i " << i << ", j " << j << " - distance: " << pairwise_distance_poi_to_poi_map[i_j] << ", length(path): " << length(pairwise_path_poi_to_poi_map[i_j]) << std::endl;
-    //     }
-    // }
 
     memory_usage += algorithm.get_memory() + 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
     index_size += 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
@@ -1326,7 +1168,6 @@ void RC_Oracle_Naive_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *po
         {
             destinations_poi_list.push_back(geodesic::SurfacePoint(&mesh.vertices()[poi_list[j]]));
         }
-        // algorithm.propagate(one_source_poi_list, &destinations_poi_list);
         algorithm.propagate(one_source_poi_list, distance_limit);
         for (int j = i; j < poi_num; j++)
         {
@@ -1340,17 +1181,6 @@ void RC_Oracle_Naive_FaceExact(int poi_num, point_cloud_geodesic::PointCloud *po
             pairwise_path_poi_to_poi_size += path.size();
         }
     }
-
-    // for (int i = 0; i < poi_num; i++)
-    // {
-    //     for (int j = i; j < poi_num; j++)
-    //     {
-    //         int i_j;
-    //         hash_function_two_keys_to_one_key(poi_num, i, j, i_j);
-    //         assert(std::abs(pairwise_distance_poi_to_poi_map[i_j] - length(pairwise_path_poi_to_poi_map[i_j])) < 0.0000000001);
-    //         std::cout << "i " << i << ", j " << j << " - distance: " << pairwise_distance_poi_to_poi_map[i_j] << ", length(path): " << length(pairwise_path_poi_to_poi_map[i_j]) << std::endl;
-    //     }
-    // }
 
     memory_usage += algorithm.get_memory() + 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
     index_size += 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
@@ -1484,14 +1314,6 @@ void RC_Oracle_Point_query(int poi_num, std::unordered_map<int, double> &distanc
         assert(parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getx() == children_src_parent_src_path[0].getx() &&
                parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].gety() == children_src_parent_src_path[0].gety() &&
                parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getz() == children_src_parent_src_path[0].getz());
-        // std::cout << "parent src in longer path "
-        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getx() << " "
-        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].gety() << " "
-        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getz() << " "
-        //           << "parent src in shorter path "
-        //           << children_src_parent_src_path[0].getx() << " "
-        //           << children_src_parent_src_path[0].gety() << " "
-        //           << children_src_parent_src_path[0].getz() << " " << std::endl;
         children_src_children_dest_distance = children_src_parent_src_distance + parent_src_children_dest_distance;
         for (int m = 0; m < parent_src_children_dest_path.size(); m++)
         {
@@ -1505,11 +1327,9 @@ void RC_Oracle_Point_query(int poi_num, std::unordered_map<int, double> &distanc
         {
             std::reverse(children_src_children_dest_path.begin(), children_src_children_dest_path.end());
         }
-        // std::cout << "approximate path: short " << children_src_parent_src_distance << " + long: " << parent_src_children_dest_distance << std::endl;
         distance_result = children_src_children_dest_distance;
         distance_result = round(distance_result * 1000000000.0) / 1000000000.0;
         path_result = children_src_children_dest_path;
-        // std::cout << "length(path): " << length(path_result) << " distance: " << distance_result << std::endl;
     }
 
     auto stop_query_time = std::chrono::high_resolution_clock::now();
@@ -1667,14 +1487,6 @@ void RC_Oracle_Vertex_FaceAppr_FaceExact_query(int poi_num, std::unordered_map<i
         assert(parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getx() == children_src_parent_src_path[0].getx() &&
                parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].gety() == children_src_parent_src_path[0].gety() &&
                parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getz() == children_src_parent_src_path[0].getz());
-        // std::cout << "parent src in longer path "
-        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getx() << " "
-        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].gety() << " "
-        //           << parent_src_children_dest_path[parent_src_children_dest_path.size() - 1].getz() << " "
-        //           << "parent src in shorter path "
-        //           << children_src_parent_src_path[0].getx() << " "
-        //           << children_src_parent_src_path[0].gety() << " "
-        //           << children_src_parent_src_path[0].getz() << " " << std::endl;
         children_src_children_dest_distance = children_src_parent_src_distance + parent_src_children_dest_distance;
         for (int m = 0; m < parent_src_children_dest_path.size(); m++)
         {
@@ -1688,11 +1500,9 @@ void RC_Oracle_Vertex_FaceAppr_FaceExact_query(int poi_num, std::unordered_map<i
         {
             std::reverse(children_src_children_dest_path.begin(), children_src_children_dest_path.end());
         }
-        // std::cout << "approximate path: short " << children_src_parent_src_distance << " + long: " << parent_src_children_dest_distance << std::endl;
         distance_result = children_src_children_dest_distance;
         distance_result = round(distance_result * 1000000000.0) / 1000000000.0;
         path_result = children_src_children_dest_path;
-        // std::cout << "length(path): " << length(path_result) << " distance: " << distance_result << std::endl;
     }
 
     auto stop_query_time = std::chrono::high_resolution_clock::now();
@@ -1949,7 +1759,6 @@ void SE_Oracle_Point(
         radius = std::max(pre_pairwise_distance_poi_to_poi_map[x_y_in_poi_list], radius);
     }
     GeoNode root_geo(0, poi_list[0], radius);
-    // std::cout << root_geo.radius << std::endl;
 
     stx::btree<int, GeoNode *> pois_as_center_each_parent_layer;
     pois_as_center_each_parent_layer.clear();
@@ -1968,7 +1777,6 @@ void SE_Oracle_Point(
     double WSPD_oracle_epsilon = pow((1 + epsilon), 0.35) - 1;
     generate_geo_pair_C(geo_tree_node_id, WSPD_oracle_edge_num, point_cloud, root_geo, root_geo, WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
     index_size = WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
-    // std::cout << "WSPD_oracle_edge_num: " << WSPD_oracle_edge_num << std::endl;
 
     memory_usage += pre_pairwise_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
 
@@ -2086,7 +1894,6 @@ void SE_Oracle_Vertex_FaceAppr_FaceExact(
         radius = std::max(pre_pairwise_distance_poi_to_poi_map[x_y_in_poi_list], radius);
     }
     GeoNode root_geo(0, poi_list[0], radius);
-    // std::cout << root_geo.radius << std::endl;
 
     stx::btree<int, GeoNode *> pois_as_center_each_parent_layer;
     pois_as_center_each_parent_layer.clear();
@@ -2105,7 +1912,6 @@ void SE_Oracle_Vertex_FaceAppr_FaceExact(
     double WSPD_oracle_epsilon = pow((1 + epsilon), 0.35) - 1;
     generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, &mesh, root_geo, root_geo, WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
     index_size = WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
-    // std::cout << "WSPD_oracle_edge_num: " << WSPD_oracle_edge_num << std::endl;
 
     memory_usage += pre_pairwise_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
 
@@ -2164,7 +1970,6 @@ void Fly_Point(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &
     point_cloud_geodesic::PathPoint destination(&point_cloud->pc_points()[poi_list[destination_poi_index]]);
     std::vector<point_cloud_geodesic::PathPoint> one_source_poi_list(1, source);
     std::vector<point_cloud_geodesic::PathPoint> one_destination_poi_list(1, destination);
-    // algorithm.propagate(one_source_poi_list, &one_destination_poi_list);
     algorithm.propagate(one_source_poi_list, distance_limit);
     algorithm.trace_back(destination, path_result);
     distance_result = length(path_result);
@@ -2195,27 +2000,17 @@ void Fly_Vertex_FaceAppr(point_cloud_geodesic::PointCloud *point_cloud, std::vec
         subdivision_level = epslion_to_subdivision_level(epsilon);
     }
     geodesic::GeodesicAlgorithmSubdivision algorithm(&mesh, subdivision_level);
-    // geodesic::GeodesicAlgorithmSubdivision algorithm(&mesh, epsilon);
-    // geodesic::GeodesicAlgorithmSubdivision algorithm(&mesh, -1);
     double const distance_limit = geodesic::GEODESIC_INF;
     geodesic::SurfacePoint source(&mesh.vertices()[poi_list[source_poi_index]]);
     geodesic::SurfacePoint destination(&mesh.vertices()[poi_list[destination_poi_index]]);
     std::vector<geodesic::SurfacePoint> one_source_poi_list(1, source);
     std::vector<geodesic::SurfacePoint> one_destination_poi_list(1, destination);
-    // algorithm.propagate(one_source_poi_list, &one_destination_poi_list);
     algorithm.propagate(one_source_poi_list, distance_limit);
     algorithm.trace_back(destination, path_result);
-    // subdivision_level = 0;
     if (subdivision_level == 0)
     {
         modify_path(path_result);
     }
-    // for (int i = 0; i < path_result.size(); i++)
-    // // for (int i = path_result.size() - 1; i >= 0; i--)
-    // {
-    //     std::cout << std::fixed << "reply->add_path(" << path_result[i].getx() << ");\nreply->add_path(" << path_result[i].gety() << ");\nreply->add_path(" << path_result[i].getz() << ");\n"
-    //               << std::endl;
-    // }
     distance_result = length(path_result);
     distance_result = round(distance_result * 1000000000.0) / 1000000000.0;
     memory_usage += algorithm.get_memory() + path_result.size() * sizeof(geodesic::SurfacePoint) + sizeof(double);
@@ -2243,7 +2038,6 @@ void Fly_FaceExact(point_cloud_geodesic::PointCloud *point_cloud, std::vector<in
     geodesic::SurfacePoint destination(&mesh.vertices()[poi_list[destination_poi_index]]);
     std::vector<geodesic::SurfacePoint> one_source_poi_list(1, source);
     std::vector<geodesic::SurfacePoint> one_destination_poi_list(1, destination);
-    // algorithm.propagate(one_source_poi_list, &one_destination_poi_list);
     algorithm.propagate(one_source_poi_list, distance_limit);
     algorithm.trace_back(destination, path_result);
     distance_result = length(path_result);
