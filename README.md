@@ -4,7 +4,7 @@
 
 This project provides the implementation for proximity queries on point cloud using rapid construction path oracle. We refer the readers to our paper for more details.
 
-We compared 20 algorithms as follows:
+We compared 16 algorithms as follows:
 
 - SE-Oracle(FaceExact) (oracle based baseline)
 - SE-Oracle(FaceAppr) (oracle based baseline)
