@@ -4,7 +4,7 @@
 
 This project provides the implementation for proximity queries on point cloud using rapid construction path oracle. We refer the readers to our paper for more details.
 
-We compared 16 algorithms as follows:
+We compared 8 algorithms as follows:
 
 - SE-Oracle-Adapt (oracle based baseline)
 - SE-Oracle-Adapt2 (oracle based baseline)
@@ -272,7 +272,7 @@ An example:
 ./main 0 0.5 0 0
 ```
 
-In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run 16 algorithms.
+In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run 8 algorithms.
 
 ## Output
 
