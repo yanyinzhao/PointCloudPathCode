@@ -6,22 +6,14 @@ This project provides the implementation for proximity queries on point cloud us
 
 We compared 16 algorithms as follows:
 
-- SE-Oracle(FaceExact) (oracle based baseline)
-- SE-Oracle(FaceAppr) (oracle based baseline)
-- SE-Oracle(Edge) (oracle based baseline)
-- SE-Oracle(Point) (variation oracle)
-- RC-Oracle-Naive(FaceExact) (variation oracle)
-- RC-Oracle-Naive(FaceAppr) (variation oracle)
-- RC-Oracle-Naive(Edge) (variation oracle)
-- RC-Oracle-Naive(Point) (variation oracle)
-- RC-Oracle(FaceExact) (variation oracle)
-- RC-Oracle(FaceAppr) (variation oracle)
-- RC-Oracle(Edge) (variation oracle)
-- RC-Oracle(Point) (our oracle)
-- Fly(FaceExact) (on-the-fly baseline)
-- Fly(FaceAppr) (on-the-fly baseline)
-- Fly(Edge) (on-the-fly baseline)
-- Fly(Point) (our on-the-fly)
+- SE-Oracle-Adapt (oracle based baseline)
+- SE-Oracle-Adapt2 (oracle based baseline)
+- RC-Oracle-Naive (variation oracle)
+- RC-Oracle (our oracle)
+- CH-Adapt (on-the-fly baseline)
+- Kaul-Adapt (on-the-fly baseline)
+- Dijk-Adapt (on-the-fly baseline)
+- FastFly (our on-the-fly)
 
 Make sure there is a folder called "input/" and a folder called "output/" under the working directory. They will be used for storing the input/output files.
 
@@ -75,15 +67,6 @@ The datasets are as follows:
 - "BH_150_poi_on_10086.txt" (POI list with POI number of 150 on "BH_10086.xyz")
 - "BH_200_poi_on_10086.txt" (POI list with POI number of 200 on "BH_10086.xyz")
 - "BH_250_poi_on_10086.txt" (POI list with POI number of 250 on "BH_10086.xyz")
-- "BH_50_poi_on_500835.txt" (POI list with POI number of 50 on "BH_500835.xyz")
-- "BH_50_poi_on_1000414.txt" (POI list with POI number of 50 on "BH_1000414.xyz")
-- "BH_50_poi_on_1500996.txt" (POI list with POI number of 50 on "BH_1500996.xyz")
-- "BH_50_poi_on_2001610.txt" (POI list with POI number of 50 on "BH_2001610.xyz")
-- "BH_50_poi_on_2502596.txt" (POI list with POI number of 50 on "BH_2502596.xyz")
-- "BH_100_poi_on_500835.txt" (POI list with POI number of 100 on "BH_500835.xyz")
-- "BH_150_poi_on_500835.txt" (POI list with POI number of 150 on "BH_500835.xyz")
-- "BH_200_poi_on_500835.txt" (POI list with POI number of 200 on "BH_500835.xyz")
-- "BH_250_poi_on_500835.txt" (POI list with POI number of 250 on "BH_500835.xyz")
 - "BH_500_poi_on_500835.txt" (POI list with POI number of 500 on "BH_500835.xyz")
 - "BH_500_poi_on_1000414.txt" (POI list with POI number of 500 on "BH_1000414.xyz")
 - "BH_500_poi_on_1500996.txt" (POI list with POI number of 500 on "BH_1500996.xyz")
@@ -102,15 +85,6 @@ The datasets are as follows:
 - "EP_150_poi_on_10062.txt" (POI list with POI number of 150 on "EP_10062.xyz")
 - "EP_200_poi_on_10062.txt" (POI list with POI number of 200 on "EP_10062.xyz")
 - "EP_250_poi_on_10062.txt" (POI list with POI number of 250 on "EP_10062.xyz")
-- "EP_50_poi_on_500384.txt" (POI list with POI number of 50 on "EP_500384.xyz")
-- "EP_50_poi_on_1001040.txt" (POI list with POI number of 50 on "EP_1001040.xyz")
-- "EP_50_poi_on_1501578.txt" (POI list with POI number of 50 on "EP_1501578.xyz")
-- "EP_50_poi_on_2001536.txt" (POI list with POI number of 50 on "EP_2001536.xyz")
-- "EP_50_poi_on_2500560.txt" (POI list with POI number of 50 on "EP_2500560.xyz")
-- "EP_100_poi_on_500384.txt" (POI list with POI number of 100 on "EP_500384.xyz")
-- "EP_150_poi_on_500384.txt" (POI list with POI number of 150 on "EP_500384.xyz")
-- "EP_200_poi_on_500384.txt" (POI list with POI number of 200 on "EP_500384.xyz")
-- "EP_250_poi_on_500384.txt" (POI list with POI number of 250 on "EP_500384.xyz")
 - "EP_500_poi_on_500384.txt" (POI list with POI number of 500 on "EP_500384.xyz")
 - "EP_500_poi_on_1001040.txt" (POI list with POI number of 500 on "EP_1001040.xyz")
 - "EP_500_poi_on_1501578.txt" (POI list with POI number of 500 on "EP_1501578.xyz")
@@ -125,15 +99,6 @@ The datasets are as follows:
 - "GF_150_poi_on_10092.txt" (POI list with POI number of 150 on "GF_10092.xyz")
 - "GF_200_poi_on_10092.txt" (POI list with POI number of 200 on "GF_10092.xyz")
 - "GF_250_poi_on_10092.txt" (POI list with POI number of 250 on "GF_10092.xyz")
-- "GF_50_poi_on_500208.txt" (POI list with POI number of 50 on "GF_500208.xyz")
-- "GF_50_poi_on_1000518.txt" (POI list with POI number of 50 on "GF_1000518.xyz")
-- "GF_50_poi_on_1501668.txt" (POI list with POI number of 50 on "GF_1501668.xyz")
-- "GF_50_poi_on_2000832.txt" (POI list with POI number of 50 on "GF_2000832.xyz")
-- "GF_50_poi_on_2502075.txt" (POI list with POI number of 50 on "GF_2502075.xyz")
-- "GF_100_poi_on_500208.txt" (POI list with POI number of 100 on "GF_500208.xyz")
-- "GF_150_poi_on_500208.txt" (POI list with POI number of 150 on "GF_500208.xyz")
-- "GF_200_poi_on_500208.txt" (POI list with POI number of 200 on "GF_500208.xyz")
-- "GF_250_poi_on_500208.txt" (POI list with POI number of 250 on "GF_500208.xyz")
 - "GF_500_poi_on_500208.txt" (POI list with POI number of 500 on "GF_500208.xyz")
 - "GF_500_poi_on_1000518.txt" (POI list with POI number of 500 on "GF_1000518.xyz")
 - "GF_500_poi_on_1501668.txt" (POI list with POI number of 500 on "GF_1501668.xyz")
@@ -148,15 +113,6 @@ The datasets are as follows:
 - "LM_150_poi_on_10092.txt" (POI list with POI number of 150 on "LM_10092.xyz")
 - "LM_200_poi_on_10092.txt" (POI list with POI number of 200 on "LM_10092.xyz")
 - "LM_250_poi_on_10092.txt" (POI list with POI number of 250 on "LM_10092.xyz")
-- "LM_50_poi_on_500208.txt" (POI list with POI number of 50 on "LM_500208.xyz")
-- "LM_50_poi_on_1000518.txt" (POI list with POI number of 50 on "LM_1000518.xyz")
-- "LM_50_poi_on_1501668.txt" (POI list with POI number of 50 on "LM_1501668.xyz")
-- "LM_50_poi_on_2000832.txt" (POI list with POI number of 50 on "LM_2000832.xyz")
-- "LM_50_poi_on_2502075.txt" (POI list with POI number of 50 on "LM_2502075.xyz")
-- "LM_100_poi_on_500208.txt" (POI list with POI number of 100 on "LM_500208.xyz")
-- "LM_150_poi_on_500208.txt" (POI list with POI number of 150 on "LM_500208.xyz")
-- "LM_200_poi_on_500208.txt" (POI list with POI number of 200 on "LM_500208.xyz")
-- "LM_250_poi_on_500208.txt" (POI list with POI number of 250 on "LM_500208.xyz")
 - "LM_500_poi_on_500208.txt" (POI list with POI number of 500 on "LM_500208.xyz")
 - "LM_500_poi_on_1000518.txt" (POI list with POI number of 500 on "LM_1000518.xyz")
 - "LM_500_poi_on_1501668.txt" (POI list with POI number of 500 on "LM_1501668.xyz")
@@ -171,15 +127,6 @@ The datasets are as follows:
 - "RM_150_poi_on_10092.txt" (POI list with POI number of 150 on "RM_10092.xyz")
 - "RM_200_poi_on_10092.txt" (POI list with POI number of 200 on "RM_10092.xyz")
 - "RM_250_poi_on_10092.txt" (POI list with POI number of 250 on "RM_10092.xyz")
-- "RM_50_poi_on_500208.txt" (POI list with POI number of 50 on "RM_500208.xyz")
-- "RM_50_poi_on_1000518.txt" (POI list with POI number of 50 on "RM_1000518.xyz")
-- "RM_50_poi_on_1501668.txt" (POI list with POI number of 50 on "RM_1501668.xyz")
-- "RM_50_poi_on_2000832.txt" (POI list with POI number of 50 on "RM_2000832.xyz")
-- "RM_50_poi_on_2502075.txt" (POI list with POI number of 50 on "RM_2502075.xyz")
-- "RM_100_poi_on_500208.txt" (POI list with POI number of 100 on "RM_500208.xyz")
-- "RM_150_poi_on_500208.txt" (POI list with POI number of 150 on "RM_500208.xyz")
-- "RM_200_poi_on_500208.txt" (POI list with POI number of 200 on "RM_500208.xyz")
-- "RM_250_poi_on_500208.txt" (POI list with POI number of 250 on "RM_500208.xyz")
 - "RM_500_poi_on_500208.txt" (POI list with POI number of 500 on "RM_500208.xyz")
 - "RM_500_poi_on_1000518.txt" (POI list with POI number of 500 on "RM_1000518.xyz")
 - "RM_500_poi_on_1501668.txt" (POI list with POI number of 500 on "RM_1501668.xyz")
@@ -269,98 +216,53 @@ For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index
 | 27 | RM | 10092 | 150 |
 | 28 | RM | 10092 | 200 |
 | 29 | RM | 10092 | 250 |
-| 30 | BH | 500835 | 50 |
-| 31 | BH | 500835 | 100 |
-| 32 | BH | 500835 | 150 |
-| 33 | BH | 500835 | 200 |
-| 34 | BH | 500835 | 250 |
-| 35 | BH | 1000414 | 50 |
-| 36 | BH | 1500996 | 50 |
-| 37 | BH | 2001610 | 50 |
-| 38 | BH | 2502596 | 50 |
-| 39 | EP | 500384 | 50 |
-| 40 | EP | 500384 | 100 |
-| 41 | EP | 500384 | 150 |
-| 42 | EP | 500384 | 200 |
-| 43 | EP | 500384 | 250 |
-| 44 | EP | 1001040 | 50 |
-| 45 | EP | 1501578 | 50 |
-| 46 | EP | 2001536 | 50 |
-| 47 | EP | 2500560 | 50 |
-| 48 | GF | 500208 | 50 |
-| 49 | GF | 500208 | 100 |
-| 50 | GF | 500208 | 150 |
-| 51 | GF | 500208 | 200 |
-| 52 | GF | 500208 | 250 |
-| 53 | GF | 1000518 | 50 |
-| 54 | GF | 1501668 | 50 |
-| 55 | GF | 2000832 | 50 |
-| 56 | GF | 2502075 | 50 |
-| 57 | LM | 500208 | 50 |
-| 58 | LM | 500208 | 100 |
-| 59 | LM | 500208 | 150 |
-| 60 | LM | 500208 | 200 |
-| 61 | LM | 500208 | 250 |
-| 62 | LM | 1000518 | 50 |
-| 63 | LM | 1501668 | 50 |
-| 64 | LM | 2000832 | 50 |
-| 65 | LM | 2502075 | 50 |
-| 66 | RM | 500208 | 50 |
-| 67 | RM | 500208 | 100 |
-| 68 | RM | 500208 | 150 |
-| 69 | RM | 500208 | 200 |
-| 70 | RM | 500208 | 250 |
-| 71 | RM | 1000518 | 50 |
-| 72 | RM | 1501668 | 50 |
-| 73 | RM | 2000832 | 50 |
-| 74 | RM | 2502075 | 50 |
-| 75 | BH | 500835 | 500 |
-| 76 | BH | 500835 | 1000 |
-| 77 | BH | 500835 | 1500 |
-| 78 | BH | 500835 | 2000 |
-| 79 | BH | 500835 | 2500 |
-| 80 | BH | 1000414 | 500 |
-| 81 | BH | 1500996 | 500 |
-| 82 | BH | 2001610 | 500 |
-| 83 | BH | 2502596 | 500 |
-| 84 | EP | 500384 | 500 |
-| 85 | EP | 500384 | 1000 |
-| 86 | EP | 500384 | 1500 |
-| 87 | EP | 500384 | 2000 |
-| 88 | EP | 500384 | 2500 |
-| 89 | EP | 1001040 | 500 |
-| 90 | EP | 1501578 | 500 |
-| 91 | EP | 2001536 | 500 |
-| 92 | EP | 2500560 | 500 |
-| 93 | GF | 500208 | 500 |
-| 94 | GF | 500208 | 1000 |
-| 95 | GF | 500208 | 1500 |
-| 96 | GF | 500208 | 2000 |
-| 97 | GF | 500208 | 2500 |
-| 98 | GF | 1000518 | 500 |
-| 99 | GF | 1501668 | 500 |
-| 100 | GF | 2000832 | 500 |
-| 101 | GF | 2502075 | 500 |
-| 102 | LM | 500208 | 500 |
-| 103 | LM | 500208 | 1000 |
-| 104 | LM | 500208 | 1500 |
-| 105 | LM | 500208 | 2000 |
-| 106 | LM | 500208 | 2500 |
-| 107 | LM | 1000518 | 500 |
-| 108 | LM | 1501668 | 500 |
-| 109 | LM | 2000832 | 500 |
-| 110 | LM | 2502075 | 500 |
-| 111 | RM | 500208 | 500 |
-| 112 | RM | 500208 | 1000 |
-| 113 | RM | 500208 | 1500 |
-| 114 | RM | 500208 | 2000 |
-| 115 | RM | 500208 | 2500 |
-| 116 | RM | 1000518 | 500 |
-| 117 | RM | 1501668 | 500 |
-| 118 | RM | 2000832 | 500 |
-| 119 | RM | 2502075 | 500 |
+| 30 | BH | 500835 | 500 |
+| 31 | BH | 500835 | 1000 |
+| 32 | BH | 500835 | 1500 |
+| 33 | BH | 500835 | 2000 |
+| 34 | BH | 500835 | 2500 |
+| 35 | BH | 1000414 | 500 |
+| 36 | BH | 1500996 | 500 |
+| 37 | BH | 2001610 | 500 |
+| 38 | BH | 2502596 | 500 |
+| 39 | EP | 500384 | 500 |
+| 40 | EP | 500384 | 1000 |
+| 41 | EP | 500384 | 1500 |
+| 42 | EP | 500384 | 2000 |
+| 43 | EP | 500384 | 2500 |
+| 44 | EP | 1001040 | 500 |
+| 45 | EP | 1501578 | 500 |
+| 46 | EP | 2001536 | 500 |
+| 47 | EP | 2500560 | 500 |
+| 48 | GF | 500208 | 500 |
+| 49 | GF | 500208 | 1000 |
+| 50 | GF | 500208 | 1500 |
+| 51 | GF | 500208 | 2000 |
+| 52 | GF | 500208 | 2500 |
+| 53 | GF | 1000518 | 500 |
+| 54 | GF | 1501668 | 500 |
+| 55 | GF | 2000832 | 500 |
+| 56 | GF | 2502075 | 500 |
+| 57 | LM | 500208 | 500 |
+| 58 | LM | 500208 | 1000 |
+| 59 | LM | 500208 | 1500 |
+| 60 | LM | 500208 | 2000 |
+| 61 | LM | 500208 | 2500 |
+| 62 | LM | 1000518 | 500 |
+| 63 | LM | 1501668 | 500 |
+| 64 | LM | 2000832 | 500 |
+| 65 | LM | 2502075 | 500 |
+| 66 | RM | 500208 | 500 |
+| 67 | RM | 500208 | 1000 |
+| 68 | RM | 500208 | 1500 |
+| 69 | RM | 500208 | 2000 |
+| 70 | RM | 500208 | 2500 |
+| 71 | RM | 1000518 | 500 |
+| 72 | RM | 1501668 | 500 |
+| 73 | RM | 2000832 | 500 |
+| 74 | RM | 2502075 | 500 |
 
-As mentioned in our paper, SE-Oracle(FaceExact), SE-Oracle(FaceAppr), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr) are very time consuming (they are only feasible on small-version dataset), and SE-Oracle(Edge), SE-Oracle(Point), RC-Oracle-Naive(Edge), RC-Oracle-Naive(Point) are also time consuming (they are only feasible on small-verion dataset and large-version dataset with small-version POIs). So the project will run SE-Oracle(FaceExact), SE-Oracle(FaceAppr), SE-Oracle(Edge), SE-Oracle(Point), RC-Oracle-Naive(FaceExact), RC-Oracle-Naive(FaceAppr), RC-Oracle-Naive(Edge), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Edge), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Edge) and Fly(Point) on small-version dataset ([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run SE-Oracle(Edge), SE-Oracle(Point), RC-Oracle-Naive(Edge), RC-Oracle-Naive(Point), RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Edge), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Edge) and Fly(Point) on large-version dataset with small-version POIs (29 < [point_cloud_data_and_point_number_and_poi_number_map_index] <= 74). The project will run RC-Oracle(FaceExact), RC-Oracle(FaceAppr), RC-Oracle(Edge), RC-Oracle(Point), Fly(FaceExact), Fly(FaceAppr), Fly(Edge) and Fly(Point) on large-version dataset with large-version POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 74).
+As mentioned in our paper, SE-Oracle-Adapt, SE-Oracle-Adapt2, and RC-Oracle-Naive are time consuming. So the project will run SE-Oracle-Adapt, SE-Oracle-Adapt2, RC-Oracle-Naive, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
 
 In addition, we strongly encourage you to set [run_knn] to 0 if you are not conducting experiments. Otherwise, it will take a very long time to run calculate the knn of all POIs. 
 

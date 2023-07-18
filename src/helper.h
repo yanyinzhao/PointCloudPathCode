@@ -541,53 +541,6 @@ void pre_compute_Point(int poi_num, point_cloud_geodesic::PointCloud *point_clou
     memory_usage += algorithm.get_memory() + 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(point_cloud_geodesic::PathPoint);
 }
 
-void pre_compute_Vertex_FaceAppr(int poi_num, geodesic::Mesh *mesh, std::vector<int> &poi_list, double epsilon,
-                                 bool pass_point_and_not_pass_terrain, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
-                                 std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &pairwise_path_poi_to_poi_map,
-                                 double &memory_usage)
-{
-    double subdivision_level = 0;
-    if (!pass_point_and_not_pass_terrain)
-    {
-        subdivision_level = epslion_to_subdivision_level(epsilon);
-    }
-    geodesic::GeodesicAlgorithmSubdivision algorithm(mesh, subdivision_level);
-    double const distance_limit = geodesic::GEODESIC_INF;
-    pairwise_distance_poi_to_poi_map.clear();
-    pairwise_path_poi_to_poi_map.clear();
-    int pairwise_path_poi_to_poi_size = 0;
-    std::vector<geodesic::SurfacePoint> one_source_poi_list;
-    std::vector<geodesic::SurfacePoint> destinations_poi_list;
-
-    for (int i = 0; i < poi_num; i++)
-    {
-        one_source_poi_list.clear();
-        destinations_poi_list.clear();
-        one_source_poi_list.push_back(geodesic::SurfacePoint(&mesh->vertices()[poi_list[i]]));
-        for (int j = i; j < poi_num; j++)
-        {
-            destinations_poi_list.push_back(geodesic::SurfacePoint(&mesh->vertices()[poi_list[j]]));
-        }
-        algorithm.propagate(one_source_poi_list, distance_limit);
-        for (int j = i; j < poi_num; j++)
-        {
-            std::vector<geodesic::SurfacePoint> path;
-            geodesic::SurfacePoint one_destination(&mesh->vertices()[poi_list[j]]);
-            algorithm.trace_back(one_destination, path);
-            if (subdivision_level == 0)
-            {
-                modify_path(path);
-            }
-            int i_j;
-            hash_function_two_keys_to_one_key(poi_num, i, j, i_j);
-            pairwise_distance_poi_to_poi_map[i_j] = length(path);
-            pairwise_path_poi_to_poi_map[i_j] = path;
-            pairwise_path_poi_to_poi_size += path.size();
-        }
-    }
-    memory_usage += algorithm.get_memory() + 0.5 * poi_num * (poi_num - 1) * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
-}
-
 void pre_compute_FaceExact(int poi_num, geodesic::Mesh *mesh, std::vector<int> &poi_list,
                            std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
                            std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &pairwise_path_poi_to_poi_map,
