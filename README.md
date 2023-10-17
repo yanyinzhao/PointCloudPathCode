@@ -4,10 +4,12 @@
 
 This project provides the implementation for proximity queries on point cloud using rapid construction path oracle. We refer the readers to our paper for more details.
 
-We compared 8 algorithms as follows:
+We compared 10 algorithms as follows:
 
 - SE-Oracle-Adapt (oracle based baseline)
-- SE-Oracle-Adapt2 (oracle based baseline)
+- SE-Oracle-FastFly-Adapt (oracle in ablation study)
+- EAR-Oracle-Adapt (oracle based baseline)
+- EAR-Oracle-FastFly-Adapt (oracle in ablation study)
 - RC-Oracle-Naive (variation oracle)
 - RC-Oracle (our oracle)
 - CH-Adapt (on-the-fly baseline)
@@ -262,7 +264,7 @@ For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index
 | 73 | RM | 2000832 | 500 |
 | 74 | RM | 2502075 | 500 |
 
-As mentioned in our paper, SE-Oracle-Adapt, SE-Oracle-Adapt2, and RC-Oracle-Naive are time consuming. So the project will run SE-Oracle-Adapt, SE-Oracle-Adapt2, RC-Oracle-Naive, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
+As mentioned in our paper, SE-Oracle-Adapt, EAR-Oracle-Adapt, and RC-Oracle-Naive are time consuming. So the project will run SE-Oracle-Adapt, SE-Oracle-FastFly-Adapt, EAR-Oracle-Adapt, EAR-Oracle-FastFly-Adapt, RC-Oracle-Naive, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run SE-Oracle-FastFly-Adapt, EAR-Oracle-FastFly-Adapt, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
 
 In addition, we strongly encourage you to set [run_knn] to 0 if you are not conducting experiments. Otherwise, it will take a very long time to run calculate the knn of all POIs. 
 
@@ -272,7 +274,7 @@ An example:
 ./main 0 0.5 0 0
 ```
 
-In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run 8 algorithms.
+In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run 10 algorithms.
 
 ## Output
 

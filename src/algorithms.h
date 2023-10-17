@@ -807,7 +807,7 @@ void RC_Oracle_Naive_all_poi_knn_or_range_query(int poi_num, std::unordered_map<
     knn_or_range_query_time /= 1000000;
 }
 
-void SE_Oracle_Adapt2(
+void SE_Oracle_FastFly_Adapt(
     int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
     int source_poi_index, int destination_poi_index, double &construction_time,
     double &query_time, double &memory_usage, double &index_size, double &distance_result,
@@ -860,24 +860,24 @@ void SE_Oracle_Adapt2(
         }
         radius = std::max(pre_pairwise_distance_poi_to_poi_map[x_y_in_poi_list], radius);
     }
-    GeoNode root_geo(0, poi_list[0], radius);
+    GeoNode *root_geo = new GeoNode(0, poi_list[0], radius);
 
     stx::btree<int, GeoNode *> pois_as_center_each_parent_layer;
     pois_as_center_each_parent_layer.clear();
-    build_geo_tree_C(geo_tree_node_id, point_cloud, root_geo, poi_num, pois_B_tree, pois_as_center_each_parent_layer, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, poi_unordered_map);
+    build_geo_tree_C(geo_tree_node_id, point_cloud, *root_geo, poi_num, pois_B_tree, pois_as_center_each_parent_layer, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, poi_unordered_map);
 
     std::vector<GeoNode *> partition_tree_to_compressed_partition_tree_to_be_removed_nodes;
     partition_tree_to_compressed_partition_tree_to_be_removed_nodes.clear();
     std::unordered_map<int, GeoNode *> geo_node_in_partition_tree_unordered_map;
     geo_node_in_partition_tree_unordered_map.clear();
-    partition_tree_to_compressed_partition_tree(root_geo, partition_tree_to_compressed_partition_tree_to_be_removed_nodes, geo_node_in_partition_tree_unordered_map);
+    partition_tree_to_compressed_partition_tree(*root_geo, partition_tree_to_compressed_partition_tree_to_be_removed_nodes, geo_node_in_partition_tree_unordered_map);
 
     std::unordered_map<int, int> geo_pair_unordered_map;
     geo_pair_unordered_map.clear();
     int pairwise_path_poi_to_poi_size = 0;
     int WSPD_oracle_edge_num = 0;
     double WSPD_oracle_epsilon = pow((1 + epsilon), 0.35) - 1;
-    generate_geo_pair_C(geo_tree_node_id, WSPD_oracle_edge_num, point_cloud, root_geo, root_geo, WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
+    generate_geo_pair_C(geo_tree_node_id, WSPD_oracle_edge_num, point_cloud, *root_geo, *root_geo, WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
     index_size = WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
 
     memory_usage += pre_pairwise_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
@@ -888,7 +888,8 @@ void SE_Oracle_Adapt2(
 
     auto start_query_time = std::chrono::high_resolution_clock::now();
 
-    distance_result = query_geo_C(geo_tree_node_id, *geo_node_in_partition_tree_unordered_map[all_poi[source_poi_index]->index], *geo_node_in_partition_tree_unordered_map[all_poi[destination_poi_index]->index], geopairs, poi_unordered_map, path_result);
+    int a, b;
+    distance_result = query_geo_C(geo_tree_node_id, *geo_node_in_partition_tree_unordered_map[all_poi[source_poi_index]->index], *geo_node_in_partition_tree_unordered_map[all_poi[destination_poi_index]->index], a, b, geopairs, path_result);
     distance_result = round(distance_result * 1000000000.0) / 1000000000.0;
 
     auto stop_query_time = std::chrono::high_resolution_clock::now();
@@ -901,7 +902,7 @@ void SE_Oracle_Adapt2(
     if (run_knn_query)
     {
         all_poi_knn_or_range_query_geo_C(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, poi_unordered_map, 1, k_value, range, all_poi_knn_query_list);
+                                         all_poi, geopairs, 1, k_value, range, all_poi_knn_query_list);
     }
 
     auto stop_knn_query_time = std::chrono::high_resolution_clock::now();
@@ -914,7 +915,7 @@ void SE_Oracle_Adapt2(
     if (run_range_query)
     {
         all_poi_knn_or_range_query_geo_C(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, poi_unordered_map, 2, k_value, range, all_poi_range_list);
+                                         all_poi, geopairs, 2, k_value, range, all_poi_range_list);
     }
 
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
@@ -981,24 +982,24 @@ void SE_Oracle_Adapt(
         }
         radius = std::max(pre_pairwise_distance_poi_to_poi_map[x_y_in_poi_list], radius);
     }
-    GeoNode root_geo(0, poi_list[0], radius);
+    GeoNode *root_geo = new GeoNode(0, poi_list[0], radius);
 
     stx::btree<int, GeoNode *> pois_as_center_each_parent_layer;
     pois_as_center_each_parent_layer.clear();
-    build_geo_tree_T(geo_tree_node_id, &mesh, root_geo, poi_num, pois_B_tree, pois_as_center_each_parent_layer, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, poi_unordered_map);
+    build_geo_tree_T(geo_tree_node_id, &mesh, *root_geo, poi_num, pois_B_tree, pois_as_center_each_parent_layer, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, poi_unordered_map);
 
     std::vector<GeoNode *> partition_tree_to_compressed_partition_tree_to_be_removed_nodes;
     partition_tree_to_compressed_partition_tree_to_be_removed_nodes.clear();
     std::unordered_map<int, GeoNode *> geo_node_in_partition_tree_unordered_map;
     geo_node_in_partition_tree_unordered_map.clear();
-    partition_tree_to_compressed_partition_tree(root_geo, partition_tree_to_compressed_partition_tree_to_be_removed_nodes, geo_node_in_partition_tree_unordered_map);
+    partition_tree_to_compressed_partition_tree(*root_geo, partition_tree_to_compressed_partition_tree_to_be_removed_nodes, geo_node_in_partition_tree_unordered_map);
 
     std::unordered_map<int, int> geo_pair_unordered_map;
     geo_pair_unordered_map.clear();
     int pairwise_path_poi_to_poi_size = 0;
     int WSPD_oracle_edge_num = 0;
     double WSPD_oracle_epsilon = pow((1 + epsilon), 0.35) - 1;
-    generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, &mesh, root_geo, root_geo, WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
+    generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, &mesh, *root_geo, *root_geo, WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
     index_size = WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
 
     memory_usage += pre_pairwise_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
@@ -1009,7 +1010,8 @@ void SE_Oracle_Adapt(
 
     auto start_query_time = std::chrono::high_resolution_clock::now();
 
-    distance_result = query_geo_T(geo_tree_node_id, *geo_node_in_partition_tree_unordered_map[all_poi[source_poi_index]->index], *geo_node_in_partition_tree_unordered_map[all_poi[destination_poi_index]->index], geopairs, poi_unordered_map, path_result);
+    int a, b;
+    distance_result = query_geo_T(geo_tree_node_id, *geo_node_in_partition_tree_unordered_map[all_poi[source_poi_index]->index], *geo_node_in_partition_tree_unordered_map[all_poi[destination_poi_index]->index], a, b, geopairs, path_result);
     distance_result = round(distance_result * 1000000000.0) / 1000000000.0;
 
     auto stop_query_time = std::chrono::high_resolution_clock::now();
@@ -1022,7 +1024,7 @@ void SE_Oracle_Adapt(
     if (run_knn_query)
     {
         all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, poi_unordered_map, 1, k_value, range, all_poi_knn_query_list);
+                                         all_poi, geopairs, 1, k_value, range, all_poi_knn_query_list);
     }
 
     auto stop_knn_query_time = std::chrono::high_resolution_clock::now();
@@ -1035,7 +1037,300 @@ void SE_Oracle_Adapt(
     if (run_range_query)
     {
         all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, poi_unordered_map, 2, k_value, range, all_poi_range_list);
+                                         all_poi, geopairs, 2, k_value, range, all_poi_range_list);
+    }
+
+    auto stop_range_query_time = std::chrono::high_resolution_clock::now();
+    auto duration_range_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_range_query_time - start_range_query_time);
+    range_query_time = duration_range_query_time.count();
+    range_query_time /= 1000000;
+}
+
+void EAR_Oracle_FastFly_Adapt(
+    int sqrt_num_of_box, int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+    int source_poi_index, int destination_poi_index,
+    double &construction_time, double &query_time,
+    double &memory_usage, double &index_size, double &distance_result,
+    std::vector<point_cloud_geodesic::PathPoint> &path_result, bool run_knn_query, bool run_range_query,
+    int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
+    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
+{
+    auto start_construction_time = std::chrono::high_resolution_clock::now();
+
+    std::unordered_map<int, int> highway_node_id_map;
+    std::unordered_map<int, std::unordered_map<int, int>> highway_node_id_with_box_id_map;
+    highway_node_id_map.clear();
+    highway_node_id_with_box_id_map.clear();
+    geodesic::Mesh mesh;
+    double point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage;
+    point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
+    divide_mesh_into_box(&mesh, sqrt_num_of_box, highway_node_id_map, highway_node_id_with_box_id_map);
+
+    std::vector<int> highway_node_list;
+    highway_node_list.clear();
+    for (auto i : highway_node_id_map)
+    {
+        highway_node_list.push_back(i.first);
+    }
+
+    std::unordered_map<int, double> pre_distance_highway_node_to_highway_node_map;
+    std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> pre_path_highway_node_to_highway_node_map;
+    double pre_memory_usage = 0;
+
+    pre_compute_EAR_Oracle_highway_node_C(point_cloud, highway_node_list, pre_distance_highway_node_to_highway_node_map,
+                                          pre_path_highway_node_to_highway_node_map, pre_memory_usage);
+
+    int geo_tree_node_id = 1; // the root node has 0 id
+    std::unordered_map<int, GeoPair_C *> geopairs;
+    geopairs.clear();
+    std::vector<GeoNode *> all_highway_node;
+    all_highway_node.clear();
+    std::vector<std::pair<int, GeoNode *>> highway_nodes;
+    highway_nodes.clear();
+    std::unordered_map<int, int> highway_node_unordered_map;
+    highway_node_unordered_map.clear();
+
+    for (int i = 0; i < highway_node_list.size(); i++)
+    {
+        GeoNode *n = new GeoNode(highway_node_list[i], 0);
+        all_highway_node.push_back(n);
+        std::pair<int, GeoNode *> m(highway_node_list[i], n);
+        highway_nodes.push_back(m);
+        highway_node_unordered_map[highway_node_list[i]] = i;
+    }
+
+    double radius = 0;
+    stx::btree<int, GeoNode *> highway_nodes_B_tree(highway_nodes.begin(), highway_nodes.end());
+
+    for (int i = 0; i < highway_node_list.size(); i++)
+    {
+        int x_in_highway_node_list = 0;
+        int y_in_highway_node_list = i;
+        int x_y_in_highway_node_list;
+        if (x_in_highway_node_list <= y_in_highway_node_list)
+        {
+            hash_function_two_keys_to_one_key(highway_node_list.size(), x_in_highway_node_list, y_in_highway_node_list, x_y_in_highway_node_list);
+        }
+        else
+        {
+            hash_function_two_keys_to_one_key(highway_node_list.size(), y_in_highway_node_list, x_in_highway_node_list, x_y_in_highway_node_list);
+        }
+        radius = std::max(pre_distance_highway_node_to_highway_node_map[x_y_in_highway_node_list], radius);
+    }
+    GeoNode *root_geo = new GeoNode(0, highway_node_list[0], radius);
+
+    stx::btree<int, GeoNode *> highway_nodes_as_center_each_parent_layer;
+    highway_nodes_as_center_each_parent_layer.clear();
+    build_geo_tree_C(geo_tree_node_id, point_cloud, *root_geo, highway_node_list.size(), highway_nodes_B_tree, highway_nodes_as_center_each_parent_layer, pre_distance_highway_node_to_highway_node_map, pre_path_highway_node_to_highway_node_map, highway_node_unordered_map);
+
+    std::vector<GeoNode *> partition_tree_to_compressed_partition_tree_to_be_removed_nodes;
+    partition_tree_to_compressed_partition_tree_to_be_removed_nodes.clear();
+    std::unordered_map<int, GeoNode *> geo_node_in_partition_tree_unordered_map;
+    geo_node_in_partition_tree_unordered_map.clear();
+    partition_tree_to_compressed_partition_tree(*root_geo, partition_tree_to_compressed_partition_tree_to_be_removed_nodes, geo_node_in_partition_tree_unordered_map);
+
+    std::unordered_map<int, int> geo_pair_unordered_map;
+    geo_pair_unordered_map.clear();
+    int EAR_oracle_edge_num = 0;
+    double EAR_oracle_epsilon = pow((1 + epsilon), 0.35) - 1;
+    int pairwise_path_highway_node_to_highway_node_size = 0;
+    generate_geo_pair_C(geo_tree_node_id, EAR_oracle_edge_num, point_cloud, *root_geo, *root_geo, epsilon, geopairs, highway_node_unordered_map, geo_pair_unordered_map, pre_distance_highway_node_to_highway_node_map, pre_path_highway_node_to_highway_node_map, pairwise_path_highway_node_to_highway_node_size);
+    index_size = EAR_oracle_edge_num * sizeof(double) + pairwise_path_highway_node_to_highway_node_size * sizeof(point_cloud_geodesic::PathPoint);
+
+    std::unordered_map<int, double> distance_poi_to_highway_node_map;
+    std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> path_poi_to_highway_node_map;
+
+    poi_to_highway_node_path_C(point_cloud, &mesh, sqrt_num_of_box, highway_node_id_with_box_id_map, poi_list, distance_poi_to_highway_node_map, path_poi_to_highway_node_map, index_size, memory_usage);
+
+    memory_usage += pre_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + EAR_oracle_edge_num * sizeof(double) + pairwise_path_highway_node_to_highway_node_size * sizeof(point_cloud_geodesic::PathPoint);
+
+    auto stop_construction_time = std::chrono::high_resolution_clock::now();
+    auto duration_construction_time = std::chrono::duration_cast<std::chrono::milliseconds>(stop_construction_time - start_construction_time);
+    construction_time = duration_construction_time.count();
+
+    auto start_query_time = std::chrono::high_resolution_clock::now();
+
+    EAR_Oracle_query_C(point_cloud, &mesh, poi_list, sqrt_num_of_box, geo_tree_node_id, highway_node_id_with_box_id_map,
+                       all_highway_node, geo_node_in_partition_tree_unordered_map,
+                       geopairs, distance_poi_to_highway_node_map, path_poi_to_highway_node_map,
+                       source_poi_index, destination_poi_index, distance_result, path_result);
+    distance_result = round(distance_result * 1000000000.0) / 1000000000.0;
+
+    auto stop_query_time = std::chrono::high_resolution_clock::now();
+    auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
+    query_time = duration_query_time.count();
+    query_time /= 1000000;
+
+    auto start_knn_query_time = std::chrono::high_resolution_clock::now();
+
+    if (run_knn_query)
+    {
+        all_poi_knn_or_range_query_EAR_oracle_C(point_cloud, &mesh, poi_list, sqrt_num_of_box, geo_tree_node_id, highway_node_id_with_box_id_map,
+                                                all_highway_node, geo_node_in_partition_tree_unordered_map,
+                                                geopairs, distance_poi_to_highway_node_map, path_poi_to_highway_node_map,
+                                                poi_num, 1, k_value, range, all_poi_knn_query_list);
+    }
+
+    auto stop_knn_query_time = std::chrono::high_resolution_clock::now();
+    auto duration_knn_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_knn_query_time - start_knn_query_time);
+    knn_query_time = duration_knn_query_time.count();
+    knn_query_time /= 1000000;
+
+    auto start_range_query_time = std::chrono::high_resolution_clock::now();
+
+    if (run_range_query)
+    {
+        all_poi_knn_or_range_query_EAR_oracle_C(point_cloud, &mesh, poi_list, sqrt_num_of_box, geo_tree_node_id, highway_node_id_with_box_id_map,
+                                                all_highway_node, geo_node_in_partition_tree_unordered_map,
+                                                geopairs, distance_poi_to_highway_node_map, path_poi_to_highway_node_map,
+                                                poi_num, 2, k_value, range, all_poi_knn_query_list);
+    }
+
+    auto stop_range_query_time = std::chrono::high_resolution_clock::now();
+    auto duration_range_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_range_query_time - start_range_query_time);
+    range_query_time = duration_range_query_time.count();
+    range_query_time /= 1000000;
+}
+
+void EAR_Oracle_Adapt(
+    int sqrt_num_of_box, int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+    int source_poi_index, int destination_poi_index,
+    double &point_cloud_to_terrain_time, double &construction_time,
+    double &query_time, double &point_cloud_to_terrain_memory_usage,
+    double &memory_usage, double &index_size, double &distance_result,
+    std::vector<geodesic::SurfacePoint> &path_result, bool run_knn_query, bool run_range_query,
+    int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
+    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
+{
+    geodesic::Mesh mesh;
+    point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
+
+    auto start_construction_time = std::chrono::high_resolution_clock::now();
+
+    std::unordered_map<int, int> highway_node_id_map;
+    std::unordered_map<int, std::unordered_map<int, int>> highway_node_id_with_box_id_map;
+    highway_node_id_map.clear();
+    highway_node_id_with_box_id_map.clear();
+    divide_mesh_into_box(&mesh, sqrt_num_of_box, highway_node_id_map, highway_node_id_with_box_id_map);
+
+    std::vector<int> highway_node_list;
+    highway_node_list.clear();
+    for (auto i : highway_node_id_map)
+    {
+        highway_node_list.push_back(i.first);
+    }
+
+    std::unordered_map<int, double> pre_distance_highway_node_to_highway_node_map;
+    std::unordered_map<int, std::vector<geodesic::SurfacePoint>> pre_path_highway_node_to_highway_node_map;
+    double pre_memory_usage = 0;
+
+    pre_compute_EAR_Oracle_highway_node_T(&mesh, highway_node_list, pre_distance_highway_node_to_highway_node_map,
+                                          pre_path_highway_node_to_highway_node_map, pre_memory_usage);
+
+    int geo_tree_node_id = 1; // the root node has 0 id
+    std::unordered_map<int, GeoPair_T *> geopairs;
+    geopairs.clear();
+    std::vector<GeoNode *> all_highway_node;
+    all_highway_node.clear();
+    std::vector<std::pair<int, GeoNode *>> highway_nodes;
+    highway_nodes.clear();
+    std::unordered_map<int, int> highway_node_unordered_map;
+    highway_node_unordered_map.clear();
+
+    for (int i = 0; i < highway_node_list.size(); i++)
+    {
+        GeoNode *n = new GeoNode(highway_node_list[i], 0);
+        all_highway_node.push_back(n);
+        std::pair<int, GeoNode *> m(highway_node_list[i], n);
+        highway_nodes.push_back(m);
+        highway_node_unordered_map[highway_node_list[i]] = i;
+    }
+
+    double radius = 0;
+    stx::btree<int, GeoNode *> highway_nodes_B_tree(highway_nodes.begin(), highway_nodes.end());
+
+    for (int i = 0; i < highway_node_list.size(); i++)
+    {
+        int x_in_highway_node_list = 0;
+        int y_in_highway_node_list = i;
+        int x_y_in_highway_node_list;
+        if (x_in_highway_node_list <= y_in_highway_node_list)
+        {
+            hash_function_two_keys_to_one_key(highway_node_list.size(), x_in_highway_node_list, y_in_highway_node_list, x_y_in_highway_node_list);
+        }
+        else
+        {
+            hash_function_two_keys_to_one_key(highway_node_list.size(), y_in_highway_node_list, x_in_highway_node_list, x_y_in_highway_node_list);
+        }
+        radius = std::max(pre_distance_highway_node_to_highway_node_map[x_y_in_highway_node_list], radius);
+    }
+    GeoNode *root_geo = new GeoNode(0, highway_node_list[0], radius);
+
+    stx::btree<int, GeoNode *> highway_nodes_as_center_each_parent_layer;
+    highway_nodes_as_center_each_parent_layer.clear();
+    build_geo_tree_T(geo_tree_node_id, &mesh, *root_geo, highway_node_list.size(), highway_nodes_B_tree, highway_nodes_as_center_each_parent_layer, pre_distance_highway_node_to_highway_node_map, pre_path_highway_node_to_highway_node_map, highway_node_unordered_map);
+
+    std::vector<GeoNode *> partition_tree_to_compressed_partition_tree_to_be_removed_nodes;
+    partition_tree_to_compressed_partition_tree_to_be_removed_nodes.clear();
+    std::unordered_map<int, GeoNode *> geo_node_in_partition_tree_unordered_map;
+    geo_node_in_partition_tree_unordered_map.clear();
+    partition_tree_to_compressed_partition_tree(*root_geo, partition_tree_to_compressed_partition_tree_to_be_removed_nodes, geo_node_in_partition_tree_unordered_map);
+
+    std::unordered_map<int, int> geo_pair_unordered_map;
+    geo_pair_unordered_map.clear();
+    int EAR_oracle_edge_num = 0;
+    double EAR_oracle_epsilon = pow((1 + epsilon), 0.35) - 1;
+    int pairwise_path_highway_node_to_highway_node_size = 0;
+    generate_geo_pair_T(geo_tree_node_id, EAR_oracle_edge_num, &mesh, *root_geo, *root_geo, epsilon, geopairs, highway_node_unordered_map, geo_pair_unordered_map, pre_distance_highway_node_to_highway_node_map, pre_path_highway_node_to_highway_node_map, pairwise_path_highway_node_to_highway_node_size);
+    index_size = EAR_oracle_edge_num * sizeof(double) + pairwise_path_highway_node_to_highway_node_size * sizeof(geodesic::SurfacePoint);
+
+    std::unordered_map<int, double> distance_poi_to_highway_node_map;
+    std::unordered_map<int, std::vector<geodesic::SurfacePoint>> path_poi_to_highway_node_map;
+
+    poi_to_highway_node_path_T(&mesh, sqrt_num_of_box, highway_node_id_with_box_id_map, poi_list, distance_poi_to_highway_node_map, path_poi_to_highway_node_map, index_size, memory_usage);
+
+    memory_usage += pre_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + EAR_oracle_edge_num * sizeof(double) + pairwise_path_highway_node_to_highway_node_size * sizeof(geodesic::SurfacePoint);
+
+    auto stop_construction_time = std::chrono::high_resolution_clock::now();
+    auto duration_construction_time = std::chrono::duration_cast<std::chrono::milliseconds>(stop_construction_time - start_construction_time);
+    construction_time = duration_construction_time.count();
+
+    auto start_query_time = std::chrono::high_resolution_clock::now();
+
+    EAR_Oracle_query_T(&mesh, poi_list, sqrt_num_of_box, geo_tree_node_id, highway_node_id_with_box_id_map,
+                       all_highway_node, geo_node_in_partition_tree_unordered_map,
+                       geopairs, distance_poi_to_highway_node_map, path_poi_to_highway_node_map,
+                       source_poi_index, destination_poi_index, distance_result, path_result);
+    distance_result = round(distance_result * 1000000000.0) / 1000000000.0;
+
+    auto stop_query_time = std::chrono::high_resolution_clock::now();
+    auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
+    query_time = duration_query_time.count();
+    query_time /= 1000000;
+
+    auto start_knn_query_time = std::chrono::high_resolution_clock::now();
+
+    if (run_knn_query)
+    {
+        all_poi_knn_or_range_query_EAR_oracle_T(&mesh, poi_list, sqrt_num_of_box, geo_tree_node_id, highway_node_id_with_box_id_map,
+                                                all_highway_node, geo_node_in_partition_tree_unordered_map,
+                                                geopairs, distance_poi_to_highway_node_map, path_poi_to_highway_node_map,
+                                                poi_num, 1, k_value, range, all_poi_knn_query_list);
+    }
+
+    auto stop_knn_query_time = std::chrono::high_resolution_clock::now();
+    auto duration_knn_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_knn_query_time - start_knn_query_time);
+    knn_query_time = duration_knn_query_time.count();
+    knn_query_time /= 1000000;
+
+    auto start_range_query_time = std::chrono::high_resolution_clock::now();
+
+    if (run_range_query)
+    {
+        all_poi_knn_or_range_query_EAR_oracle_T(&mesh, poi_list, sqrt_num_of_box, geo_tree_node_id, highway_node_id_with_box_id_map,
+                                                all_highway_node, geo_node_in_partition_tree_unordered_map,
+                                                geopairs, distance_poi_to_highway_node_map, path_poi_to_highway_node_map,
+                                                poi_num, 2, k_value, range, all_poi_knn_query_list);
     }
 
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
@@ -1426,14 +1721,14 @@ void RC_Oracle_Naive_with_output(int poi_num, point_cloud_geodesic::PointCloud *
     ofs.close();
 }
 
-void SE_Oracle_Adapt2_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
-                                  int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
-                                  double terrain_exact_distance, bool run_knn_query, bool run_range_query,
-                                  int k_value, double range,
-                                  std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_query_list,
-                                  std::vector<std::vector<int>> &terrain_exact_all_poi_knn_query_list,
-                                  std::vector<std::vector<int>> &point_cloud_exact_all_poi_range_query_list,
-                                  std::vector<std::vector<int>> &terrain_exact_all_poi_range_query_list, std::string write_file_header)
+void SE_Oracle_FastFly_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                         int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                         double terrain_exact_distance, bool run_knn_query, bool run_range_query,
+                                         int k_value, double range,
+                                         std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_query_list,
+                                         std::vector<std::vector<int>> &terrain_exact_all_poi_knn_query_list,
+                                         std::vector<std::vector<int>> &point_cloud_exact_all_poi_range_query_list,
+                                         std::vector<std::vector<int>> &terrain_exact_all_poi_range_query_list, std::string write_file_header)
 {
     double construction_time = 0;
     double query_time = 0;
@@ -1453,9 +1748,9 @@ void SE_Oracle_Adapt2_with_output(int poi_num, point_cloud_geodesic::PointCloud 
     all_poi_knn_query_list.clear();
     all_poi_range_query_list.clear();
 
-    SE_Oracle_Adapt2(poi_num, point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, construction_time,
-                     query_time, memory_usage, index_size, distance_result, path_result, run_knn_query, run_range_query,
-                     k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
+    SE_Oracle_FastFly_Adapt(poi_num, point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, construction_time,
+                            query_time, memory_usage, index_size, distance_result, path_result, run_knn_query, run_range_query,
+                            k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
     if (run_knn_query)
     {
         calculate_knn_or_range_query_error(point_cloud_exact_all_poi_knn_query_list, all_poi_knn_query_list, point_cloud_knn_query_error);
@@ -1484,7 +1779,7 @@ void SE_Oracle_Adapt2_with_output(int poi_num, point_cloud_geodesic::PointCloud 
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== SE_Oracle_Adapt2 ==\n";
+    ofs << "== SE_Oracle_FastFly_Adapt ==\n";
     ofs << write_file_header << "\t"
         << 0 << "\t"
         << construction_time << "\t"
@@ -1568,6 +1863,169 @@ void SE_Oracle_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud *
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
     ofs << "== SE_Oracle_Adapt ==\n";
+    ofs << write_file_header << "\t"
+        << point_cloud_to_terrain_time << "\t"
+        << construction_time << "\t"
+        << query_time << "\t"
+        << point_cloud_to_terrain_memory_usage / 1e6 << "\t"
+        << memory_usage / 1e6 << "\t"
+        << index_size / 1e6 << "\t"
+        << distance_result / point_cloud_exact_distance - 1 << "\t"
+        << distance_result / terrain_exact_distance - 1 << "\t"
+        << knn_query_time << "\t"
+        << point_cloud_knn_query_error << "\t"
+        << terrain_knn_query_error << "\t"
+        << range_query_time << "\t"
+        << point_cloud_range_query_error << "\t"
+        << terrain_range_query_error << "\n\n";
+    ofs.close();
+}
+
+void EAR_Oracle_FastFly_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                          int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                          double terrain_exact_distance, bool run_knn_query, bool run_range_query,
+                                          int k_value, double range,
+                                          std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_query_list,
+                                          std::vector<std::vector<int>> &terrain_exact_all_poi_knn_query_list,
+                                          std::vector<std::vector<int>> &point_cloud_exact_all_poi_range_query_list,
+                                          std::vector<std::vector<int>> &terrain_exact_all_poi_range_query_list, std::string write_file_header)
+{
+    int sqrt_num_of_box = 2;
+    double construction_time = 0;
+    double query_time = 0;
+    double knn_query_time = 0;
+    double range_query_time = 0;
+    double memory_usage = 0;
+    double index_size = 0;
+    double distance_result = 0;
+    double point_cloud_knn_query_error = 0;
+    double terrain_knn_query_error = 0;
+    double point_cloud_range_query_error = 0;
+    double terrain_range_query_error = 0;
+    std::vector<point_cloud_geodesic::PathPoint> path_result;
+    std::vector<std::vector<int>> all_poi_knn_query_list;
+    std::vector<std::vector<int>> all_poi_range_query_list;
+    path_result.clear();
+    all_poi_knn_query_list.clear();
+    all_poi_range_query_list.clear();
+
+    EAR_Oracle_FastFly_Adapt(
+        sqrt_num_of_box, poi_num, point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index,
+        construction_time, query_time, memory_usage, index_size, distance_result, path_result, run_knn_query, run_range_query,
+        k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
+    if (run_knn_query)
+    {
+        calculate_knn_or_range_query_error(point_cloud_exact_all_poi_knn_query_list, all_poi_knn_query_list, point_cloud_knn_query_error);
+        calculate_knn_or_range_query_error(terrain_exact_all_poi_knn_query_list, all_poi_knn_query_list, terrain_knn_query_error);
+    }
+    if (run_range_query)
+    {
+        calculate_knn_or_range_query_error(point_cloud_exact_all_poi_range_query_list, all_poi_range_query_list, point_cloud_range_query_error);
+        calculate_knn_or_range_query_error(terrain_exact_all_poi_range_query_list, all_poi_range_query_list, terrain_range_query_error);
+    }
+
+    std::cout << "Preprocessing time: " << construction_time << " ms" << std::endl;
+    std::cout << "Query time: " << query_time << " ms" << std::endl;
+    std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
+    std::cout << "Index size: " << index_size / 1e6 << " MB" << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    if (run_knn_query)
+    {
+        std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
+        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+    }
+    if (run_range_query)
+    {
+        std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
+        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+    }
+
+    std::ofstream ofs("../output/output.txt", std::ios_base::app);
+    ofs << "== EAR_Oracle_FastFly_Adapt ==\n";
+    ofs << write_file_header << "\t"
+        << 0 << "\t"
+        << construction_time << "\t"
+        << query_time << "\t"
+        << 0 << "\t"
+        << memory_usage / 1e6 << "\t"
+        << index_size / 1e6 << "\t"
+        << distance_result / point_cloud_exact_distance - 1 << "\t"
+        << distance_result / terrain_exact_distance - 1 << "\t"
+        << knn_query_time << "\t"
+        << point_cloud_knn_query_error << "\t"
+        << terrain_knn_query_error << "\t"
+        << range_query_time << "\t"
+        << point_cloud_range_query_error << "\t"
+        << terrain_range_query_error << "\n\n";
+    ofs.close();
+}
+
+void EAR_Oracle_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                  int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                  double terrain_exact_distance, bool run_knn_query, bool run_range_query,
+                                  int k_value, double range,
+                                  std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_query_list,
+                                  std::vector<std::vector<int>> &terrain_exact_all_poi_knn_query_list,
+                                  std::vector<std::vector<int>> &point_cloud_exact_all_poi_range_query_list,
+                                  std::vector<std::vector<int>> &terrain_exact_all_poi_range_query_list, std::string write_file_header)
+{
+    int sqrt_num_of_box = 2;
+    double point_cloud_to_terrain_time = 0;
+    double construction_time = 0;
+    double query_time = 0;
+    double knn_query_time = 0;
+    double range_query_time = 0;
+    double point_cloud_to_terrain_memory_usage = 0;
+    double memory_usage = 0;
+    double index_size = 0;
+    double distance_result = 0;
+    double point_cloud_knn_query_error = 0;
+    double terrain_knn_query_error = 0;
+    double point_cloud_range_query_error = 0;
+    double terrain_range_query_error = 0;
+    std::vector<geodesic::SurfacePoint> path_result;
+    std::vector<std::vector<int>> all_poi_knn_query_list;
+    std::vector<std::vector<int>> all_poi_range_query_list;
+    path_result.clear();
+    all_poi_knn_query_list.clear();
+    all_poi_range_query_list.clear();
+
+    EAR_Oracle_Adapt(
+        sqrt_num_of_box, poi_num, point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index,
+        point_cloud_to_terrain_time, construction_time, query_time, point_cloud_to_terrain_memory_usage,
+        memory_usage, index_size, distance_result, path_result, run_knn_query, run_range_query,
+        k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
+    if (run_knn_query)
+    {
+        calculate_knn_or_range_query_error(point_cloud_exact_all_poi_knn_query_list, all_poi_knn_query_list, point_cloud_knn_query_error);
+        calculate_knn_or_range_query_error(terrain_exact_all_poi_knn_query_list, all_poi_knn_query_list, terrain_knn_query_error);
+    }
+    if (run_range_query)
+    {
+        calculate_knn_or_range_query_error(point_cloud_exact_all_poi_range_query_list, all_poi_range_query_list, point_cloud_range_query_error);
+        calculate_knn_or_range_query_error(terrain_exact_all_poi_range_query_list, all_poi_range_query_list, terrain_range_query_error);
+    }
+
+    std::cout << "Point cloud to terrain time: " << point_cloud_to_terrain_time << " ms" << std::endl;
+    std::cout << "Preprocessing time: " << construction_time << " ms" << std::endl;
+    std::cout << "Query time: " << query_time << " ms" << std::endl;
+    std::cout << "Point cloud to terrain memory usage: " << point_cloud_to_terrain_memory_usage / 1e6 << " MB" << std::endl;
+    std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
+    std::cout << "Index size: " << index_size / 1e6 << " MB" << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    if (run_knn_query)
+    {
+        std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
+        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+    }
+    if (run_range_query)
+    {
+        std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
+        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+    }
+
+    std::ofstream ofs("../output/output.txt", std::ios_base::app);
+    ofs << "== EAR_Oracle_Adapt ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
