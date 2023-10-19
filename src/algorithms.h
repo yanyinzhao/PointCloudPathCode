@@ -639,6 +639,140 @@ void RC_Oracle_Naive_query(int poi_num, std::unordered_map<int, double> &pairwis
     query_time /= 1000000;
 }
 
+void RC_Oracle_NaiveProx_all_poi_knn_or_range_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
+                                                    std::unordered_map<int, int> &non_exact_source_poi_map,
+                                                    std::unordered_map<int, int> &exact_source_poi_process_order_map,
+                                                    int knn_one_range_two, int k_value, double range,
+                                                    double &knn_or_range_query_time, std::vector<std::vector<int>> &all_poi_knn_or_range_list)
+{
+    auto start_knn_or_range_query_time = std::chrono::high_resolution_clock::now();
+
+    for (int m = 0; m < 2; m++)
+    {
+        std::vector<std::vector<std::pair<double, int>>> poi_to_other_poi_distance_and_index_list;
+        poi_to_other_poi_distance_and_index_list.clear();
+        std::vector<std::pair<double, int>> one_poi_to_other_poi_distance_and_index_list;
+        for (int i = 0; i < poi_num; i++)
+        {
+            one_poi_to_other_poi_distance_and_index_list.clear();
+            for (int j = 0; j < poi_num; j++)
+            {
+                int i_j;
+                int source_poi_index;
+                int destination_poi_index;
+                int current_parent_source_poi_index;
+                int current_children_source_poi_index;
+                int other_children_destination_poi_index;
+                bool approximate_path = false;
+
+                if (i <= j)
+                {
+                    source_poi_index = i;
+                    destination_poi_index = j;
+                }
+                else
+                {
+                    source_poi_index = j;
+                    destination_poi_index = i;
+                }
+                double distance_result;
+                if (source_poi_index == destination_poi_index)
+                {
+                    distance_result = 0;
+                }
+                else if ((non_exact_source_poi_map.count(source_poi_index) == 0 && non_exact_source_poi_map.count(destination_poi_index) == 0) ||
+                         (non_exact_source_poi_map.count(source_poi_index) == 0 && non_exact_source_poi_map.count(destination_poi_index) != 0 && exact_source_poi_process_order_map[source_poi_index] <= exact_source_poi_process_order_map[non_exact_source_poi_map[destination_poi_index]]) ||
+                         (non_exact_source_poi_map.count(source_poi_index) != 0 && non_exact_source_poi_map.count(destination_poi_index) == 0 && exact_source_poi_process_order_map[non_exact_source_poi_map[source_poi_index]] >= exact_source_poi_process_order_map[destination_poi_index]) ||
+                         (non_exact_source_poi_map.count(source_poi_index) != 0 && non_exact_source_poi_map.count(destination_poi_index) != 0 && exact_source_poi_process_order_map[non_exact_source_poi_map[source_poi_index]] == exact_source_poi_process_order_map[non_exact_source_poi_map[destination_poi_index]]))
+                {
+                    hash_function_two_keys_to_one_key(poi_num, source_poi_index, destination_poi_index, i_j);
+                    if (distance_poi_to_poi_map.count(i_j) == 0)
+                    {
+                        std::cout << "i: " << i << ", j: " << j << std::endl;
+                    }
+                    assert(distance_poi_to_poi_map.count(i_j) != 0);
+                    distance_result = distance_poi_to_poi_map[i_j];
+                }
+                else if ((non_exact_source_poi_map.count(source_poi_index) == 0 && non_exact_source_poi_map.count(destination_poi_index) != 0 && exact_source_poi_process_order_map[source_poi_index] > exact_source_poi_process_order_map[non_exact_source_poi_map[destination_poi_index]]) ||
+                         (non_exact_source_poi_map.count(source_poi_index) != 0 && non_exact_source_poi_map.count(destination_poi_index) != 0 && exact_source_poi_process_order_map[non_exact_source_poi_map[source_poi_index]] > exact_source_poi_process_order_map[non_exact_source_poi_map[destination_poi_index]]))
+                {
+                    current_parent_source_poi_index = non_exact_source_poi_map[destination_poi_index];
+                    current_children_source_poi_index = destination_poi_index;
+                    other_children_destination_poi_index = source_poi_index;
+                    approximate_path = true;
+                }
+                else if ((non_exact_source_poi_map.count(source_poi_index) != 0 && non_exact_source_poi_map.count(destination_poi_index) == 0 && exact_source_poi_process_order_map[non_exact_source_poi_map[source_poi_index]] < exact_source_poi_process_order_map[destination_poi_index]) ||
+                         (non_exact_source_poi_map.count(source_poi_index) != 0 && non_exact_source_poi_map.count(destination_poi_index) != 0 && exact_source_poi_process_order_map[non_exact_source_poi_map[source_poi_index]] < exact_source_poi_process_order_map[non_exact_source_poi_map[destination_poi_index]]))
+                {
+                    current_parent_source_poi_index = non_exact_source_poi_map[source_poi_index];
+                    current_children_source_poi_index = source_poi_index;
+                    other_children_destination_poi_index = destination_poi_index;
+                    approximate_path = true;
+                }
+                else
+                {
+                    std::cout << "source_poi_index: " << source_poi_index << ", destination_poi_index: " << destination_poi_index << std::endl;
+                    assert(false);
+                }
+
+                if (approximate_path)
+                {
+                    // the shorter part of the path between children source poi and parent source poi
+                    int children_src_parent_src_index;
+                    double children_src_parent_src_distance = 0;
+
+                    if (current_children_source_poi_index <= current_parent_source_poi_index)
+                    {
+                        hash_function_two_keys_to_one_key(poi_num, current_children_source_poi_index, current_parent_source_poi_index, children_src_parent_src_index);
+                    }
+                    else
+                    {
+                        hash_function_two_keys_to_one_key(poi_num, current_parent_source_poi_index, current_children_source_poi_index, children_src_parent_src_index);
+                    }
+                    children_src_parent_src_distance = distance_poi_to_poi_map[children_src_parent_src_index];
+
+                    // the longer part of the path between parent source poi and children destination poi
+                    int parent_src_children_dest_index;
+                    double parent_src_children_dest_distance = 0;
+
+                    if (current_parent_source_poi_index <= other_children_destination_poi_index)
+                    {
+                        hash_function_two_keys_to_one_key(poi_num, current_parent_source_poi_index, other_children_destination_poi_index, parent_src_children_dest_index);
+                    }
+                    else
+                    {
+                        hash_function_two_keys_to_one_key(poi_num, other_children_destination_poi_index, current_parent_source_poi_index, parent_src_children_dest_index);
+                    }
+                    parent_src_children_dest_distance = distance_poi_to_poi_map[parent_src_children_dest_index];
+
+                    // sum the shorter and longer path together to be the new approximated path
+                    int children_src_children_dest_index;
+                    double children_src_children_dest_distance = 0;
+                    if (current_children_source_poi_index <= other_children_destination_poi_index)
+                    {
+                        hash_function_two_keys_to_one_key(poi_num, current_children_source_poi_index, other_children_destination_poi_index, children_src_children_dest_index);
+                    }
+                    else
+                    {
+                        hash_function_two_keys_to_one_key(poi_num, other_children_destination_poi_index, current_children_source_poi_index, children_src_children_dest_index);
+                    }
+                    children_src_children_dest_distance = children_src_parent_src_distance + parent_src_children_dest_distance;
+                    distance_result = children_src_children_dest_distance;
+                }
+
+                one_poi_to_other_poi_distance_and_index_list.push_back(std::make_pair(distance_result, j));
+            }
+            std::sort(one_poi_to_other_poi_distance_and_index_list.begin(), one_poi_to_other_poi_distance_and_index_list.end());
+            poi_to_other_poi_distance_and_index_list.push_back(one_poi_to_other_poi_distance_and_index_list);
+        }
+        knn_or_range_query(knn_one_range_two, k_value, range, poi_to_other_poi_distance_and_index_list, all_poi_knn_or_range_list);
+    }
+    auto stop_knn_or_range_query_time = std::chrono::high_resolution_clock::now();
+    auto duration_knn_or_range_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_knn_or_range_query_time - start_knn_or_range_query_time);
+    knn_or_range_query_time = duration_knn_or_range_query_time.count();
+    knn_or_range_query_time /= 1000000;
+}
+
 void RC_Oracle_all_poi_knn_or_range_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
                                           std::unordered_map<int, int> &non_exact_source_poi_map,
                                           std::unordered_map<int, int> &exact_source_poi_process_order_map,
@@ -1339,6 +1473,134 @@ void EAR_Oracle_Adapt(
     range_query_time /= 1000000;
 }
 
+void VO_Oracle_Adapt(
+    int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+    int source_poi_index, int destination_poi_index,
+    double &point_cloud_to_terrain_time, double &construction_time,
+    double &query_time, double &point_cloud_to_terrain_memory_usage,
+    double &memory_usage, double &index_size, double &distance_result,
+    std::vector<geodesic::SurfacePoint> &path_result, bool run_knn_query, bool run_range_query,
+    int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
+    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
+{
+    geodesic::Mesh mesh;
+    point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
+
+    auto start_construction_time = std::chrono::high_resolution_clock::now();
+
+    std::unordered_map<int, double> pre_pairwise_distance_poi_to_poi_map;
+    std::unordered_map<int, std::vector<geodesic::SurfacePoint>> pre_pairwise_path_poi_to_poi_map;
+    double pre_pairwise_memory_usage = 0;
+
+    pre_compute_FaceExact(poi_num, &mesh, poi_list, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pre_pairwise_memory_usage);
+
+    int geo_tree_node_id = 1; // the root node has 0 id
+    std::unordered_map<int, GeoPair_T *> geopairs;
+    geopairs.clear();
+    std::vector<GeoNode *> all_poi;
+    all_poi.clear();
+    std::vector<std::pair<int, GeoNode *>> pois;
+    pois.clear();
+    std::unordered_map<int, int> poi_unordered_map;
+    poi_unordered_map.clear();
+
+    for (int i = 0; i < poi_num; i++)
+    {
+        GeoNode *n = new GeoNode(poi_list[i], 0);
+        all_poi.push_back(n);
+        std::pair<int, GeoNode *> m(poi_list[i], n);
+        pois.push_back(m);
+        poi_unordered_map[poi_list[i]] = i;
+    }
+
+    double radius = 0;
+    stx::btree<int, GeoNode *> pois_B_tree(pois.begin(), pois.end());
+
+    for (int i = 0; i < poi_num; i++)
+    {
+        int x_in_poi_list = 0;
+        int y_in_poi_list = i;
+        int x_y_in_poi_list;
+        if (x_in_poi_list <= y_in_poi_list)
+        {
+            hash_function_two_keys_to_one_key(poi_num, x_in_poi_list, y_in_poi_list, x_y_in_poi_list);
+        }
+        else
+        {
+            hash_function_two_keys_to_one_key(poi_num, y_in_poi_list, x_in_poi_list, x_y_in_poi_list);
+        }
+        radius = std::max(pre_pairwise_distance_poi_to_poi_map[x_y_in_poi_list], radius);
+    }
+    GeoNode *root_geo = new GeoNode(0, poi_list[0], radius);
+
+    stx::btree<int, GeoNode *> pois_as_center_each_parent_layer;
+    pois_as_center_each_parent_layer.clear();
+    build_geo_tree_T(geo_tree_node_id, &mesh, *root_geo, poi_num, pois_B_tree, pois_as_center_each_parent_layer, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, poi_unordered_map);
+
+    std::vector<GeoNode *> partition_tree_to_compressed_partition_tree_to_be_removed_nodes;
+    partition_tree_to_compressed_partition_tree_to_be_removed_nodes.clear();
+    std::unordered_map<int, GeoNode *> geo_node_in_partition_tree_unordered_map;
+    geo_node_in_partition_tree_unordered_map.clear();
+    partition_tree_to_compressed_partition_tree(*root_geo, partition_tree_to_compressed_partition_tree_to_be_removed_nodes, geo_node_in_partition_tree_unordered_map);
+
+    std::unordered_map<int, int> geo_pair_unordered_map;
+    geo_pair_unordered_map.clear();
+    int pairwise_path_poi_to_poi_size = 0;
+    int WSPD_oracle_edge_num = 0;
+    double WSPD_oracle_epsilon = pow((1.05), 0.35) - 1;
+    generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, &mesh, *root_geo, *root_geo, WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
+    index_size = WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
+
+    memory_usage += pre_pairwise_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
+
+    auto stop_construction_time = std::chrono::high_resolution_clock::now();
+    auto duration_construction_time = std::chrono::duration_cast<std::chrono::milliseconds>(stop_construction_time - start_construction_time);
+    construction_time = duration_construction_time.count();
+
+    auto start_query_time = std::chrono::high_resolution_clock::now();
+
+    int a, b;
+    distance_result = query_geo_T(geo_tree_node_id, *geo_node_in_partition_tree_unordered_map[all_poi[source_poi_index]->index], *geo_node_in_partition_tree_unordered_map[all_poi[destination_poi_index]->index], a, b, geopairs, path_result);
+    distance_result = round(distance_result * 1000000000.0) / 1000000000.0;
+
+    auto stop_query_time = std::chrono::high_resolution_clock::now();
+    auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
+    query_time = duration_query_time.count();
+    query_time /= 1000000;
+
+    auto start_knn_query_time = std::chrono::high_resolution_clock::now();
+
+    if (run_knn_query)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
+                                             all_poi, geopairs, 1, k_value, range, all_poi_knn_query_list);
+        }
+    }
+
+    auto stop_knn_query_time = std::chrono::high_resolution_clock::now();
+    auto duration_knn_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_knn_query_time - start_knn_query_time);
+    knn_query_time = duration_knn_query_time.count();
+    knn_query_time /= 1000000;
+
+    auto start_range_query_time = std::chrono::high_resolution_clock::now();
+
+    if (run_range_query)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
+                                             all_poi, geopairs, 2, k_value, range, all_poi_range_list);
+        }
+    }
+
+    auto stop_range_query_time = std::chrono::high_resolution_clock::now();
+    auto duration_range_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_range_query_time - start_range_query_time);
+    range_query_time = duration_range_query_time.count();
+    range_query_time /= 1000000;
+}
+
 void FastFly(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
              int source_poi_index, int destination_poi_index,
              double &query_time, double &memory_usage, double &distance_result,
@@ -1551,6 +1813,91 @@ void CH_Adapt_all_poi_knn_or_range_query(point_cloud_geodesic::PointCloud *point
     auto duration_knn_or_range_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_knn_or_range_query_time - start_knn_or_range_query_time);
     knn_or_range_query_time = duration_knn_or_range_query_time.count();
     knn_or_range_query_time /= 1000000;
+}
+
+void RC_Oracle_NaiveProx_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
+                                     int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                     double terrain_exact_distance, bool run_knn_query, bool run_range_query,
+                                     int k_value, double range,
+                                     std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_query_list,
+                                     std::vector<std::vector<int>> &terrain_exact_all_poi_knn_query_list,
+                                     std::vector<std::vector<int>> &point_cloud_exact_all_poi_range_query_list,
+                                     std::vector<std::vector<int>> &terrain_exact_all_poi_range_query_list, std::string write_file_header)
+{
+    std::unordered_map<int, double> distance_poi_to_poi_map;
+    std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> path_poi_to_poi_map;
+    std::unordered_map<int, int> non_exact_source_poi_map;
+    std::unordered_map<int, int> exact_source_poi_process_order_map;
+
+    double construction_time = 0;
+    double query_time = 0;
+    double knn_query_time = 0;
+    double range_query_time = 0;
+    double memory_usage = 0;
+    double index_size = 0;
+    double distance_result = 0;
+    double point_cloud_knn_query_error = 0;
+    double terrain_knn_query_error = 0;
+    double point_cloud_range_query_error = 0;
+    double terrain_range_query_error = 0;
+    std::vector<point_cloud_geodesic::PathPoint> path_result;
+    std::vector<std::vector<int>> all_poi_knn_query_list;
+    std::vector<std::vector<int>> all_poi_range_query_list;
+    path_result.clear();
+    all_poi_knn_query_list.clear();
+    all_poi_range_query_list.clear();
+
+    RC_Oracle(poi_num, point_cloud, poi_list, epsilon, distance_poi_to_poi_map, path_poi_to_poi_map,
+              non_exact_source_poi_map, exact_source_poi_process_order_map, construction_time, memory_usage, index_size);
+    RC_Oracle_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
+                    source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+    if (run_knn_query)
+    {
+        RC_Oracle_NaiveProx_all_poi_knn_or_range_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
+        calculate_knn_or_range_query_error(point_cloud_exact_all_poi_knn_query_list, all_poi_knn_query_list, point_cloud_knn_query_error);
+        calculate_knn_or_range_query_error(terrain_exact_all_poi_knn_query_list, all_poi_knn_query_list, terrain_knn_query_error);
+    }
+    if (run_range_query)
+    {
+        RC_Oracle_NaiveProx_all_poi_knn_or_range_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, 2, k_value, range, range_query_time, all_poi_range_query_list);
+        calculate_knn_or_range_query_error(point_cloud_exact_all_poi_range_query_list, all_poi_range_query_list, point_cloud_range_query_error);
+        calculate_knn_or_range_query_error(terrain_exact_all_poi_range_query_list, all_poi_range_query_list, terrain_range_query_error);
+    }
+
+    std::cout << "Preprocessing time: " << construction_time << " ms" << std::endl;
+    std::cout << "Query time: " << query_time << " ms" << std::endl;
+    std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
+    std::cout << "Index size: " << index_size / 1e6 << " MB" << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    if (run_knn_query)
+    {
+        std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
+        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+    }
+    if (run_range_query)
+    {
+        std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
+        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+    }
+
+    std::ofstream ofs("../output/output.txt", std::ios_base::app);
+    ofs << "== RC_Oracle_NaiveProx ==\n";
+    ofs << write_file_header << "\t"
+        << 0 << "\t"
+        << construction_time << "\t"
+        << query_time << "\t"
+        << 0 << "\t"
+        << memory_usage / 1e6 << "\t"
+        << index_size / 1e6 << "\t"
+        << distance_result / point_cloud_exact_distance - 1 << "\t"
+        << distance_result / terrain_exact_distance - 1 << "\t"
+        << knn_query_time << "\t"
+        << point_cloud_knn_query_error << "\t"
+        << terrain_knn_query_error << "\t"
+        << range_query_time << "\t"
+        << point_cloud_range_query_error << "\t"
+        << terrain_range_query_error << "\n\n";
+    ofs.close();
 }
 
 void RC_Oracle_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
@@ -2026,6 +2373,89 @@ void EAR_Oracle_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud 
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
     ofs << "== EAR_Oracle_Adapt ==\n";
+    ofs << write_file_header << "\t"
+        << point_cloud_to_terrain_time << "\t"
+        << construction_time << "\t"
+        << query_time << "\t"
+        << point_cloud_to_terrain_memory_usage / 1e6 << "\t"
+        << memory_usage / 1e6 << "\t"
+        << index_size / 1e6 << "\t"
+        << distance_result / point_cloud_exact_distance - 1 << "\t"
+        << distance_result / terrain_exact_distance - 1 << "\t"
+        << knn_query_time << "\t"
+        << point_cloud_knn_query_error << "\t"
+        << terrain_knn_query_error << "\t"
+        << range_query_time << "\t"
+        << point_cloud_range_query_error << "\t"
+        << terrain_range_query_error << "\n\n";
+    ofs.close();
+}
+
+void VO_Oracle_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+                                 int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
+                                 double terrain_exact_distance, bool run_knn_query, bool run_range_query,
+                                 int k_value, double range,
+                                 std::vector<std::vector<int>> &point_cloud_exact_all_poi_knn_query_list,
+                                 std::vector<std::vector<int>> &terrain_exact_all_poi_knn_query_list,
+                                 std::vector<std::vector<int>> &point_cloud_exact_all_poi_range_query_list,
+                                 std::vector<std::vector<int>> &terrain_exact_all_poi_range_query_list, std::string write_file_header)
+{
+    double point_cloud_to_terrain_time = 0;
+    double construction_time = 0;
+    double query_time = 0;
+    double knn_query_time = 0;
+    double range_query_time = 0;
+    double point_cloud_to_terrain_memory_usage = 0;
+    double memory_usage = 0;
+    double index_size = 0;
+    double distance_result = 0;
+    double point_cloud_knn_query_error = 0;
+    double terrain_knn_query_error = 0;
+    double point_cloud_range_query_error = 0;
+    double terrain_range_query_error = 0;
+    std::vector<geodesic::SurfacePoint> path_result;
+    std::vector<std::vector<int>> all_poi_knn_query_list;
+    std::vector<std::vector<int>> all_poi_range_query_list;
+    path_result.clear();
+    all_poi_knn_query_list.clear();
+    all_poi_range_query_list.clear();
+
+    VO_Oracle_Adapt(
+        poi_num, point_cloud, poi_list, source_poi_index, destination_poi_index,
+        point_cloud_to_terrain_time, construction_time, query_time, point_cloud_to_terrain_memory_usage,
+        memory_usage, index_size, distance_result, path_result, run_knn_query, run_range_query,
+        k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
+    if (run_knn_query)
+    {
+        calculate_knn_or_range_query_error(point_cloud_exact_all_poi_knn_query_list, all_poi_knn_query_list, point_cloud_knn_query_error);
+        calculate_knn_or_range_query_error(terrain_exact_all_poi_knn_query_list, all_poi_knn_query_list, terrain_knn_query_error);
+    }
+    if (run_range_query)
+    {
+        calculate_knn_or_range_query_error(point_cloud_exact_all_poi_range_query_list, all_poi_range_query_list, point_cloud_range_query_error);
+        calculate_knn_or_range_query_error(terrain_exact_all_poi_range_query_list, all_poi_range_query_list, terrain_range_query_error);
+    }
+
+    std::cout << "Point cloud to terrain time: " << point_cloud_to_terrain_time << " ms" << std::endl;
+    std::cout << "Preprocessing time: " << construction_time << " ms" << std::endl;
+    std::cout << "Query time: " << query_time << " ms" << std::endl;
+    std::cout << "Point cloud to terrain memory usage: " << point_cloud_to_terrain_memory_usage / 1e6 << " MB" << std::endl;
+    std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
+    std::cout << "Index size: " << index_size / 1e6 << " MB" << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    if (run_knn_query)
+    {
+        std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
+        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+    }
+    if (run_range_query)
+    {
+        std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
+        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+    }
+
+    std::ofstream ofs("../output/output.txt", std::ios_base::app);
+    ofs << "== VO_Oracle_Adapt ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"

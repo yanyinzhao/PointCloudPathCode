@@ -4,14 +4,16 @@
 
 This project provides the implementation for proximity queries on point cloud using rapid construction path oracle. We refer the readers to our paper for more details.
 
-We compared 10 algorithms as follows:
+We compared 12 algorithms as follows:
 
 - SE-Oracle-Adapt (oracle based baseline)
 - SE-Oracle-FastFly-Adapt (oracle in ablation study)
 - EAR-Oracle-Adapt (oracle based baseline)
 - EAR-Oracle-FastFly-Adapt (oracle in ablation study)
+- VO-Oracle (oracle for other proximity queries)
 - RC-Oracle-Naive (variation oracle)
-- RC-Oracle (our oracle)
+- RC-Oracle-NaiveProx (our oracle with naive proximity queries algorithm)
+- RC-Oracle (our oracle with the efficient proximity queries algorithm)
 - CH-Adapt (on-the-fly baseline)
 - Kaul-Adapt (on-the-fly baseline)
 - Dijk-Adapt (on-the-fly baseline)
@@ -264,7 +266,7 @@ For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index
 | 73 | RM | 2000832 | 500 |
 | 74 | RM | 2502075 | 500 |
 
-As mentioned in our paper, SE-Oracle-Adapt, EAR-Oracle-Adapt, and RC-Oracle-Naive are time consuming. So the project will run SE-Oracle-Adapt, SE-Oracle-FastFly-Adapt, EAR-Oracle-Adapt, EAR-Oracle-FastFly-Adapt, RC-Oracle-Naive, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run SE-Oracle-FastFly-Adapt, EAR-Oracle-FastFly-Adapt, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
+Since SE-Oracle-Adapt, EAR-Oracle-Adapt, VO-Oracle-Adapt, and RC-Oracle-Naive are time consuming, the project will run SE-Oracle-Adapt, SE-Oracle-FastFly-Adapt, EAR-Oracle-Adapt, EAR-Oracle-FastFly-Adapt, VO-Oracle-Adapt, RC-Oracle-Naive, RC-Oracle-NaiveProx, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run SE-Oracle-FastFly-Adapt, EAR-Oracle-FastFly-Adapt, RC-Oracle-NaiveProx, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
 
 In addition, we strongly encourage you to set [run_knn] to 0 if you are not conducting experiments. Otherwise, it will take a very long time to run calculate the knn of all POIs. 
 
