@@ -12,7 +12,7 @@ We compared 12 algorithms as follows:
 - EAR-Oracle-FastFly-Adapt (oracle in ablation study)
 - VO-Oracle (oracle for other proximity queries)
 - RC-Oracle-Naive (variation oracle)
-- RC-Oracle-NaiveProx (our oracle with naive proximity queries algorithm)
+- RC-Oracle-NaiveProx (our oracle with the naive proximity queries algorithm)
 - RC-Oracle (our oracle with the efficient proximity queries algorithm)
 - CH-Adapt (on-the-fly baseline)
 - Kaul-Adapt (on-the-fly baseline)
