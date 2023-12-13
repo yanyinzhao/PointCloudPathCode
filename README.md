@@ -10,7 +10,7 @@ We compared 12 algorithms as follows:
 - SE-Oracle-FastFly-Adapt (oracle in ablation study)
 - EAR-Oracle-Adapt (oracle based baseline)
 - EAR-Oracle-FastFly-Adapt (oracle in ablation study)
-- SI-Oracle-Adapt (oracle for other proximity queries)
+- SU-Oracle-Adapt (oracle for other proximity queries)
 - RC-Oracle-Naive (variation oracle)
 - RC-Oracle-NaiveProx (our oracle with the naive proximity queries algorithm)
 - RC-Oracle (our oracle with the efficient proximity queries algorithm)
@@ -266,7 +266,7 @@ For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index
 | 73 | RM | 2000832 | 500 |
 | 74 | RM | 2502075 | 500 |
 
-Since SE-Oracle-Adapt, EAR-Oracle-Adapt, SI-Oracle-Adapt, and RC-Oracle-Naive are time consuming, the project will run SE-Oracle-Adapt, SE-Oracle-FastFly-Adapt, EAR-Oracle-Adapt, EAR-Oracle-FastFly-Adapt, SI-Oracle-Adapt, RC-Oracle-Naive, RC-Oracle-NaiveProx, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run SE-Oracle-FastFly-Adapt, EAR-Oracle-FastFly-Adapt, RC-Oracle-NaiveProx, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
+Since SE-Oracle-Adapt, EAR-Oracle-Adapt, SU-Oracle-Adapt, and RC-Oracle-Naive are time consuming, the project will run SE-Oracle-Adapt, SE-Oracle-FastFly-Adapt, EAR-Oracle-Adapt, EAR-Oracle-FastFly-Adapt, SU-Oracle-Adapt, RC-Oracle-Naive, RC-Oracle-NaiveProx, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run SE-Oracle-FastFly-Adapt, EAR-Oracle-FastFly-Adapt, RC-Oracle-NaiveProx, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
 
 In addition, we strongly encourage you to set [run_knn] to 0 if you are not conducting experiments. Otherwise, it will take a very long time to run calculate the knn of all POIs. 
 
