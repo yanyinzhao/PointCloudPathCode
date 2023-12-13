@@ -1473,7 +1473,7 @@ void EAR_Oracle_Adapt(
     range_query_time /= 1000000;
 }
 
-void VO_Oracle_Adapt(
+void SI_Oracle_Adapt(
     int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
     int source_poi_index, int destination_poi_index,
     double &point_cloud_to_terrain_time, double &construction_time,
@@ -2391,7 +2391,7 @@ void EAR_Oracle_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud 
     ofs.close();
 }
 
-void VO_Oracle_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
+void SI_Oracle_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
                                  int source_poi_index, int destination_poi_index, double point_cloud_exact_distance,
                                  double terrain_exact_distance, bool run_knn_query, bool run_range_query,
                                  int k_value, double range,
@@ -2420,7 +2420,7 @@ void VO_Oracle_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud *
     all_poi_knn_query_list.clear();
     all_poi_range_query_list.clear();
 
-    VO_Oracle_Adapt(
+    SI_Oracle_Adapt(
         poi_num, point_cloud, poi_list, source_poi_index, destination_poi_index,
         point_cloud_to_terrain_time, construction_time, query_time, point_cloud_to_terrain_memory_usage,
         memory_usage, index_size, distance_result, path_result, run_knn_query, run_range_query,
@@ -2455,7 +2455,7 @@ void VO_Oracle_Adapt_with_output(int poi_num, point_cloud_geodesic::PointCloud *
     }
 
     std::ofstream ofs("../output/output.txt", std::ios_base::app);
-    ofs << "== VO_Oracle_Adapt ==\n";
+    ofs << "== SI_Oracle_Adapt ==\n";
     ofs << write_file_header << "\t"
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
