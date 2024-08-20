@@ -245,11 +245,12 @@ int main(int argc, char **argv)
         std::__fs::filesystem::create_directories(output_folder_list[i]);
     }
 
+    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     // run BH small dataset on small POI when varying epsilon
     std::map<int, input_struct> input_file1{
         {0, input_struct("BH_10086.xyz", "BH_50_poi_on_10086.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
     for (int i = 0; i < input_file1.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -281,7 +282,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file3{
         {0, input_struct("EP_10062.xyz", "EP_50_poi_on_10062.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file3.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -329,7 +330,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file6{
         {0, input_struct("GF_10092.xyz", "GF_50_poi_on_10092.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file6.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -361,7 +362,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file8{
         {0, input_struct("LM_10092.xyz", "LM_50_poi_on_10092.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file8.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -393,7 +394,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file10{
         {0, input_struct("RM_10092.xyz", "RM_50_poi_on_10092.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file10.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -425,7 +426,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file12{
         {0, input_struct("BH_500835.xyz", "BH_500_poi_on_500835.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file12.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -473,7 +474,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file15{
         {0, input_struct("EP_500384.xyz", "EP_500_poi_on_500384.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file15.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -521,7 +522,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file18{
         {0, input_struct("GF_500208.xyz", "GF_500_poi_on_500208.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file18.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -569,7 +570,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file21{
         {0, input_struct("LM_500208.xyz", "LM_500_poi_on_500208.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file21.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -617,7 +618,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file24{
         {0, input_struct("RM_500208.xyz", "RM_500_poi_on_500208.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file24.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -665,7 +666,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file27{
         {0, input_struct("BH_500835.xyz", "BH_500_poi_on_500835.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file27.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -681,7 +682,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file28{
         {0, input_struct("EP_500384.xyz", "EP_500_poi_on_500384.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file28.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -697,7 +698,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file29{
         {0, input_struct("GF_500208.xyz", "GF_500_poi_on_500208.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file29.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -713,7 +714,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file30{
         {0, input_struct("LM_500208.xyz", "LM_500_poi_on_500208.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file30.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -729,7 +730,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file31{
         {0, input_struct("RM_500208.xyz", "RM_500_poi_on_500208.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file31.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -745,7 +746,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file32{
         {0, input_struct("BH_10086.xyz", "BH_50_poi_on_10086.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file32.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -761,7 +762,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file33{
         {0, input_struct("EP_10062.xyz", "EP_50_poi_on_10062.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file33.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -777,7 +778,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file34{
         {0, input_struct("GF_10092.xyz", "GF_50_poi_on_10092.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file34.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -793,7 +794,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file35{
         {0, input_struct("LM_10092.xyz", "LM_50_poi_on_10092.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file35.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
@@ -809,7 +810,7 @@ int main(int argc, char **argv)
     std::map<int, input_struct> input_file36{
         {0, input_struct("RM_10092.xyz", "RM_50_poi_on_10092.txt", 0, 1)},
     };
-    std::vector<double> epsilon_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
+
     for (int i = 0; i < input_file36.size(); i++)
     {
         for (int j = 0; j < epsilon_list.size(); j++)
