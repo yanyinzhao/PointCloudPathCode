@@ -19,9 +19,32 @@ We compared 12 algorithms as follows:
 - Dijk-Adapt (on-the-fly baseline)
 - FastFly (our on-the-fly)
 
-Make sure there is a folder called "input/" and a folder called "output/" under the working directory. They will be used for storing the input/output files.
+## Environment: 
+- Linux machine (2.2 GHz CPU and 512GB memory)
+- g++
+- gnuplot (for plotting paper graphs)
 
-The source code are stored in "src/" folder.
+## Reproducibility run
+
+We provide simple commands to run all experiments and plot all paper graphs. Running experiments for each one figure takes 2—3 days, and running experiments for all figures takes 2—3 months. We also provide the sample experiments data used for plot all paper graphs (in the case you do not have enough time to run the experiments). We also provide simple examples to test all algorithms (takes 10 minutes). 
+
+### Run all experiments command
+
+```
+cd src
+g++ -o experiment experiment.cpp -std=c++11
+./experiment
+```
+All experimental results will be saved in “../exp”
+
+### Plot paper graphs command
+```
+cd ../exp
+sh plot.sh
+```
+All paper graphs will be saved in “../exp/eps”
+
+If you do not have enough time to run the experiments, you can skip “run all experiments command”, and directly use “plot paper graphs command”, since we provide the sample experiments data used for plot all paper graphs in “../exp”. If you run the experiments, these sample data will be override. 
 
 ## Dataset
 
@@ -166,14 +189,19 @@ POI_num
 1st_POI_index 2nd_POI_index ......
 ```
 
-## Compile command
+
+## Normal run 
+
+### Compile command
+
+The source code are stored in "src/" folder.
 
 ```
 cd src
 g++ -o main main.cpp -std=c++11
 ```
 
-## Run command
+### Run command
 
 ```
 ./main [point_cloud_data_and_point_number_and_poi_number_map_index] [epsilon] [run_knn_query] [run_range_query]
@@ -278,7 +306,9 @@ An example:
 
 In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run 10 algorithms.
 
-## Output
+Make sure there is a folder called "input/" and a folder called "output/" under the working directory. They will be used for storing the input/output files.
+
+### Output
 
 The output will be stored in "output/output.txt" file. The format will be as follows:
 
