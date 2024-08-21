@@ -4,16 +4,21 @@
 
 This project provides the implementation for proximity queries on point cloud using rapid construction path oracle. We refer the readers to our paper for more details.
 
-We compared 12 algorithms as follows:
+We compared 17 algorithms as follows:
 
 - SE-Oracle-Adapt (oracle based baseline)
+- SE-Oracle-Adapt-A2A (oracle based baseline for A2A query)
 - SE-Oracle-FastFly-Adapt (oracle in ablation study)
+- SE-Oracle-FastFly-Adapt-A2A (oracle in ablation study for A2A query)
 - EAR-Oracle-Adapt (oracle based baseline)
 - EAR-Oracle-FastFly-Adapt (oracle in ablation study)
 - SU-Oracle-Adapt (oracle for other proximity queries)
 - RC-Oracle-Naive (variation oracle)
+- RC-Oracle-Naive-A2A (variation oracle for A2A query)
 - RC-Oracle-NaiveProx (our oracle with the naive proximity queries algorithm)
+- RC-Oracle-NaiveProx-A2A (our oracle with the naive proximity queries algorithm for A2A query)
 - RC-Oracle (our oracle with the efficient proximity queries algorithm)
+- RC-Oracle-A2A (our oracle with the efficient proximity queries algorithm for A2A query)
 - CH-Adapt (on-the-fly baseline)
 - Kaul-Adapt (on-the-fly baseline)
 - Dijk-Adapt (on-the-fly baseline)
@@ -294,7 +299,7 @@ For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index
 | 73 | RM | 2000832 | 500 |
 | 74 | RM | 2502075 | 500 |
 
-Since SE-Oracle-Adapt, EAR-Oracle-Adapt, SU-Oracle-Adapt, and RC-Oracle-Naive are time consuming, the project will run SE-Oracle-Adapt, SE-Oracle-FastFly-Adapt, EAR-Oracle-Adapt, EAR-Oracle-FastFly-Adapt, SU-Oracle-Adapt, RC-Oracle-Naive, RC-Oracle-NaiveProx, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run SE-Oracle-FastFly-Adapt, EAR-Oracle-FastFly-Adapt, RC-Oracle-NaiveProx, RC-Oracle, CH-Adapt, Kaul-Adapt, Dijk-Adapt, and FastFly on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
+Since SE-Oracle-Adapt, EAR-Oracle-Adapt, SU-Oracle-Adapt, RC-Oracle-Naive, SE-Oracle-Adapt, and RC-Oracle-Naive-A2A are time consuming, the project will run all algorithms on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run all algorithms except the 6 mentioned algorithm on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
 
 In addition, we strongly encourage you to set [run_knn] to 0 if you are not conducting experiments. Otherwise, it will take a very long time to run calculate the knn of all POIs. 
 
@@ -304,7 +309,7 @@ An example:
 ./main 0 0.5 0 0
 ```
 
-In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run 10 algorithms.
+In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run 17 algorithms.
 
 Make sure there is a folder called "input/" and a folder called "output/" under the working directory. They will be used for storing the input/output files.
 

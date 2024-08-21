@@ -86,14 +86,20 @@ void run_algorithms(std::map<int, input_struct> input_file,
                                     terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
                                     write_file_header);
         std::cout << std::endl;
+    }
 
+    if (algorithm_type == 1 || algorithm_type == 5)
+    {
         std::cout << "== EAR_Oracle_Adapt ==" << std::endl;
         EAR_Oracle_Adapt_with_output(output_folder + "2_EAR_Oracle_Adapt.txt", poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
                                      terrain_exact_distance, run_knn_query, run_range_query, k_value, range, point_cloud_exact_all_poi_knn_query_list,
                                      terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
                                      write_file_header);
         std::cout << std::endl;
+    }
 
+    if (algorithm_type == 1)
+    {
         std::cout << "== RC_Oracle_Naive ==" << std::endl;
         RC_Oracle_Naive_with_output(output_folder + "3_RC_Oracle_Naive.txt", poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
                                     terrain_exact_distance, run_knn_query, run_range_query, k_value, range, point_cloud_exact_all_poi_knn_query_list,
@@ -102,14 +108,17 @@ void run_algorithms(std::map<int, input_struct> input_file,
         std::cout << std::endl;
     }
 
-    std::cout << "== RC_Oracle ==" << std::endl;
-    RC_Oracle_with_output(output_folder + "4_RC_Oracle.txt", poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
-                          terrain_exact_distance, run_knn_query, run_range_query, k_value, range, point_cloud_exact_all_poi_knn_query_list,
-                          terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
-                          write_file_header);
-    std::cout << std::endl;
+    if (algorithm_type == 1 || algorithm_type == 2 || algorithm_type == 3 || algorithm_type == 4)
+    {
+        std::cout << "== RC_Oracle ==" << std::endl;
+        RC_Oracle_with_output(output_folder + "4_RC_Oracle.txt", poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                              terrain_exact_distance, run_knn_query, run_range_query, k_value, range, point_cloud_exact_all_poi_knn_query_list,
+                              terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
+                              write_file_header);
+        std::cout << std::endl;
+    }
 
-    if (algorithm_type == 1 || algorithm_type == 2)
+    if (algorithm_type == 1 || algorithm_type == 2 || algorithm_type == 5)
     {
         std::cout << "== CH_Adapt ==" << std::endl;
         CH_Adapt_with_output(output_folder + "5_CH_Adapt.txt", &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
@@ -149,7 +158,10 @@ void run_algorithms(std::map<int, input_struct> input_file,
             terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
             write_file_header);
         std::cout << std::endl;
+    }
 
+    if (algorithm_type == 3 || algorithm_type == 6)
+    {
         std::cout << "== EAR_Oracle_FastFly_Adapt ==" << std::endl;
         EAR_Oracle_FastFly_Adapt_with_output(
             output_folder + "10_EAR_Oracle_FastFly_Adapt.txt", poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
@@ -159,7 +171,7 @@ void run_algorithms(std::map<int, input_struct> input_file,
         std::cout << std::endl;
     }
 
-    if (algorithm_type == 4)
+    if (algorithm_type == 4 || algorithm_type == 7)
     {
         std::cout << "== SU_Oracle_Adapt ==" << std::endl;
         SU_Oracle_Adapt_with_output(output_folder + "11_SU_Oracle_Adapt.txt", poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
@@ -167,12 +179,62 @@ void run_algorithms(std::map<int, input_struct> input_file,
                                     terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
                                     write_file_header);
         std::cout << std::endl;
+    }
 
+    if (algorithm_type == 4)
+    {
         std::cout << "== RC_Oracle_NaiveProx ==" << std::endl;
         RC_Oracle_NaiveProx_with_output(output_folder + "12_RC_Oracle_NaiveProx.txt", poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
                                         terrain_exact_distance, run_knn_query, run_range_query, k_value, range, point_cloud_exact_all_poi_knn_query_list,
                                         terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
                                         write_file_header);
+        std::cout << std::endl;
+    }
+
+    if (algorithm_type == 5)
+    {
+        std::cout << "== SE_Oracle_Adapt_A2A ==" << std::endl;
+        SE_Oracle_Adapt_A2A_with_output(output_folder + "13_SE_Oracle_Adapt_A2A.txt", poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                        terrain_exact_distance, run_knn_query, run_range_query, k_value, range, point_cloud_exact_all_poi_knn_query_list,
+                                        terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
+                                        write_file_header);
+        std::cout << std::endl;
+
+        std::cout << "== RC_Oracle_Naive_A2A ==" << std::endl;
+        RC_Oracle_Naive_A2A_with_output(output_folder + "14_RC_Oracle_Naive_A2A.txt", poi_num, &point_cloud, poi_list, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                        terrain_exact_distance, run_knn_query, run_range_query, k_value, range, point_cloud_exact_all_poi_knn_query_list,
+                                        terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
+                                        write_file_header);
+        std::cout << std::endl;
+    }
+
+    if (algorithm_type == 5 || algorithm_type == 6 || algorithm_type == 7)
+    {
+        std::cout << "== RC_Oracle_A2A ==" << std::endl;
+        RC_Oracle_A2A_with_output(output_folder + "15_RC_Oracle_A2A.txt", poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                  terrain_exact_distance, run_knn_query, run_range_query, k_value, range, point_cloud_exact_all_poi_knn_query_list,
+                                  terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
+                                  write_file_header);
+        std::cout << std::endl;
+    }
+
+    if (algorithm_type == 6)
+    {
+        std::cout << "== SE_Oracle_FastFly_Adapt_A2A ==" << std::endl;
+        SE_Oracle_FastFly_Adapt_A2A_with_output(output_folder + "16_SE_Oracle_FastFly_Adapt_A2A.txt", poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                                terrain_exact_distance, run_knn_query, run_range_query, k_value, range, point_cloud_exact_all_poi_knn_query_list,
+                                                terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
+                                                write_file_header);
+        std::cout << std::endl;
+    }
+
+    if (algorithm_type == 7)
+    {
+        std::cout << "== RC_Oracle_NaiveProx_A2A ==" << std::endl;
+        RC_Oracle_NaiveProx_A2A_with_output(output_folder + "17_RC_Oracle_NaiveProx_A2A.txt", poi_num, &point_cloud, poi_list, epsilon, source_poi_index, destination_poi_index, point_cloud_exact_distance,
+                                            terrain_exact_distance, run_knn_query, run_range_query, k_value, range, point_cloud_exact_all_poi_knn_query_list,
+                                            terrain_exact_all_poi_knn_query_list, point_cloud_exact_all_poi_range_query_list, terrain_exact_all_poi_range_query_list,
+                                            write_file_header);
         std::cout << std::endl;
     }
 
@@ -219,7 +281,22 @@ int main(int argc, char **argv)
         "../exp/33_e_EP_small_proxim_ora/",
         "../exp/34_e_GF_small_proxim_ora/",
         "../exp/35_e_LM_small_proxim_ora/",
-        "../exp/36_e_RM_small_proxim_ora/"};
+        "../exp/36_e_RM_small_proxim_ora/",
+        "../exp/37_e_BH_small_A2A/",
+        "../exp/38_e_EP_small_A2A/",
+        "../exp/39_e_GF_small_A2A/",
+        "../exp/40_e_LM_small_A2A/",
+        "../exp/41_e_RM_small_A2A/",
+        "../exp/42_e_BH_abla_A2A/",
+        "../exp/43_e_EP_abla_A2A/",
+        "../exp/44_e_GF_abla_A2A/",
+        "../exp/45_e_LM_abla_A2A/",
+        "../exp/46_e_RM_abla_A2A/",
+        "../exp/47_e_BH_small_proxim_ora_A2A/",
+        "../exp/48_e_EP_small_proxim_ora_A2A/",
+        "../exp/49_e_GF_small_proxim_ora_A2A/",
+        "../exp/50_e_LM_small_proxim_ora_A2A/",
+        "../exp/51_e_RM_small_proxim_ora_A2A/"};
     std::vector<std::string> output_file_list = {"1_SE_Oracle_Adapt.txt",
                                                  "2_EAR_Oracle_Adapt.txt",
                                                  "3_RC_Oracle_Naive.txt",
@@ -231,7 +308,12 @@ int main(int argc, char **argv)
                                                  "9_SE_Oracle_FastFly_Adapt.txt",
                                                  "10_EAR_Oracle_FastFly_Adapt.txt",
                                                  "11_SU_Oracle_Adapt.txt",
-                                                 "12_RC_Oracle_NaiveProx.txt"};
+                                                 "12_RC_Oracle_NaiveProx.txt",
+                                                 "13_SE_Oracle_Adapt_A2A.txt",
+                                                 "14_RC_Oracle_Naive_A2A.txt",
+                                                 "15_RC_Oracle_A2A.txt",
+                                                 "16_SE_Oracle_FastFly_Adapt_A2A.txt",
+                                                 "17_RC_Oracle_NaiveProx_A2A.txt"};
     for (int i = 0; i < output_folder_list.size(); i++)
     {
         for (int j = 0; j < output_file_list.size(); j++)
@@ -819,6 +901,246 @@ int main(int argc, char **argv)
             int input_file_index = i;
 
             run_algorithms(input_file36, output_folder_list[35], epsilon, input_file_index, 4);
+        }
+    }
+
+    // run BH small dataset on small POI when varying epsilon for A2A query
+    std::map<int, input_struct> input_file37{
+        {0, input_struct("BH_10086.xyz", "BH_50_poi_on_10086.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file37.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file37, output_folder_list[36], epsilon, input_file_index, 5);
+        }
+    }
+
+    // run EP small dataset on small POI when varying epsilon for A2A query
+    std::map<int, input_struct> input_file38{
+        {0, input_struct("EP_10062.xyz", "EP_50_poi_on_10062.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file38.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file38, output_folder_list[37], epsilon, input_file_index, 5);
+        }
+    }
+
+    // run GF small dataset on small POI when varying epsilon for A2A query
+    std::map<int, input_struct> input_file39{
+        {0, input_struct("GF_10092.xyz", "GF_50_poi_on_10092.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file39.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file39, output_folder_list[38], epsilon, input_file_index, 5);
+        }
+    }
+
+    // run LM small dataset on small POI when varying epsilon for A2A query
+    std::map<int, input_struct> input_file40{
+        {0, input_struct("LM_10092.xyz", "LM_50_poi_on_10092.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file40.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file40, output_folder_list[39], epsilon, input_file_index, 5);
+        }
+    }
+
+    // run RM small dataset on small POI when varying epsilon for A2A query
+    std::map<int, input_struct> input_file41{
+        {0, input_struct("RM_10092.xyz", "RM_50_poi_on_10092.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file41.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file41, output_folder_list[40], epsilon, input_file_index, 5);
+        }
+    }
+
+    // run BH dataset on large POI when varying epsilon for ablation study for A2A query
+    std::map<int, input_struct> input_file42{
+        {0, input_struct("BH_500835.xyz", "BH_500_poi_on_500835.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file42.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file42, output_folder_list[41], epsilon, input_file_index, 6);
+        }
+    }
+
+    // run EP dataset on large POI when varying epsilon for ablation study for A2A query
+    std::map<int, input_struct> input_file43{
+        {0, input_struct("EP_500384.xyz", "EP_500_poi_on_500384.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file43.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file43, output_folder_list[42], epsilon, input_file_index, 6);
+        }
+    }
+
+    // run GF dataset on large POI when varying epsilon for ablation study for A2A query
+    std::map<int, input_struct> input_file44{
+        {0, input_struct("GF_500208.xyz", "GF_500_poi_on_500208.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file44.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file44, output_folder_list[43], epsilon, input_file_index, 6);
+        }
+    }
+
+    // run LM dataset on large POI when varying epsilon for ablation study for A2A query
+    std::map<int, input_struct> input_file45{
+        {0, input_struct("LM_500208.xyz", "LM_500_poi_on_500208.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file45.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file45, output_folder_list[44], epsilon, input_file_index, 6);
+        }
+    }
+
+    // run RM dataset on large POI when varying epsilon for ablation study for A2A query
+    std::map<int, input_struct> input_file46{
+        {0, input_struct("RM_500208.xyz", "RM_500_poi_on_500208.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file46.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file46, output_folder_list[45], epsilon, input_file_index, 6);
+        }
+    }
+
+    // run BH small dataset on small POI when varying epsilon for proximity query oracle and algorithm comparision for A2A query
+    std::map<int, input_struct> input_file47{
+        {0, input_struct("BH_10086.xyz", "BH_50_poi_on_10086.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file47.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file47, output_folder_list[46], epsilon, input_file_index, 7);
+        }
+    }
+
+    // run EP small dataset on small POI when varying epsilon for proximity query oracle and algorithm comparision for A2A query
+    std::map<int, input_struct> input_file48{
+        {0, input_struct("EP_10062.xyz", "EP_50_poi_on_10062.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file48.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file48, output_folder_list[47], epsilon, input_file_index, 7);
+        }
+    }
+
+    // run GF small dataset on small POI when varying epsilon for proximity query oracle and algorithm comparision for A2A query
+    std::map<int, input_struct> input_file49{
+        {0, input_struct("GF_10092.xyz", "GF_50_poi_on_10092.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file49.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file49, output_folder_list[48], epsilon, input_file_index, 7);
+        }
+    }
+
+    // run LM small dataset on small POI when varying epsilon for proximity query oracle and algorithm comparision for A2A query
+    std::map<int, input_struct> input_file50{
+        {0, input_struct("LM_10092.xyz", "LM_50_poi_on_10092.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file50.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file50, output_folder_list[49], epsilon, input_file_index, 7);
+        }
+    }
+
+    // run RM small dataset on small POI when varying epsilon for proximity query oracle and algorithm comparision for A2A query
+    std::map<int, input_struct> input_file51{
+        {0, input_struct("RM_10092.xyz", "RM_50_poi_on_10092.txt", 0, 1)},
+    };
+
+    for (int i = 0; i < input_file51.size(); i++)
+    {
+        for (int j = 0; j < epsilon_list.size(); j++)
+        {
+            double epsilon = epsilon_list[j];
+            int input_file_index = i;
+
+            run_algorithms(input_file51, output_folder_list[50], epsilon, input_file_index, 7);
         }
     }
 }

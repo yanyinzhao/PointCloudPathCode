@@ -218,3 +218,93 @@ rm e_RM_small_proxim_ora.eps
 gnuplot e_RM_small_proxim_ora.plt
 cp e_RM_small_proxim_ora.eps ../eps/
 cd ..
+
+cd 37_e_BH_small_A2A
+rm e_BH_small_A2A.eps
+gnuplot e_BH_small_A2A.plt
+cp e_BH_small_A2A.eps ../eps/
+cd ..
+
+cd 38_e_EP_small_A2A
+rm e_EP_small_A2A.eps
+gnuplot e_EP_small_A2A.plt
+cp e_EP_small_A2A.eps ../eps/
+cd ..
+
+cd 39_e_GF_small_A2A
+rm e_GF_small_A2A.eps
+gnuplot e_GF_small_A2A.plt
+cp e_GF_small_A2A.eps ../eps/
+cd ..
+
+cd 40_e_LM_small_A2A
+rm e_LM_small_A2A.eps
+gnuplot e_LM_small_A2A.plt
+cp e_LM_small_A2A.eps ../eps/
+cd ..
+
+cd 41_e_RM_small_A2A
+rm e_RM_small_A2A.eps
+gnuplot e_RM_small_A2A.plt
+cp e_RM_small_A2A.eps ../eps/
+cd ..
+
+cd 42_e_BH_abla_A2A
+rm e_BH_abla_A2A.eps
+gnuplot e_BH_abla_A2A.plt
+cp e_BH_abla_A2A.eps ../eps/
+cd ..
+
+cd 43_e_EP_abla_A2A
+rm e_EP_abla_A2A.eps
+gnuplot e_EP_abla_A2A.plt
+cp e_EP_abla_A2A.eps ../eps/
+cd ..
+
+cd 44_e_GF_abla_A2A
+rm e_GF_abla_A2A.eps
+gnuplot e_GF_abla_A2A.plt
+cp e_GF_abla_A2A.eps ../eps/
+cd ..
+
+cd 45_e_LM_abla_A2A
+rm e_LM_abla_A2A.eps
+gnuplot e_LM_abla_A2A.plt
+cp e_LM_abla_A2A.eps ../eps/
+cd ..
+
+cd 46_e_RM_abla_A2A
+rm e_RM_abla_A2A.eps
+gnuplot e_RM_abla_A2A.plt
+cp e_RM_abla_A2A.eps ../eps/
+cd ..
+
+cd 47_e_BH_small_proxim_ora_A2A
+rm e_BH_small_proxim_ora_A2A.eps
+gnuplot e_BH_small_proxim_ora_A2A.plt
+cp e_BH_small_proxim_ora_A2A.eps ../eps/
+cd ..
+
+cd 48_e_EP_small_proxim_ora_A2A
+rm e_EP_small_proxim_ora_A2A.eps
+gnuplot e_EP_small_proxim_ora_A2A.plt
+cp e_EP_small_proxim_ora_A2A.eps ../eps/
+cd ..
+
+cd 49_e_GF_small_proxim_ora_A2A
+rm e_GF_small_proxim_ora_A2A.eps
+gnuplot e_GF_small_proxim_ora_A2A.plt
+cp e_GF_small_proxim_ora_A2A.eps ../eps/
+cd ..
+
+cd 50_e_LM_small_proxim_ora_A2A
+rm e_LM_small_proxim_ora_A2A.eps
+gnuplot e_LM_small_proxim_ora_A2A.plt
+cp e_LM_small_proxim_ora_A2A.eps ../eps/
+cd ..
+
+cd 51_e_RM_small_proxim_ora_A2A
+rm e_RM_small_proxim_ora_A2A.eps
+gnuplot e_RM_small_proxim_ora_A2A.plt
+cp e_RM_small_proxim_ora_A2A.eps ../eps/
+cd ..
