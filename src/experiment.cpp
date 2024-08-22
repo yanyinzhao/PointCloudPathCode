@@ -243,8 +243,6 @@ void run_algorithms(std::map<int, input_struct> input_file,
 
 int main(int argc, char **argv)
 {
-    // std::__fs::filesystem::remove_all("../exp");
-
     std::vector<std::string> output_folder_list = {
         "../exp/1_e_BH_small/",
         "../exp/2_n_BH_small/",

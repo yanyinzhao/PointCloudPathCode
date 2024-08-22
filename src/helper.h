@@ -169,7 +169,7 @@ public:
         std::pair<int, GeoNode *> q(this->index, this);
         p->covers.push_back(q);
     }
-    ~GeoNode(){};
+    ~GeoNode() {};
 };
 
 class GeoPair_C
@@ -892,7 +892,7 @@ void generate_geo_pair_C(int geo_tree_node_id, int &WSPD_oracle_edge_num,
 
     if (geo_pair_unordered_map.count(x_y_in_geo_node_id) == 0)
     {
-        geo_pair_unordered_map[x_y_in_geo_node_id] = 1; // avoid storing a pair for two times
+        geo_pair_unordered_map[x_y_in_geo_node_id] = 1;
 
         assert(poi_unordered_map.count(x.index) != 0 && poi_unordered_map.count(y.index) != 0);
         int x_in_poi_list = poi_unordered_map[x.index];
@@ -995,7 +995,7 @@ void generate_geo_pair_T(int geo_tree_node_id, int &WSPD_oracle_edge_num,
 
     if (geo_pair_unordered_map.count(x_y_in_geo_node_id) == 0)
     {
-        geo_pair_unordered_map[x_y_in_geo_node_id] = 1; // avoid storing a pair for two times
+        geo_pair_unordered_map[x_y_in_geo_node_id] = 1;
 
         assert(poi_unordered_map.count(x.index) != 0 && poi_unordered_map.count(y.index) != 0);
         int x_in_poi_list = poi_unordered_map[x.index];
@@ -1320,7 +1320,6 @@ void poi_to_highway_node_path_C(point_cloud_geodesic::PointCloud *point_cloud, g
         {
             destinations_highway_node_list.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[i.first]));
         }
-        // add poi in the current box
         for (int i = 0; i < same_box_poi_vertex_id.size(); i++)
         {
             destinations_highway_node_list.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[same_box_poi_vertex_id[i]]));
@@ -1328,7 +1327,6 @@ void poi_to_highway_node_path_C(point_cloud_geodesic::PointCloud *point_cloud, g
 
         algorithm.propagate(one_source_poi_list, &destinations_highway_node_list);
 
-        // add highway node in of current box
         for (auto i : highway_node_id_with_box_id_map[box_id])
         {
             point_cloud_geodesic::PathPoint one_dest(&point_cloud->pc_points()[i.first]);
@@ -1354,7 +1352,6 @@ void poi_to_highway_node_path_C(point_cloud_geodesic::PointCloud *point_cloud, g
                 memory_usage += path.size() * sizeof(point_cloud_geodesic::PathPoint);
             }
         }
-        // add poi in the current box
         for (int i = 0; i < same_box_poi_vertex_id.size(); i++)
         {
             point_cloud_geodesic::PathPoint one_dest(&point_cloud->pc_points()[same_box_poi_vertex_id[i]]);
@@ -1444,12 +1441,10 @@ void poi_to_highway_node_path_T(geodesic::Mesh *mesh, int sqrt_num_of_box,
             }
         }
 
-        // add highway node in of current box
         for (auto i : highway_node_id_with_box_id_map[box_id])
         {
             destinations_highway_node_list.push_back(geodesic::SurfacePoint(&mesh->vertices()[i.first]));
         }
-        // add poi in the current box
         for (int i = 0; i < same_box_poi_vertex_id.size(); i++)
         {
             destinations_highway_node_list.push_back(geodesic::SurfacePoint(&mesh->vertices()[same_box_poi_vertex_id[i]]));
@@ -1457,7 +1452,6 @@ void poi_to_highway_node_path_T(geodesic::Mesh *mesh, int sqrt_num_of_box,
 
         algorithm.propagate(one_source_poi_list, &destinations_highway_node_list);
 
-        // add highway node in of current box
         for (auto i : highway_node_id_with_box_id_map[box_id])
         {
             geodesic::SurfacePoint one_dest(&mesh->vertices()[i.first]);
@@ -1483,7 +1477,7 @@ void poi_to_highway_node_path_T(geodesic::Mesh *mesh, int sqrt_num_of_box,
                 memory_usage += path.size() * sizeof(geodesic::SurfacePoint);
             }
         }
-        // add poi in the current box
+
         for (int i = 0; i < same_box_poi_vertex_id.size(); i++)
         {
             geodesic::SurfacePoint one_dest(&mesh->vertices()[same_box_poi_vertex_id[i]]);
@@ -1878,7 +1872,6 @@ void EAR_Oracle_query_C(point_cloud_geodesic::PointCloud *point_cloud, geodesic:
         }
     }
 
-    // for destination poi
     for (int i = 0; i < sqrt_num_of_box; i++)
     {
         for (int j = 0; j < sqrt_num_of_box; j++)
@@ -1952,7 +1945,6 @@ void EAR_Oracle_query_C(point_cloud_geodesic::PointCloud *point_cloud, geodesic:
                         highway_node_to_highway_node_path.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[i.first]));
                     }
 
-                    // src to highway node
                     double src_to_highway_node_distance = 0;
                     std::vector<point_cloud_geodesic::PathPoint> src_to_highway_node_path;
                     src_to_highway_node_path.clear();
@@ -1977,7 +1969,6 @@ void EAR_Oracle_query_C(point_cloud_geodesic::PointCloud *point_cloud, geodesic:
                         src_to_highway_node_path.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[i.first]));
                     }
 
-                    // dest to highway node
                     double dest_to_highway_node_distance = 0;
                     std::vector<point_cloud_geodesic::PathPoint> dest_to_highway_node_path;
                     dest_to_highway_node_path.clear();
@@ -2125,7 +2116,6 @@ void EAR_Oracle_query_T(geodesic::Mesh *mesh, std::vector<int> &poi_list,
     double dest_x = mesh->vertices()[poi_list[destination_poi_index]].getx();
     double dest_y = mesh->vertices()[poi_list[destination_poi_index]].gety();
 
-    // for source poi
     for (int i = 0; i < sqrt_num_of_box; i++)
     {
         for (int j = 0; j < sqrt_num_of_box; j++)
@@ -2145,7 +2135,6 @@ void EAR_Oracle_query_T(geodesic::Mesh *mesh, std::vector<int> &poi_list,
         }
     }
 
-    // for destination poi
     for (int i = 0; i < sqrt_num_of_box; i++)
     {
         for (int j = 0; j < sqrt_num_of_box; j++)
@@ -2204,7 +2193,6 @@ void EAR_Oracle_query_T(geodesic::Mesh *mesh, std::vector<int> &poi_list,
             {
                 for (auto j : highway_node_id_with_box_id_map[dest_box_id])
                 {
-                    // highway node to highway node
                     double highway_node_to_highway_node_distance = 0;
                     std::vector<geodesic::SurfacePoint> highway_node_to_highway_node_path;
                     highway_node_to_highway_node_path.clear();
@@ -2219,7 +2207,6 @@ void EAR_Oracle_query_T(geodesic::Mesh *mesh, std::vector<int> &poi_list,
                         highway_node_to_highway_node_path.push_back(geodesic::SurfacePoint(&mesh->vertices()[i.first]));
                     }
 
-                    // src to highway node
                     double src_to_highway_node_distance = 0;
                     std::vector<geodesic::SurfacePoint> src_to_highway_node_path;
                     src_to_highway_node_path.clear();
@@ -2244,7 +2231,6 @@ void EAR_Oracle_query_T(geodesic::Mesh *mesh, std::vector<int> &poi_list,
                         src_to_highway_node_path.push_back(geodesic::SurfacePoint(&mesh->vertices()[i.first]));
                     }
 
-                    // dest to highway node
                     double dest_to_highway_node_distance = 0;
                     std::vector<geodesic::SurfacePoint> dest_to_highway_node_path;
                     dest_to_highway_node_path.clear();

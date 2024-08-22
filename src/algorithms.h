@@ -150,7 +150,6 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
     sorted_poi_x_or_y_coordinate_and_original_index_list.clear();
     double max_increment = 0;
 
-    // sort poi based on their x coordinate, since the point cloud in x-axis is larger
     if (point_cloud->m_xlength > point_cloud->m_ylength)
     {
         for (int i = 0; i < poi_num; i++)
@@ -159,7 +158,6 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
         }
         max_increment = point_cloud->m_xincrement;
     }
-    // sort poi based on their y coordinate, since the point cloud in y-axis is larger
     else
     {
         for (int i = 0; i < poi_num; i++)
@@ -177,8 +175,6 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
     processed_poi_index_unordered_map.clear();
     int exact_source_poi_process_order = 1;
 
-    // for each non-processes poi, select the poi with smallest x/y coordinate, mark it as
-    // parent source poi, run SSAD from this poi
     for (int i = 0; i < poi_num; i++)
     {
         parent_one_source_poi_list.clear();
@@ -212,7 +208,6 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
             }
             algorithm.propagate(parent_one_source_poi_list, &parent_destinations_poi_list);
 
-            // store the distance and path to these parent destination pois
             for (int j = 0; j < poi_num; j++)
             {
                 int other_parent_destination_poi_index = sorted_poi_x_or_y_coordinate_and_original_index_list[j].second;
@@ -243,11 +238,6 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
             sort_min_to_max_and_get_original_index(distance_of_current_parent_poi_to_non_precessed_poi_list, sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list);
             assert(sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list.size() == poi_num);
 
-            // for these parent destination pois, check whether they are close to parent source poi, if so,
-            // we need to (1) use the path between parent source poi and a children destination poi that are
-            // far away to approximate the path between children source poi and this far children destination
-            // poi, or (2) run SSAD from children source poi to children destination poi that are near =>
-            // based on the euclidean distance between children source poi and a far/near children destination poi
             std::vector<point_cloud_geodesic::PathPoint> children_one_source_poi_list;
             std::vector<point_cloud_geodesic::PathPoint> children_destinations_poi_list;
             std::vector<int> children_destinations_poi_index_list;
@@ -273,7 +263,6 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
                         assert(non_exact_source_poi_map.count(current_children_source_poi_index) == 0);
                         non_exact_source_poi_map[current_children_source_poi_index] = current_parent_source_poi_index;
 
-                        // the shorter part of the path between children source poi and parent source poi
                         int children_src_parent_src_index;
                         double children_src_parent_src_distance = 0;
                         std::vector<point_cloud_geodesic::PathPoint> children_src_parent_src_path;
@@ -296,11 +285,6 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
                             std::reverse(children_src_parent_src_path.begin(), children_src_parent_src_path.end());
                         }
 
-                        // for each children destination poi, (1) if the euclidean distance between current children
-                        // source poi and this children destination poi is less than a value, then run SSAD to this
-                        // children destination poi, (2) if not, just use the existing path between current partent
-                        // source poi to this children destination poi to approximate the path between current
-                        // children source poi and this children destination poi
                         for (int k = 0; k < poi_num; k++)
                         {
                             int other_children_destination_poi_index = sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[k].second;
@@ -314,13 +298,10 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
                                 double other_children_destination_poi_y = point_cloud->pc_points()[poi_list[other_children_destination_poi_index]].gety();
                                 double euclidean_distance_curr_children_other_children = euclidean_distance(current_children_source_poi_x, current_children_source_poi_y, other_children_destination_poi_x, other_children_destination_poi_y);
 
-                                // no need run SSAD to this children destination poi since it is far away from current children source poi
                                 if (euclidean_distance_curr_children_other_children > 2 * sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first / pow(epsilon, 0.25))
                                 {
-                                    // if other children distination poi has same parent source with the current children source poi
                                     if (sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[k].first <= max_increment * 7)
                                     {
-                                        // the longer part of the path between parent source poi and children destination poi
                                         int parent_src_children_dest_index;
                                         double parent_src_children_dest_distance = 0;
                                         std::vector<point_cloud_geodesic::PathPoint> parent_src_children_dest_path;
@@ -343,7 +324,6 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
                                             std::reverse(parent_src_children_dest_path.begin(), parent_src_children_dest_path.end());
                                         }
 
-                                        // sum the shorter and longer path together to be the new approximated path
                                         int children_src_children_dest_index;
                                         double children_src_children_dest_distance = 0;
                                         std::vector<point_cloud_geodesic::PathPoint> children_src_children_dest_path;
@@ -378,7 +358,6 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
                                         path_poi_to_poi_map[children_src_children_dest_index] = children_src_children_dest_path;
                                     }
                                 }
-                                // store this children destination poi and need to run SSAD
                                 else
                                 {
                                     children_destinations_poi_list.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[poi_list[other_children_destination_poi_index]]));
@@ -456,7 +435,6 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
     int times = point_cloud->pc_points().size() / poi_num;
     times /= poi_num > 300 ? 10 : 1;
 
-    // sort poi based on their x coordinate, since the point cloud in x-axis is larger
     if (point_cloud->m_xlength > point_cloud->m_ylength)
     {
         for (int i = 0; i < poi_num; i++)
@@ -465,7 +443,6 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
         }
         max_increment = point_cloud->m_xincrement;
     }
-    // sort poi based on their y coordinate, since the point cloud in y-axis is larger
     else
     {
         for (int i = 0; i < poi_num; i++)
@@ -483,8 +460,6 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
     processed_poi_index_unordered_map.clear();
     int exact_source_poi_process_order = 1;
 
-    // for each non-processes poi, select the poi with smallest x/y coordinate, mark it as
-    // parent source poi, run SSAD from this poi
     for (int i = 0; i < poi_num; i++)
     {
         parent_one_source_poi_list.clear();
@@ -521,7 +496,6 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
                 algorithm.propagate(parent_one_source_poi_list, &parent_destinations_poi_list);
             }
 
-            // store the distance and path to these parent destination pois
             for (int j = 0; j < poi_num; j++)
             {
                 int other_parent_destination_poi_index = sorted_poi_x_or_y_coordinate_and_original_index_list[j].second;
@@ -552,11 +526,6 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
             sort_min_to_max_and_get_original_index(distance_of_current_parent_poi_to_non_precessed_poi_list, sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list);
             assert(sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list.size() == poi_num);
 
-            // for these parent destination pois, check whether they are close to parent source poi, if so,
-            // we need to (1) use the path between parent source poi and a children destination poi that are
-            // far away to approximate the path between children source poi and this far children destination
-            // poi, or (2) run SSAD from children source poi to children destination poi that are near =>
-            // based on the euclidean distance between children source poi and a far/near children destination poi
             std::vector<point_cloud_geodesic::PathPoint> children_one_source_poi_list;
             std::vector<point_cloud_geodesic::PathPoint> children_destinations_poi_list;
             std::vector<int> children_destinations_poi_index_list;
@@ -582,7 +551,6 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
                         assert(non_exact_source_poi_map.count(current_children_source_poi_index) == 0);
                         non_exact_source_poi_map[current_children_source_poi_index] = current_parent_source_poi_index;
 
-                        // the shorter part of the path between children source poi and parent source poi
                         int children_src_parent_src_index;
                         double children_src_parent_src_distance = 0;
                         std::vector<point_cloud_geodesic::PathPoint> children_src_parent_src_path;
@@ -605,11 +573,6 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
                             std::reverse(children_src_parent_src_path.begin(), children_src_parent_src_path.end());
                         }
 
-                        // for each children destination poi, (1) if the euclidean distance between current children
-                        // source poi and this children destination poi is less than a value, then run SSAD to this
-                        // children destination poi, (2) if not, just use the existing path between current partent
-                        // source poi to this children destination poi to approximate the path between current
-                        // children source poi and this children destination poi
                         for (int k = 0; k < poi_num; k++)
                         {
                             int other_children_destination_poi_index = sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[k].second;
@@ -623,13 +586,10 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
                                 double other_children_destination_poi_y = point_cloud->pc_points()[poi_list[other_children_destination_poi_index]].gety();
                                 double euclidean_distance_curr_children_other_children = euclidean_distance(current_children_source_poi_x, current_children_source_poi_y, other_children_destination_poi_x, other_children_destination_poi_y);
 
-                                // no need run SSAD to this children destination poi since it is far away from current children source poi
                                 if (euclidean_distance_curr_children_other_children > 2 * sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[j].first / pow(epsilon, 0.25))
                                 {
-                                    // if other children distination poi has same parent source with the current children source poi
                                     if (sorted_distance_of_current_parent_poi_to_non_precessed_poi_and_original_index_list[k].first <= max_increment * 7)
                                     {
-                                        // the longer part of the path between parent source poi and children destination poi
                                         int parent_src_children_dest_index;
                                         double parent_src_children_dest_distance = 0;
                                         std::vector<point_cloud_geodesic::PathPoint> parent_src_children_dest_path;
@@ -652,7 +612,6 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
                                             std::reverse(parent_src_children_dest_path.begin(), parent_src_children_dest_path.end());
                                         }
 
-                                        // sum the shorter and longer path together to be the new approximated path
                                         int children_src_children_dest_index;
                                         double children_src_children_dest_distance = 0;
                                         std::vector<point_cloud_geodesic::PathPoint> children_src_children_dest_path;
@@ -687,7 +646,6 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
                                         path_poi_to_poi_map[children_src_children_dest_index] = children_src_children_dest_path;
                                     }
                                 }
-                                // store this children destination poi and need to run SSAD
                                 else
                                 {
                                     children_destinations_poi_list.push_back(point_cloud_geodesic::PathPoint(&point_cloud->pc_points()[poi_list[other_children_destination_poi_index]]));
@@ -898,7 +856,6 @@ void RC_Oracle_query(int poi_num, std::unordered_map<int, double> &distance_poi_
 
     if (approximate_path)
     {
-        // the shorter part of the path between children source poi and parent source poi
         int children_src_parent_src_index;
         double children_src_parent_src_distance = 0;
         std::vector<point_cloud_geodesic::PathPoint> children_src_parent_src_path;
@@ -921,7 +878,6 @@ void RC_Oracle_query(int poi_num, std::unordered_map<int, double> &distance_poi_
             std::reverse(children_src_parent_src_path.begin(), children_src_parent_src_path.end());
         }
 
-        // the longer part of the path between parent source poi and children destination poi
         int parent_src_children_dest_index;
         double parent_src_children_dest_distance = 0;
         std::vector<point_cloud_geodesic::PathPoint> parent_src_children_dest_path;
@@ -944,7 +900,6 @@ void RC_Oracle_query(int poi_num, std::unordered_map<int, double> &distance_poi_
             std::reverse(parent_src_children_dest_path.begin(), parent_src_children_dest_path.end());
         }
 
-        // sum the shorter and longer path together to be the new approximated path
         int children_src_children_dest_index;
         double children_src_children_dest_distance = 0;
         std::vector<point_cloud_geodesic::PathPoint> children_src_children_dest_path;
@@ -1089,7 +1044,6 @@ void RC_Oracle_NaiveProx_all_poi_knn_or_range_query(int poi_num, std::unordered_
 
                 if (approximate_path)
                 {
-                    // the shorter part of the path between children source poi and parent source poi
                     int children_src_parent_src_index;
                     double children_src_parent_src_distance = 0;
 
@@ -1103,7 +1057,6 @@ void RC_Oracle_NaiveProx_all_poi_knn_or_range_query(int poi_num, std::unordered_
                     }
                     children_src_parent_src_distance = distance_poi_to_poi_map[children_src_parent_src_index];
 
-                    // the longer part of the path between parent source poi and children destination poi
                     int parent_src_children_dest_index;
                     double parent_src_children_dest_distance = 0;
 
@@ -1117,7 +1070,6 @@ void RC_Oracle_NaiveProx_all_poi_knn_or_range_query(int poi_num, std::unordered_
                     }
                     parent_src_children_dest_distance = distance_poi_to_poi_map[parent_src_children_dest_index];
 
-                    // sum the shorter and longer path together to be the new approximated path
                     int children_src_children_dest_index;
                     double children_src_children_dest_distance = 0;
                     if (current_children_source_poi_index <= other_children_destination_poi_index)
@@ -1221,7 +1173,6 @@ void RC_Oracle_all_poi_knn_or_range_query(int poi_num, std::unordered_map<int, d
 
             if (approximate_path)
             {
-                // the shorter part of the path between children source poi and parent source poi
                 int children_src_parent_src_index;
                 double children_src_parent_src_distance = 0;
 
@@ -1235,7 +1186,6 @@ void RC_Oracle_all_poi_knn_or_range_query(int poi_num, std::unordered_map<int, d
                 }
                 children_src_parent_src_distance = distance_poi_to_poi_map[children_src_parent_src_index];
 
-                // the longer part of the path between parent source poi and children destination poi
                 int parent_src_children_dest_index;
                 double parent_src_children_dest_distance = 0;
 
@@ -1249,7 +1199,6 @@ void RC_Oracle_all_poi_knn_or_range_query(int poi_num, std::unordered_map<int, d
                 }
                 parent_src_children_dest_distance = distance_poi_to_poi_map[parent_src_children_dest_index];
 
-                // sum the shorter and longer path together to be the new approximated path
                 int children_src_children_dest_index;
                 double children_src_children_dest_distance = 0;
                 if (current_children_source_poi_index <= other_children_destination_poi_index)
@@ -1329,7 +1278,7 @@ void SE_Oracle_FastFly_Adapt(
 
     pre_compute_Point(poi_num, point_cloud, poi_list, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pre_pairwise_memory_usage);
 
-    int geo_tree_node_id = 1; // the root node has 0 id
+    int geo_tree_node_id = 1;
     std::unordered_map<int, GeoPair_C *> geopairs;
     geopairs.clear();
     std::vector<GeoNode *> all_poi;
@@ -1451,7 +1400,7 @@ void SE_Oracle_FastFly_Adapt_A2A(
         pre_compute_Point(poi_num, point_cloud, poi_list, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pre_pairwise_memory_usage);
     }
 
-    int geo_tree_node_id = 1; // the root node has 0 id
+    int geo_tree_node_id = 1;
     std::unordered_map<int, GeoPair_C *> geopairs;
     geopairs.clear();
     std::vector<GeoNode *> all_poi;
@@ -1573,7 +1522,7 @@ void SE_Oracle_Adapt(
 
     pre_compute_FaceExact(poi_num, &mesh, poi_list, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pre_pairwise_memory_usage);
 
-    int geo_tree_node_id = 1; // the root node has 0 id
+    int geo_tree_node_id = 1;
     std::unordered_map<int, GeoPair_T *> geopairs;
     geopairs.clear();
     std::vector<GeoNode *> all_poi;
@@ -1698,7 +1647,7 @@ void SE_Oracle_Adapt_A2A(
         pre_compute_FaceExact(poi_num, &mesh, poi_list, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pre_pairwise_memory_usage);
     }
 
-    int geo_tree_node_id = 1; // the root node has 0 id
+    int geo_tree_node_id = 1;
     std::unordered_map<int, GeoPair_T *> geopairs;
     geopairs.clear();
     std::vector<GeoNode *> all_poi;
@@ -1833,7 +1782,7 @@ void EAR_Oracle_FastFly_Adapt(
     pre_compute_EAR_Oracle_highway_node_C(point_cloud, highway_node_list, pre_distance_highway_node_to_highway_node_map,
                                           pre_path_highway_node_to_highway_node_map, pre_memory_usage);
 
-    int geo_tree_node_id = 1; // the root node has 0 id
+    int geo_tree_node_id = 1;
     std::unordered_map<int, GeoPair_C *> geopairs;
     geopairs.clear();
     std::vector<GeoNode *> all_highway_node;
@@ -1980,7 +1929,7 @@ void EAR_Oracle_Adapt(
     pre_compute_EAR_Oracle_highway_node_T(&mesh, highway_node_list, pre_distance_highway_node_to_highway_node_map,
                                           pre_path_highway_node_to_highway_node_map, pre_memory_usage);
 
-    int geo_tree_node_id = 1; // the root node has 0 id
+    int geo_tree_node_id = 1;
     std::unordered_map<int, GeoPair_T *> geopairs;
     geopairs.clear();
     std::vector<GeoNode *> all_highway_node;
@@ -2113,7 +2062,7 @@ void SU_Oracle_Adapt(
 
     pre_compute_FaceExact(poi_num, &mesh, poi_list, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pre_pairwise_memory_usage);
 
-    int geo_tree_node_id = 1; // the root node has 0 id
+    int geo_tree_node_id = 1;
     std::unordered_map<int, GeoPair_T *> geopairs;
     geopairs.clear();
     std::vector<GeoNode *> all_poi;
