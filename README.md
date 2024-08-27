@@ -319,7 +319,7 @@ The output will be stored in "output/output.txt" file. The format will be as fol
 
 ```
 
-[dataset] [point_num] [poi_num] [epsilon] [point_cloud_to_terrain_time (ms)] [construction_time (ms)] [query_time (ms)] [point_cloud_to_terrain_memroy_usage (MB)] [memory_usage (MB)] [index_size (MB)] [distance_error_point_cloud] [distance_error_terrain] [knn_query_time] [knn_error_point_cloud] [knn_error_terrain] [range_query_time] [range_error_point_cloud] [range_error_terrain]
+[dataset] [point_num] [poi_num] [epsilon] [point_cloud_to_terrain_time (ms)] [construction_time (ms)] [query_time (ms)] [point_cloud_to_terrain_memroy_usage (MB)] [memory_usage (MB)] [output_size (MB)] [distance_error_point_cloud] [distance_error_terrain] [knn_query_time] [knn_error_point_cloud] [knn_error_terrain] [range_query_time] [range_error_point_cloud] [range_error_terrain]
 
 ```
 

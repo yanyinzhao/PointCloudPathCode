@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 
        std::string output_file = "../output/output.txt";
        std::ofstream ofs(output_file, std::ofstream::app);
-       ofs << "# dataset\tpoint_num\tpoi_num\tepsilon\tpoint_cloud_to_terrain_time\tconstruction_time\tquery_time\tpoint_cloud_to_terrain_memroy_usage\tmemory_usage\tindex_size\tdistance_error_point_cloud\tdistance_error_terrain\tknn_query_time\tknn_error_point_cloud\tknn_error_terrain\trange_query_time\trange_error_point_cloud\trange_error_terrain\n\n";
+       ofs << "# dataset\tpoint_num\tpoi_num\tepsilon\tpoint_cloud_to_terrain_time\tconstruction_time\tquery_time\tpoint_cloud_to_terrain_memroy_usage\tmemory_usage\toutput_size\tdistance_error_point_cloud\tdistance_error_terrain\tknn_query_time\tknn_error_point_cloud\tknn_error_terrain\trange_query_time\trange_error_point_cloud\trange_error_terrain\n\n";
        ofs.close();
 
        assert(source_poi_index <= poi_num - 1 && destination_poi_index <= poi_num - 1);

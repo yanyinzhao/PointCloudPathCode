@@ -487,7 +487,7 @@ double euclidean_distance(double x_1, double y_1, double x_2, double y_2)
     return sqrt(pow(x_1 - x_2, 2) + pow(y_1 - y_2, 2));
 }
 
-double epslion_to_subdivision_level(double epsilon)
+double epsilon_to_subdivision_level(double epsilon)
 {
     assert(epsilon > 0 && epsilon <= 1);
     double subdivision_level = 0;
@@ -1258,7 +1258,7 @@ void poi_to_highway_node_path_C(point_cloud_geodesic::PointCloud *point_cloud, g
                                 std::unordered_map<int, std::unordered_map<int, int>> &highway_node_id_with_box_id_map,
                                 std::vector<int> &poi_list, std::unordered_map<int, double> &distance_poi_to_highway_node_map,
                                 std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> &path_poi_to_highway_node_map,
-                                double &index_size, double &memory_usage)
+                                double &output_size, double &memory_usage)
 {
     point_cloud_geodesic::PointCloudGeodesicAlgorithmDijkstra algorithm(point_cloud);
     std::vector<point_cloud_geodesic::PathPoint> one_source_poi_list;
@@ -1348,7 +1348,7 @@ void poi_to_highway_node_path_C(point_cloud_geodesic::PointCloud *point_cloud, g
             {
                 path_poi_to_highway_node_map[x_y_vertex_id] = path;
                 distance_poi_to_highway_node_map[x_y_vertex_id] = length(path);
-                index_size += path.size() * sizeof(point_cloud_geodesic::PathPoint);
+                output_size += path.size() * sizeof(point_cloud_geodesic::PathPoint);
                 memory_usage += path.size() * sizeof(point_cloud_geodesic::PathPoint);
             }
         }
@@ -1373,7 +1373,7 @@ void poi_to_highway_node_path_C(point_cloud_geodesic::PointCloud *point_cloud, g
             {
                 path_poi_to_highway_node_map[x_y_vertex_id] = path;
                 distance_poi_to_highway_node_map[x_y_vertex_id] = length(path);
-                index_size += path.size() * sizeof(point_cloud_geodesic::PathPoint);
+                output_size += path.size() * sizeof(point_cloud_geodesic::PathPoint);
                 memory_usage += path.size() * sizeof(point_cloud_geodesic::PathPoint);
             }
         }
@@ -1384,7 +1384,7 @@ void poi_to_highway_node_path_T(geodesic::Mesh *mesh, int sqrt_num_of_box,
                                 std::unordered_map<int, std::unordered_map<int, int>> &highway_node_id_with_box_id_map,
                                 std::vector<int> &poi_list, std::unordered_map<int, double> &distance_poi_to_highway_node_map,
                                 std::unordered_map<int, std::vector<geodesic::SurfacePoint>> &path_poi_to_highway_node_map,
-                                double &index_size, double &memory_usage)
+                                double &output_size, double &memory_usage)
 {
     geodesic::GeodesicAlgorithmExact algorithm(mesh);
     std::vector<geodesic::SurfacePoint> one_source_poi_list;
@@ -1473,7 +1473,7 @@ void poi_to_highway_node_path_T(geodesic::Mesh *mesh, int sqrt_num_of_box,
             {
                 path_poi_to_highway_node_map[x_y_vertex_id] = path;
                 distance_poi_to_highway_node_map[x_y_vertex_id] = length(path);
-                index_size += path.size() * sizeof(geodesic::SurfacePoint);
+                output_size += path.size() * sizeof(geodesic::SurfacePoint);
                 memory_usage += path.size() * sizeof(geodesic::SurfacePoint);
             }
         }
@@ -1499,7 +1499,7 @@ void poi_to_highway_node_path_T(geodesic::Mesh *mesh, int sqrt_num_of_box,
             {
                 path_poi_to_highway_node_map[x_y_vertex_id] = path;
                 distance_poi_to_highway_node_map[x_y_vertex_id] = length(path);
-                index_size += path.size() * sizeof(geodesic::SurfacePoint);
+                output_size += path.size() * sizeof(geodesic::SurfacePoint);
                 memory_usage += path.size() * sizeof(geodesic::SurfacePoint);
             }
         }
