@@ -19,10 +19,10 @@ We compared 17 algorithms as follows:
 - RC-Oracle-NaiveProx-A2A (our oracle with the naive proximity queries algorithm for A2A query)
 - RC-Oracle (our oracle with the efficient proximity queries algorithm)
 - RC-Oracle-A2A (our oracle with the efficient proximity queries algorithm for A2A query)
-- CH-Adapt (on-the-fly baseline)
-- Kaul-Adapt (on-the-fly baseline)
-- Dijk-Adapt (on-the-fly baseline)
-- FastFly (our on-the-fly)
+- CH-Adapt (on-the-fly baseline algorithm)
+- Kaul-Adapt (on-the-fly baseline algorithm)
+- Dijk-Adapt (on-the-fly baseline algorithm)
+- FastFly (our on-the-fly algorithm)
 
 ## Environment: 
 - Linux machine (2.2 GHz CPU and 512GB memory)
