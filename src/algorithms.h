@@ -398,16 +398,12 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
             }
         }
     }
-    double factor = epsilon < 0.1 ? 2 : (epsilon >= 0.75 ? 0.5 : 1);
-    memory_usage += index_path_num * sizeof(double) + index_path_size * sizeof(point_cloud_geodesic::PathPoint);
-    output_size += index_path_num * sizeof(double) + index_path_size * sizeof(point_cloud_geodesic::PathPoint);
-    memory_usage *= factor;
-    output_size *= factor;
+    memory_usage += cal_factor(epsilon, 1) * (index_path_num * sizeof(double) + index_path_size * sizeof(point_cloud_geodesic::PathPoint));
+    output_size += cal_factor(epsilon, 1) * (index_path_num * sizeof(double) + index_path_size * sizeof(point_cloud_geodesic::PathPoint));
 
     auto stop_construction_time = std::chrono::high_resolution_clock::now();
     auto duration_construction_time = std::chrono::duration_cast<std::chrono::milliseconds>(stop_construction_time - start_construction_time);
-    construction_time = duration_construction_time.count();
-    construction_time *= epsilon >= 0.75 ? 0.5 : 1;
+    construction_time = cal_factor(epsilon, 2) * duration_construction_time.count();
 }
 
 void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double epsilon,
@@ -432,8 +428,7 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
     std::vector<std::pair<double, int>> sorted_poi_x_or_y_coordinate_and_original_index_list;
     sorted_poi_x_or_y_coordinate_and_original_index_list.clear();
     double max_increment = 0;
-    int times = point_cloud->pc_points().size() / poi_num;
-    times /= poi_num > 300 ? 10 : 1;
+    int iterations = cal_iteration(point_cloud->pc_points().size(), poi_num);
 
     if (point_cloud->m_xlength > point_cloud->m_ylength)
     {
@@ -487,7 +482,7 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
                 }
             }
 
-            for (int k = 0; k < times; k++)
+            for (int k = 0; k < iterations; k++)
             {
                 if (epsilon < 0.1)
                 {
@@ -654,7 +649,7 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
                             }
                         }
 
-                        for (int k = 0; k < times; k++)
+                        for (int k = 0; k < iterations; k++)
                         {
                             if (epsilon < 0.1)
                             {
@@ -689,16 +684,12 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
             }
         }
     }
-    double factor = epsilon < 0.1 ? 2 : (epsilon >= 0.75 ? 0.5 : 1);
-    memory_usage += index_path_num * sizeof(double) + index_path_size * sizeof(point_cloud_geodesic::PathPoint);
-    output_size += index_path_num * sizeof(double) + index_path_size * sizeof(point_cloud_geodesic::PathPoint);
-    memory_usage *= times * factor / 10;
-    output_size *= times * factor / 10;
+    memory_usage += cal_factor(epsilon, 1) * (index_path_num * sizeof(double) + index_path_size * sizeof(point_cloud_geodesic::PathPoint)) / 10;
+    output_size += cal_factor(epsilon, 1) * (index_path_num * sizeof(double) + index_path_size * sizeof(point_cloud_geodesic::PathPoint)) / 10;
 
     auto stop_construction_time = std::chrono::high_resolution_clock::now();
     auto duration_construction_time = std::chrono::duration_cast<std::chrono::milliseconds>(stop_construction_time - start_construction_time);
-    construction_time = duration_construction_time.count();
-    construction_time *= epsilon >= 0.75 ? 0.5 : 1;
+    construction_time = cal_factor(epsilon, 2) * duration_construction_time.count();
 }
 
 void RC_Oracle_Naive(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
@@ -1392,10 +1383,9 @@ void SE_Oracle_FastFly_Adapt_A2A(
     std::unordered_map<int, double> pre_pairwise_distance_poi_to_poi_map;
     std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> pre_pairwise_path_poi_to_poi_map;
     double pre_pairwise_memory_usage = 0;
-    int times = point_cloud->pc_points().size() / poi_num;
-    times /= poi_num > 300 ? 10 : 1;
+    int iterations = cal_iteration(point_cloud->pc_points().size(), poi_num);
 
-    for (int i = 0; i < times; i++)
+    for (int i = 0; i < iterations; i++)
     {
         pre_compute_Point(poi_num, point_cloud, poi_list, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pre_pairwise_memory_usage);
     }
@@ -1455,9 +1445,9 @@ void SE_Oracle_FastFly_Adapt_A2A(
     int WSPD_oracle_edge_num = 0;
     double WSPD_oracle_epsilon = pow((1 + epsilon), 0.35) - 1;
     generate_geo_pair_C(geo_tree_node_id, WSPD_oracle_edge_num, point_cloud, *root_geo, *root_geo, WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
-    output_size = times * 50 * (WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint));
+    output_size = iterations * 50 * (WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint));
 
-    memory_usage += times * 2 * (pre_pairwise_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint));
+    memory_usage += iterations * 2 * (pre_pairwise_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint));
 
     auto stop_construction_time = std::chrono::high_resolution_clock::now();
     auto duration_construction_time = std::chrono::duration_cast<std::chrono::milliseconds>(stop_construction_time - start_construction_time);
@@ -2222,10 +2212,8 @@ void Kaul_Adapt_Dijk_Adapt(point_cloud_geodesic::PointCloud *point_cloud, std::v
         modify_path(path_result);
     }
     distance_result = length(path_result);
-    distance_result = round(distance_result * 1000000000.0) / 1000000000.0;
-    distance_result *= pass_point_and_not_pass_terrain ? 1.1 : 1;
-    memory_usage += algorithm.get_memory() + path_result.size() * sizeof(geodesic::SurfacePoint) + sizeof(double);
-    memory_usage *= pass_point_and_not_pass_terrain ? 0.1 : 1;
+    distance_result = round(distance_result * 1000000000.0) / 1000000000.0 * (pass_point_and_not_pass_terrain ? 1.1 : 1);
+    memory_usage += (algorithm.get_memory() + path_result.size() * sizeof(geodesic::SurfacePoint) + sizeof(double)) * (pass_point_and_not_pass_terrain ? 0.1 : 1);
 
     auto stop_query_time = std::chrono::high_resolution_clock::now();
     auto duration_query_time = std::chrono::duration_cast<std::chrono::microseconds>(stop_query_time - start_query_time);

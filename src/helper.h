@@ -1079,6 +1079,24 @@ int doubleCmp(const double &x)
     return x < 0 ? -1 : 1;
 }
 
+double cal_factor(double epsilon, int type)
+{
+    if (type == 1)
+    {
+        return epsilon < 0.1 ? 2 : (epsilon >= 0.75 ? 0.5 : 1);
+    }
+    else if (type == 2)
+    {
+        return epsilon >= 0.75 ? 0.5 : 1;
+    }
+    return 1;
+}
+
+int cal_iteration(int a, int b)
+{
+    return a / b / (b > 300 ? 10 : 1);
+}
+
 int cross_product(double p1_x, double p1_y, double p2_x, double p2_y)
 {
     return doubleCmp(p1_x * p2_y - p2_x * p1_y);
