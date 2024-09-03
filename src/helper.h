@@ -487,25 +487,25 @@ double euclidean_distance(double x_1, double y_1, double x_2, double y_2)
     return sqrt(pow(x_1 - x_2, 2) + pow(y_1 - y_2, 2));
 }
 
-double epsilon_to_subdivision_level(double epsilon)
+double e_to_subdivision_level(double e)
 {
-    assert(epsilon > 0 && epsilon <= 1);
+    assert(e > 0 && e <= 1);
     double subdivision_level = 0;
-    if (epsilon > 0 && epsilon <= 0.05)
+    if (e > 0 && e <= 0.05)
     {
-        subdivision_level = floor(7 / (10 * epsilon)) - 8;
+        subdivision_level = floor(7 / (10 * e)) - 8;
     }
-    else if (epsilon > 0.05 && epsilon <= 0.1)
+    else if (e > 0.05 && e <= 0.1)
     {
-        subdivision_level = floor(7 / (10 * epsilon)) - 2;
+        subdivision_level = floor(7 / (10 * e)) - 2;
     }
-    else if (epsilon > 0.1 && epsilon <= 0.25)
+    else if (e > 0.1 && e <= 0.25)
     {
-        subdivision_level = floor(1 / epsilon) - 1;
+        subdivision_level = floor(1 / e) - 1;
     }
-    else if (epsilon > 0.25 && epsilon < 1)
+    else if (e > 0.25 && e < 1)
     {
-        subdivision_level = floor(1 / epsilon);
+        subdivision_level = floor(1 / e);
     }
     if (subdivision_level < 5)
     {
@@ -869,7 +869,7 @@ void build_geo_tree_T(int &geo_tree_node_id, geodesic::Mesh *mesh, GeoNode &root
 
 void generate_geo_pair_C(int geo_tree_node_id, int &WSPD_oracle_edge_num,
                          point_cloud_geodesic::PointCloud *point_cloud, GeoNode &x, GeoNode &y,
-                         double WSPD_oracle_epsilon, std::unordered_map<int, GeoPair_C *> &geopairs,
+                         double WSPD_oracle_e, std::unordered_map<int, GeoPair_C *> &geopairs,
                          std::unordered_map<int, int> &poi_unordered_map,
                          std::unordered_map<int, int> &geo_pair_unordered_map,
                          std::unordered_map<int, double> &pre_pairwise_distance_poi_to_poi_map,
@@ -924,7 +924,7 @@ void generate_geo_pair_C(int geo_tree_node_id, int &WSPD_oracle_edge_num,
                 return;
             }
         }
-        if (distancexy >= (2.0 / WSPD_oracle_epsilon + 2.0) * max(x.radius, y.radius))
+        if (distancexy >= (2.0 / WSPD_oracle_e + 2.0) * max(x.radius, y.radius))
         {
             WSPD_oracle_edge_num++;
             GeoPair_C *nodepair = new GeoPair_C();
@@ -955,14 +955,14 @@ void generate_geo_pair_C(int geo_tree_node_id, int &WSPD_oracle_edge_num,
             {
                 for (std::list<GeoNode *>::iterator ite = x.children.begin(); ite != x.children.end(); ite++)
                 {
-                    generate_geo_pair_C(geo_tree_node_id, WSPD_oracle_edge_num, point_cloud, (**ite), y, WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
+                    generate_geo_pair_C(geo_tree_node_id, WSPD_oracle_edge_num, point_cloud, (**ite), y, WSPD_oracle_e, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
                 }
             }
             else
             {
                 for (std::list<GeoNode *>::iterator jte = y.children.begin(); jte != y.children.end(); jte++)
                 {
-                    generate_geo_pair_C(geo_tree_node_id, WSPD_oracle_edge_num, point_cloud, x, (**jte), WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
+                    generate_geo_pair_C(geo_tree_node_id, WSPD_oracle_edge_num, point_cloud, x, (**jte), WSPD_oracle_e, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
                 }
             }
         }
@@ -971,7 +971,7 @@ void generate_geo_pair_C(int geo_tree_node_id, int &WSPD_oracle_edge_num,
 
 void generate_geo_pair_T(int geo_tree_node_id, int &WSPD_oracle_edge_num,
                          geodesic::Mesh *mesh, GeoNode &x, GeoNode &y,
-                         double WSPD_oracle_epsilon,
+                         double WSPD_oracle_e,
                          std::unordered_map<int, GeoPair_T *> &geopairs,
                          std::unordered_map<int, int> &poi_unordered_map,
                          std::unordered_map<int, int> &geo_pair_unordered_map,
@@ -1027,7 +1027,7 @@ void generate_geo_pair_T(int geo_tree_node_id, int &WSPD_oracle_edge_num,
                 return;
             }
         }
-        if (distancexy >= (2.0 / WSPD_oracle_epsilon + 2.0) * max(x.radius, y.radius))
+        if (distancexy >= (2.0 / WSPD_oracle_e + 2.0) * max(x.radius, y.radius))
         {
             WSPD_oracle_edge_num++;
             GeoPair_T *nodepair = new GeoPair_T();
@@ -1058,14 +1058,14 @@ void generate_geo_pair_T(int geo_tree_node_id, int &WSPD_oracle_edge_num,
             {
                 for (std::list<GeoNode *>::iterator ite = x.children.begin(); ite != x.children.end(); ite++)
                 {
-                    generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, mesh, (**ite), y, WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
+                    generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, mesh, (**ite), y, WSPD_oracle_e, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
                 }
             }
             else
             {
                 for (std::list<GeoNode *>::iterator jte = y.children.begin(); jte != y.children.end(); jte++)
                 {
-                    generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, mesh, x, (**jte), WSPD_oracle_epsilon, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
+                    generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, mesh, x, (**jte), WSPD_oracle_e, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
                 }
             }
         }
@@ -1079,15 +1079,15 @@ int doubleCmp(const double &x)
     return x < 0 ? -1 : 1;
 }
 
-double cal_factor(double epsilon, int type)
+double cal_factor(double e, int type)
 {
     if (type == 1)
     {
-        return epsilon < 0.1 ? 2 : (epsilon >= 0.75 ? 0.5 : 1);
+        return e < 0.1 ? 2 : (e >= 0.75 ? 0.5 : 1);
     }
     else if (type == 2)
     {
-        return epsilon >= 0.75 ? 0.5 : 1;
+        return e >= 0.75 ? 0.5 : 1;
     }
     return 1;
 }
