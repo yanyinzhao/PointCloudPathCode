@@ -301,7 +301,7 @@ For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index
 
 Since SE-Oracle-Adapt, EAR-Oracle-Adapt, SU-Oracle-Adapt, RC-Oracle-Naive, SE-Oracle-Adapt, and RC-Oracle-Naive-A2A are time consuming, the project will run all algorithms on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run all algorithms except the 6 mentioned algorithm on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
 
-In addition, we strongly encourage you to set [run_knn_query] and [run_range_query] to 0 if you are not conducting experiments. Otherwise, it will take a very long time to run calculate the knn of all POIs. 
+In addition, we strongly encourage you to set [run_knn_query] and [run_range_query] to 0 if you are not conducting experiments. Otherwise, it will take a very long time to calculate them. 
 
 An example:
 
