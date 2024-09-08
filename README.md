@@ -219,7 +219,7 @@ The meaning for each parameter is as follows:
 - [run_knn_query]: whether to run all POIs knn query (0 means not running knn query, 1 means running knn query)
 - [run_range_query]: whether to run all POIs range query (0 means not running range query, 1 means running range query)
 
-For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index value corresponding to a point cloud data, the dataset size of the point cloud and the poi number on the terrain, their relationships are as follows:
+For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index value corresponding to a point cloud data, the dataset size of the point cloud and the poi number on the point cloud, their relationships are as follows:
 
 | Index | Point cloud data | Point number | POI number |
 | ----------- | ----------- | ----------- | ----------- |
