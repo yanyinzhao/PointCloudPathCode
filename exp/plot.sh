@@ -308,3 +308,159 @@ rm e_RM_small_proxim_ora_A2A.eps
 gnuplot e_RM_small_proxim_ora_A2A.plt
 cp e_RM_small_proxim_ora_A2A.eps ../eps/
 cd ..
+
+cd 52_e_BH_small_TIN
+rm e_BH_small_TIN.eps
+gnuplot e_BH_small_TIN.plt
+cp e_BH_small_TIN.eps ../eps/
+cd ..
+
+cd 53_n_BH_small_TIN
+rm n_BH_small_TIN.eps
+gnuplot n_BH_small_TIN.plt
+cp n_BH_small_TIN.eps ../eps/
+cd ..
+
+cd 54_e_EP_small_TIN
+rm e_EP_small_TIN.eps
+gnuplot e_EP_small_TIN.plt
+cp e_EP_small_TIN.eps ../eps/
+cd ..
+
+cd 55_n_EP_small_TIN
+rm n_EP_small_TIN.eps
+gnuplot n_EP_small_TIN.plt
+cp n_EP_small_TIN.eps ../eps/
+cd ..
+
+cd 56_DS_EP_small_TIN
+rm DS_EP_small_TIN.eps
+gnuplot DS_EP_small_TIN.plt
+cp DS_EP_small_TIN.eps ../eps/
+cd ..
+
+cd 57_e_GF_small_TIN
+rm e_GF_small_TIN.eps
+gnuplot e_GF_small_TIN.plt
+cp e_GF_small_TIN.eps ../eps/
+cd ..
+
+cd 58_n_GF_small_TIN
+rm n_GF_small_TIN.eps
+gnuplot n_GF_small_TIN.plt
+cp n_GF_small_TIN.eps ../eps/
+cd ..
+
+cd 59_e_LM_small_TIN
+rm e_LM_small_TIN.eps
+gnuplot e_LM_small_TIN.plt
+cp e_LM_small_TIN.eps ../eps/
+cd ..
+
+cd 60_n_LM_small_TIN
+rm n_LM_small_TIN.eps
+gnuplot n_LM_small_TIN.plt
+cp n_LM_small_TIN.eps ../eps/
+cd ..
+
+cd 61_e_RM_small_TIN
+rm e_RM_small_TIN.eps
+gnuplot e_RM_small_TIN.plt
+cp e_RM_small_TIN.eps ../eps/
+cd ..
+
+cd 62_n_RM_small_TIN
+rm n_RM_small_TIN.eps
+gnuplot n_RM_small_TIN.plt
+cp n_RM_small_TIN.eps ../eps/
+cd ..
+
+cd 63_e_BH_TIN
+rm e_BH_TIN.eps
+gnuplot e_BH_TIN.plt
+cp e_BH_TIN.eps ../eps/
+cd ..
+
+cd 64_n_BH_TIN
+rm n_BH_TIN.eps
+gnuplot n_BH_TIN.plt
+cp n_BH_TIN.eps ../eps/
+cd ..
+
+cd 65_DS_BH_TIN
+rm DS_BH_TIN.eps
+gnuplot DS_BH_TIN.plt
+cp DS_BH_TIN.eps ../eps/
+cd ..
+
+cd 66_e_EP_TIN
+rm e_EP_TIN.eps
+gnuplot e_EP_TIN.plt
+cp e_EP_TIN.eps ../eps/
+cd ..
+
+cd 67_n_EP_TIN
+rm n_EP_TIN.eps
+gnuplot n_EP_TIN.plt
+cp n_EP_TIN.eps ../eps/
+cd ..
+
+cd 68_DS_EP_TIN
+rm DS_EP_TIN.eps
+gnuplot DS_EP_TIN.plt
+cp DS_EP_TIN.eps ../eps/
+cd ..
+
+cd 69_e_GF_TIN
+rm e_GF_TIN.eps
+gnuplot e_GF_TIN.plt
+cp e_GF_TIN.eps ../eps/
+cd ..
+
+cd 70_n_GF_TIN
+rm n_GF_TIN.eps
+gnuplot n_GF_TIN.plt
+cp n_GF_TIN.eps ../eps/
+cd ..
+
+cd 71_DS_GF_TIN
+rm DS_GF_TIN.eps
+gnuplot DS_GF_TIN.plt
+cp DS_GF_TIN.eps ../eps/
+cd ..
+
+cd 72_e_LM_TIN
+rm e_LM_TIN.eps
+gnuplot e_LM_TIN.plt
+cp e_LM_TIN.eps ../eps/
+cd ..
+
+cd 73_n_LM_TIN
+rm n_LM_TIN.eps
+gnuplot n_LM_TIN.plt
+cp n_LM_TIN.eps ../eps/
+cd ..
+
+cd 74_DS_LM_TIN
+rm DS_LM_TIN.eps
+gnuplot DS_LM_TIN.plt
+cp DS_LM_TIN.eps ../eps/
+cd ..
+
+cd 75_e_RM_TIN
+rm e_RM_TIN.eps
+gnuplot e_RM_TIN.plt
+cp e_RM_TIN.eps ../eps/
+cd ..
+
+cd 76_n_RM_TIN
+rm n_RM_TIN.eps
+gnuplot n_RM_TIN.plt
+cp n_RM_TIN.eps ../eps/
+cd ..
+
+cd 77_DS_RM_TIN
+rm DS_RM_TIN.eps
+gnuplot DS_RM_TIN.plt
+cp DS_RM_TIN.eps ../eps/
+cd ..

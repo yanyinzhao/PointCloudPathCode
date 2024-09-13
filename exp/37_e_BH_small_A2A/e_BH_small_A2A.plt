@@ -52,8 +52,8 @@ set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1)
 
 plot "13_SE_Oracle_Adapt_A2A.txt" using 4:(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
 "2_EAR_Oracle_Adapt.txt" using 4:(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
-"14_RC_Oracle_Naive_A2A.txt" using 4:(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 6 linecolor rgbcolor "#000000", \
-"15_RC_Oracle_A2A.txt" using 4:(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+"14_RC_Oracle_Naive_A2A.txt" using 4:($6/1000) notitle with linespoints linetype 1 pointtype 6 linecolor rgbcolor "#000000", \
+"15_RC_Oracle_A2A.txt" using 4:($6/1000) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 #=========================================
 set size 0.7, 0.5;
@@ -75,12 +75,12 @@ set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1)
 
 plot "13_SE_Oracle_Adapt_A2A.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
 "2_EAR_Oracle_Adapt.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
-"14_RC_Oracle_Naive_A2A.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 6 linecolor rgbcolor "#000000", \
+"14_RC_Oracle_Naive_A2A.txt" using 4:9 notitle with linespoints linetype 1 pointtype 6 linecolor rgbcolor "#000000", \
 "5_CH_Adapt.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
 "6_Kaul_Adapt.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
 "7_Dijk_Adapt.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
 "8_FastFly.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
-"15_RC_Oracle_A2A.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+"15_RC_Oracle_A2A.txt" using 4:9 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================
@@ -131,7 +131,7 @@ plot "13_SE_Oracle_Adapt_A2A.txt" using 4:7 notitle with linespoints linetype 1 
 "5_CH_Adapt.txt" using 4:($5+$7) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
 "6_Kaul_Adapt.txt" using 4:($5+$7) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
 "7_Dijk_Adapt.txt" using 4:($5+$7) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
-"8_FastFly.txt" using 4:($5+$7) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
+"8_FastFly.txt" using 4:7 notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
 "15_RC_Oracle_A2A.txt" using 4:7 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
@@ -159,7 +159,7 @@ plot "13_SE_Oracle_Adapt_A2A.txt" using 4:($3*$3*$7) notitle with linespoints li
 "5_CH_Adapt.txt" using 4:($3*($5+$7)) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
 "6_Kaul_Adapt.txt" using 4:($3*($5+$7)) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
 "7_Dijk_Adapt.txt" using 4:($3*($5+$7)) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
-"8_FastFly.txt" using 4:($3*($5+$7)) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
+"8_FastFly.txt" using 4:($3*$7) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
 "15_RC_Oracle_A2A.txt" using 4:($3*$3*$7) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
@@ -187,7 +187,7 @@ plot "13_SE_Oracle_Adapt_A2A.txt" using 4:($3*$3*$7) notitle with linespoints li
 "5_CH_Adapt.txt" using 4:($3*($5+$7)) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
 "6_Kaul_Adapt.txt" using 4:($3*($5+$7)) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
 "7_Dijk_Adapt.txt" using 4:($3*($5+$7)) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
-"8_FastFly.txt" using 4:($3*($5+$7)) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
+"8_FastFly.txt" using 4:($3*$7) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
 "15_RC_Oracle_A2A.txt" using 4:($3*$3*$7) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 

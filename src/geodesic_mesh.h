@@ -25,9 +25,9 @@ namespace geodesic
 	class Mesh
 	{
 	public:
-		Mesh(){};
+		Mesh() {};
 
-		~Mesh(){};
+		~Mesh() {};
 
 		template <class Points, class Faces>
 		void initialize_mesh_data(unsigned num_vertices,

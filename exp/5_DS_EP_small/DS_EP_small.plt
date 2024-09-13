@@ -51,8 +51,8 @@ set xtics ("10" 10, "20" 20, "30" 30, "40" 40, "50" 50)
 
 plot "1_SE_Oracle_Adapt.txt" using (floor($2/10000)*10):(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
 "2_EAR_Oracle_Adapt.txt" using (floor($2/10000)*10):(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
-"3_RC_Oracle_Naive.txt" using (floor($2/10000)*10):(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 6 linecolor rgbcolor "#000000", \
-"4_RC_Oracle.txt" using (floor($2/10000)*10):(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+"3_RC_Oracle_Naive.txt" using (floor($2/10000)*10):($6/1000) notitle with linespoints linetype 1 pointtype 6 linecolor rgbcolor "#000000", \
+"4_RC_Oracle.txt" using (floor($2/10000)*10):($6/1000) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================
@@ -75,12 +75,12 @@ set xtics ("10" 10, "20" 20, "30" 30, "40" 40, "50" 50)
 
 plot "1_SE_Oracle_Adapt.txt" using (floor($2/10000)*10):($8+$9) notitle with linespoints linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
 "2_EAR_Oracle_Adapt.txt" using (floor($2/10000)*10):($8+$9) notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
-"3_RC_Oracle_Naive.txt" using (floor($2/10000)*10):($8+$9) notitle with linespoints linetype 1 pointtype 6 linecolor rgbcolor "#000000", \
+"3_RC_Oracle_Naive.txt" using (floor($2/10000)*10):9 notitle with linespoints linetype 1 pointtype 6 linecolor rgbcolor "#000000", \
 "5_CH_Adapt.txt" using (floor($2/10000)*10):($8+$9) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
 "6_Kaul_Adapt.txt" using (floor($2/10000)*10):($8+$9) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
 "7_Dijk_Adapt.txt" using (floor($2/10000)*10):($8+$9) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
-"8_FastFly.txt" using (floor($2/10000)*10):($8+$9) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
-"4_RC_Oracle.txt" using (floor($2/10000)*10):($8+$9) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+"8_FastFly.txt" using (floor($2/10000)*10):9 notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
+"4_RC_Oracle.txt" using (floor($2/10000)*10):9 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================
@@ -131,7 +131,7 @@ plot "1_SE_Oracle_Adapt.txt" using (floor($2/10000)*10):7 notitle with linespoin
 "5_CH_Adapt.txt" using (floor($2/10000)*10):($5+$7) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
 "6_Kaul_Adapt.txt" using (floor($2/10000)*10):($5+$7) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
 "7_Dijk_Adapt.txt" using (floor($2/10000)*10):($5+$7) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
-"8_FastFly.txt" using (floor($2/10000)*10):($5+$7) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
+"8_FastFly.txt" using (floor($2/10000)*10):7 notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
 "4_RC_Oracle.txt" using (floor($2/10000)*10):7 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
@@ -159,7 +159,7 @@ plot "1_SE_Oracle_Adapt.txt" using (floor($2/10000)*10):($3*$3*$7) notitle with 
 "5_CH_Adapt.txt" using (floor($2/10000)*10):($3*($5+$7)) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
 "6_Kaul_Adapt.txt" using (floor($2/10000)*10):($3*($5+$7)) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
 "7_Dijk_Adapt.txt" using (floor($2/10000)*10):($3*($5+$7)) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
-"8_FastFly.txt" using (floor($2/10000)*10):($3*($5+$7)) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
+"8_FastFly.txt" using (floor($2/10000)*10):($3*$7) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
 "4_RC_Oracle.txt" using (floor($2/10000)*10):($3*$3*$7) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
@@ -187,7 +187,7 @@ plot "1_SE_Oracle_Adapt.txt" using (floor($2/10000)*10):($3*$3*$7) notitle with 
 "5_CH_Adapt.txt" using (floor($2/10000)*10):($3*($5+$7)) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
 "6_Kaul_Adapt.txt" using (floor($2/10000)*10):($3*($5+$7)) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
 "7_Dijk_Adapt.txt" using (floor($2/10000)*10):($3*($5+$7)) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
-"8_FastFly.txt" using (floor($2/10000)*10):($3*($5+$7)) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
+"8_FastFly.txt" using (floor($2/10000)*10):($3*$7) notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
 "4_RC_Oracle.txt" using (floor($2/10000)*10):($3*$3*$7) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 

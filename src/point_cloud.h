@@ -27,7 +27,7 @@ namespace point_cloud_geodesic
                   max_number_of_blocks);
         };
 
-        ~PointCloudSimlpeMemoryAllocator(){};
+        ~PointCloudSimlpeMemoryAllocator() {};
 
         void reset(unsigned block_size,
                    unsigned max_number_of_blocks)
@@ -78,7 +78,7 @@ namespace point_cloud_geodesic
                   max_number_of_blocks);
         };
 
-        ~PointCloudMemoryAllocator(){};
+        ~PointCloudMemoryAllocator() {};
 
         void clear()
         {
@@ -204,7 +204,7 @@ namespace point_cloud_geodesic
     {
     public:
         PointCloudSimpleVector() : m_size(0),
-                                   m_begin(NULL){};
+                                   m_begin(NULL) {};
 
         typedef Data *iterator;
 
@@ -250,7 +250,7 @@ namespace point_cloud_geodesic
         typedef PointCloudSimpleVector<double> double_vector;
 
         PointCloudElementBase() : m_id(0),
-                                  m_type(UNDEFINED_POINT){};
+                                  m_type(UNDEFINED_POINT) {};
 
         pc_point_pointer_vector &adjacent_pc_points() { return m_adjacent_pc_points; };
         double_vector &adjacent_pc_points_distance() { return m_adjacent_pc_points_distance; };
@@ -269,7 +269,7 @@ namespace point_cloud_geodesic
     class PointCloudPoint3D // point in 3D and corresponding operations
     {
     public:
-        PointCloudPoint3D(){};
+        PointCloudPoint3D() {};
         PointCloudPoint3D(PointCloudPoint3D *p)
         {
             x() = p->x();
@@ -339,17 +339,17 @@ namespace point_cloud_geodesic
             m_type = PC_POINT;
         };
 
-        ~PC_Point(){};
+        ~PC_Point() {};
     };
 
     class PathPoint : public PointCloudPoint3D // point on the surface of the point cloud
     {
     public:
-        PathPoint() : m_p(NULL){};
+        PathPoint() : m_p(NULL) {};
 
         PathPoint(pc_point_pointer v) : // set the path point in the pc point
                                         PathPoint::PointCloudPoint3D(v),
-                                        m_p(v){};
+                                        m_p(v) {};
 
         PathPoint(base_pointer g,
                   double x,
@@ -365,7 +365,7 @@ namespace point_cloud_geodesic
             *this = p;
         }
 
-        ~PathPoint(){};
+        ~PathPoint() {};
 
         PointType type() { return m_p ? m_p->type() : UNDEFINED_POINT; };
         base_pointer &base_element() { return m_p; };
@@ -408,9 +408,9 @@ namespace point_cloud_geodesic
     class PointCloud
     {
     public:
-        PointCloud(){};
+        PointCloud() {};
 
-        ~PointCloud(){};
+        ~PointCloud() {};
 
         template <class Points>
         void initialize_point_cloud_data(Points &p); // build point cloud
@@ -460,7 +460,7 @@ namespace point_cloud_geodesic
         assert(p.size() % 3 == 0);
         unsigned const num_pc_points = p.size() / 3;
 
-        unsigned const approximate_number_of_internal_pointers = (num_pc_points)*3;
+        unsigned const approximate_number_of_internal_pointers = (num_pc_points) * 3;
         unsigned const max_number_of_pointer_blocks = 100;
         m_pointer_allocator.reset(approximate_number_of_internal_pointers,
                                   max_number_of_pointer_blocks);
@@ -675,14 +675,14 @@ namespace point_cloud_geodesic
             }
         }
 
-        std::cout << std::endl;
-        std::cout << "Point cloud has " << m_pc_points.size() << " points" << std::endl;
-        std::cout << "enclosing XYZ box:"
-                  << " X[" << x_min << "," << x_max << "]"
-                  << " Y[" << y_min << "," << y_max << "]"
-                  << " Z[" << z_min << "," << z_max << "]"
-                  << std::endl;
-        std::cout << std::endl;
+        // std::cout << std::endl;
+        // std::cout << "Point cloud has " << m_pc_points.size() << " points" << std::endl;
+        // std::cout << "enclosing XYZ box:"
+        //           << " X[" << x_min << "," << x_max << "]"
+        //           << " Y[" << y_min << "," << y_max << "]"
+        //           << " Z[" << z_min << "," << z_max << "]"
+        //           << std::endl;
+        // std::cout << std::endl;
     }
 
     void PointCloud::point_cloud_to_terrain(double &memory_usage)
@@ -776,9 +776,9 @@ namespace point_cloud_geodesic
 
         PointCloudGeodesicAlgorithmBase(point_cloud_geodesic::PointCloud *point_cloud) : m_type(UNDEFINED_ALGORITHM),
                                                                                          m_max_propagation_distance(1e100),
-                                                                                         m_point_cloud(point_cloud){};
+                                                                                         m_point_cloud(point_cloud) {};
 
-        virtual ~PointCloudGeodesicAlgorithmBase(){};
+        virtual ~PointCloudGeodesicAlgorithmBase() {};
 
         // virtual void propagate(std::vector<PathPoint> &sources,
         //                        double max_propagation_distance = INFIN,           // propagation algorithm stops after reaching the certain distance from the source
@@ -904,9 +904,9 @@ namespace point_cloud_geodesic
     public:
         typedef Node *node_pointer;
 
-        PointCloudGeodesicAlgorithmGraphBase(point_cloud_geodesic::PointCloud *point_cloud) : PointCloudGeodesicAlgorithmBase(point_cloud){};
+        PointCloudGeodesicAlgorithmGraphBase(point_cloud_geodesic::PointCloud *point_cloud) : PointCloudGeodesicAlgorithmBase(point_cloud) {};
 
-        ~PointCloudGeodesicAlgorithmGraphBase(){};
+        ~PointCloudGeodesicAlgorithmGraphBase() {};
 
         void propagate(std::vector<PathPoint> &sources,
                        double max_propagation_distance);
@@ -1265,8 +1265,8 @@ namespace point_cloud_geodesic
         typedef PointCloudDijkstraNode *node_pointer;
 
     public:
-        PointCloudDijkstraNode(){};
-        ~PointCloudDijkstraNode(){};
+        PointCloudDijkstraNode() {};
+        ~PointCloudDijkstraNode() {};
 
         double &distance_from_source() { return m_distance; };
         node_pointer &previous() { return m_previous; };
@@ -1318,7 +1318,7 @@ namespace point_cloud_geodesic
             }
         };
 
-        ~PointCloudGeodesicAlgorithmDijkstra(){};
+        ~PointCloudGeodesicAlgorithmDijkstra() {};
 
     protected:
         void list_nodes_visible_from_source(PointCloudElementBase *p,

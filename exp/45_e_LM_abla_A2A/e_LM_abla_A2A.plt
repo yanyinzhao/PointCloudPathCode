@@ -45,7 +45,7 @@ set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1)
 
 plot "16_SE_Oracle_FastFly_Adapt_A2A.txt" using 4:(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
 "10_EAR_Oracle_FastFly_Adapt.txt" using 4:(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
-"15_RC_Oracle_A2A.txt" using 4:(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+"15_RC_Oracle_A2A.txt" using 4:($6/1000) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================
@@ -68,7 +68,7 @@ set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1)
 
 plot "16_SE_Oracle_FastFly_Adapt_A2A.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
 "10_EAR_Oracle_FastFly_Adapt.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
-"15_RC_Oracle_A2A.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+"15_RC_Oracle_A2A.txt" using 4:9 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================

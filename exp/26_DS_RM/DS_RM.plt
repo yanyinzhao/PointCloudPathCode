@@ -46,7 +46,7 @@ set format y "%g"
 
 set xtics ("0.5" 5, "1" 10, "1.5" 15, "2" 20, "2.5" 25)
 
-plot "4_RC_Oracle.txt" using (floor($2/100000)):(($5+$6)/1000) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+plot "4_RC_Oracle.txt" using (floor($2/100000)):($6/1000) notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================

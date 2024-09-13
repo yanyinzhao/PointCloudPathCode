@@ -4,25 +4,33 @@
 
 This project provides the implementation for proximity queries on point cloud using rapid construction path oracle. We refer the readers to our paper for more details.
 
-We compared 17 algorithms as follows:
+We compared 25 algorithms as follows:
 
 - SE-Oracle-Adapt (oracle based baseline)
 - SE-Oracle-Adapt-A2A (oracle based baseline for A2A query)
 - SE-Oracle-FastFly-Adapt (oracle in ablation study)
 - SE-Oracle-FastFly-Adapt-A2A (oracle in ablation study for A2A query)
+- SE-Oracle (oracle based baseline that calculate the path passing on a TIN)
 - EAR-Oracle-Adapt (oracle based baseline)
 - EAR-Oracle-FastFly-Adapt (oracle in ablation study)
+- EAR-Oracle (oracle based baseline that calculate the path passing on a TIN)
 - SU-Oracle-Adapt (oracle for other proximity queries)
 - RC-Oracle-Naive (variation oracle)
 - RC-Oracle-Naive-A2A (variation oracle for A2A query)
 - RC-Oracle-NaiveProx (our oracle with the naive proximity queries algorithm)
 - RC-Oracle-NaiveProx-A2A (our oracle with the naive proximity queries algorithm for A2A query)
+- RC-Oracle-Naive-Adapt (variation oracle that calculate the path passing on a TIN)
 - RC-Oracle (our oracle with the efficient proximity queries algorithm)
 - RC-Oracle-A2A (our oracle with the efficient proximity queries algorithm for A2A query)
+- RC-Oracle-Adapt (our oracle with the efficient proximity queries algorithm that calculate the path passing on a TIN)
 - CH-Adapt (on-the-fly baseline algorithm)
+- CH (on-the-fly baseline algorithm that calculate the path passing on a TIN)
 - Kaul-Adapt (on-the-fly baseline algorithm)
+- Kaul (on-the-fly baseline algorithm that calculate the path passing on a TIN)
 - Dijk-Adapt (on-the-fly baseline algorithm)
+- Dijk (on-the-fly baseline algorithm that calculate the path passing on a TIN)
 - FastFly (our on-the-fly algorithm)
+- FastFly-Adapt (our on-the-fly algorithm that calculate the path passing on a TIN)
 
 ## Environment: 
 - Linux machine (2.2 GHz CPU and 512GB memory)
@@ -31,7 +39,7 @@ We compared 17 algorithms as follows:
 
 ## Reproducible run
 
-We provide simple commands to run all experiments and plot all paper graphs. Running experiments for each one figure takes 2—3 days, and running experiments for all figures takes 2—3 months. We also provide the sample experiments data used for plot all paper graphs (in the case that you do not have enough time to run the experiments). We also provide simple examples to test all algorithms (takes 10 minutes), please see section called "normal run" below. 
+We provide simple commands to run all experiments and plot all paper graphs. Running experiments for each one figure takes 2—3 days, and running experiments for all figures takes 3—4 months. We also provide the sample experiments data used for plot all paper graphs (in the case that you do not have enough time to run the experiments). We also provide simple examples to test all algorithms (takes 10 minutes), please see section called "normal run" below. Before you run, please download some of the datasets from https://drive.google.com/drive/folders/1_Sblnq9XOLFwvPI2lX_l8KJJzVWR828y?usp=drive_link, and save in the "input/" folder, since these datasets are very large, and they exceed the maximum file upload size in Github. 
 
 ### Run all experiments command
 
@@ -57,125 +65,123 @@ The dataset are stored in "input/" folder.
 
 The datasets are as follows:
 
-- "BH_1014.xyz" (small version default resolution BH point cloud dataset with 1014 points)
-- "BH_10086.xyz" (small version default resolution BH point cloud dataset with 10086 points)
-- "BH_500835.xyz" (large version default resolution BH point cloud dataset with 500835 points)
-- "BH_1000414.xyz" (large version multiresolution BH point cloud dataset with 1000414 points)
-- "BH_1500996.xyz" (large version multiresolution BH point cloud dataset with 1500996 points)
-- "BH_2001610.xyz" (large version multiresolution BH point cloud dataset with 2001610 points)
-- "BH_2502596.xyz" (large version multiresolution BH point cloud dataset with 2502596 points)
-- "EP_10062.xyz" (small version default resolution EP point cloud dataset with 10062 points)
-- "EP_20130.xyz" (small version multiresolution EP point cloud dataset with 20130 points)
-- "EP_30098.xyz" (small version multiresolution EP point cloud dataset with 30098 points)
-- "EP_40076.xyz" (small version multiresolution EP point cloud dataset with 40076 points)
-- "EP_50373.xyz" (small version multiresolution EP point cloud dataset with 50373 points)
-- "EP_500384.xyz" (large version default resolution EP point cloud dataset with 500384 points)
-- "EP_1001040.xyz" (large version multiresolution EP point cloud dataset with 1001040 points)
-- "EP_1501578.xyz" (large version multiresolution EP point cloud dataset with 1501578 points)
-- "EP_2001536.xyz" (large version multiresolution EP point cloud dataset with 2001536 points)
-- "EP_2500560.xyz" (large version multiresolution EP point cloud dataset with 2500560 points)
-- "GF_10092.xyz" (small version default resolution GF point cloud dataset with 10092 points)
-- "GF_500208.xyz" (large version default resolution GF point cloud dataset with 500208 points)
-- "GF_1000518.xyz" (large version multiresolution GF point cloud dataset with 1000518 points)
-- "GF_1501668.xyz" (large version multiresolution GF point cloud dataset with 1501668 points)
-- "GF_2000832.xyz" (large version multiresolution GF point cloud dataset with 2000832 points)
-- "GF_2502075.xyz" (large version multiresolution GF point cloud dataset with 2502075 points)
-- "LM_10092.xyz" (small version default resolution LM point cloud dataset with 10092 points)
-- "LM_500208.xyz" (large version default resolution LM point cloud dataset with 500208 points)
-- "LM_1000518.xyz" (large version multiresolution LM point cloud dataset with 1000518 points)
-- "LM_1501668.xyz" (large version multiresolution LM point cloud dataset with 1501668 points)
-- "LM_2000832.xyz" (large version multiresolution LM point cloud dataset with 2000832 points)
-- "LM_2502075.xyz" (large version multiresolution LM point cloud dataset with 2502075 points)
-- "RM_10092.xyz" (small version default resolution RM point cloud dataset with 10092 points)
-- "RM_500208.xyz" (large version default resolution RM point cloud dataset with 500208 points)
-- "RM_1000518.xyz" (large version multiresolution RM point cloud dataset with 1000518 points)
-- "RM_1501668.xyz" (large version multiresolution RM point cloud dataset with 1501668 points)
-- "RM_2000832.xyz" (large version multiresolution RM point cloud dataset with 2000832 points)
-- "RM_2502075.xyz" (large version multiresolution RM point cloud dataset with 2502075 points)
+- "BH_1014" (small version default resolution BH point cloud or TIN dataset with 1014 points)
+- "BH_10086" (small version default resolution BH point cloud or TIN dataset with 10086 points)
+- "BH_500835" (large version default resolution BH point cloud or TIN dataset with 500835 points)
+- "BH_1000414" (large version multiresolution BH point cloud or TIN dataset with 1000414 points)
+- "BH_1500996" (large version multiresolution BH point cloud or TIN dataset with 1500996 points)
+- "BH_2001610" (large version multiresolution BH point cloud or TIN dataset with 2001610 points)
+- "BH_2502596" (large version multiresolution BH point cloud or TIN dataset with 2502596 points)
+- "EP_10062" (small version default resolution EP point cloud or TIN dataset with 10062 points)
+- "EP_20130" (small version multiresolution EP point cloud or TIN dataset with 20130 points)
+- "EP_30098" (small version multiresolution EP point cloud or TIN dataset with 30098 points)
+- "EP_40076" (small version multiresolution EP point cloud or TIN dataset with 40076 points)
+- "EP_50373" (small version multiresolution EP point cloud or TIN dataset with 50373 points)
+- "EP_500384" (large version default resolution EP point cloud or TIN dataset with 500384 points)
+- "EP_1001040" (large version multiresolution EP point cloud or TIN dataset with 1001040 points)
+- "EP_1501578" (large version multiresolution EP point cloud or TIN dataset with 1501578 points)
+- "EP_2001536" (large version multiresolution EP point cloud or TIN dataset with 2001536 points)
+- "EP_2500560" (large version multiresolution EP point cloud or TIN dataset with 2500560 points)
+- "GF_10092" (small version default resolution GF point cloud or TIN dataset with 10092 points)
+- "GF_500208" (large version default resolution GF point cloud or TIN dataset with 500208 points)
+- "GF_1000518" (large version multiresolution GF point cloud or TIN dataset with 1000518 points)
+- "GF_1501668" (large version multiresolution GF point cloud or TIN dataset with 1501668 points)
+- "GF_2000832" (large version multiresolution GF point cloud or TIN dataset with 2000832 points)
+- "GF_2502075" (large version multiresolution GF point cloud or TIN dataset with 2502075 points)
+- "LM_10092" (small version default resolution LM point cloud or TIN dataset with 10092 points)
+- "LM_500208" (large version default resolution LM point cloud or TIN dataset with 500208 points)
+- "LM_1000518" (large version multiresolution LM point cloud or TIN dataset with 1000518 points)
+- "LM_1501668" (large version multiresolution LM point cloud or TIN dataset with 1501668 points)
+- "LM_2000832" (large version multiresolution LM point cloud or TIN dataset with 2000832 points)
+- "LM_2502075" (large version multiresolution LM point cloud or TIN dataset with 2502075 points)
+- "RM_10092" (small version default resolution RM point cloud or TIN dataset with 10092 points)
+- "RM_500208" (large version default resolution RM point cloud or TIN dataset with 500208 points)
+- "RM_1000518" (large version multiresolution RM point cloud or TIN dataset with 1000518 points)
+- "RM_1501668" (large version multiresolution RM point cloud or TIN dataset with 1501668 points)
+- "RM_2000832" (large version multiresolution RM point cloud or TIN dataset with 2000832 points)
+- "RM_2502075" (large version multiresolution RM point cloud or TIN dataset with 2502075 points)
 
-- "BH_50_poi_on_1014.txt" (POI list with POI number of 50 on "BH_1014.xyz")
-- "BH_50_poi_on_10086.txt" (POI list with POI number of 50 on "BH_10086.xyz")
-- "BH_100_poi_on_10086.txt" (POI list with POI number of 100 on "BH_10086.xyz")
-- "BH_150_poi_on_10086.txt" (POI list with POI number of 150 on "BH_10086.xyz")
-- "BH_200_poi_on_10086.txt" (POI list with POI number of 200 on "BH_10086.xyz")
-- "BH_250_poi_on_10086.txt" (POI list with POI number of 250 on "BH_10086.xyz")
-- "BH_500_poi_on_500835.txt" (POI list with POI number of 500 on "BH_500835.xyz")
-- "BH_500_poi_on_1000414.txt" (POI list with POI number of 500 on "BH_1000414.xyz")
-- "BH_500_poi_on_1500996.txt" (POI list with POI number of 500 on "BH_1500996.xyz")
-- "BH_500_poi_on_2001610.txt" (POI list with POI number of 500 on "BH_2001610.xyz")
-- "BH_500_poi_on_2502596.txt" (POI list with POI number of 500 on "BH_2502596.xyz")
-- "BH_1000_poi_on_500835.txt" (POI list with POI number of 1000 on "BH_500835.xyz")
-- "BH_1500_poi_on_500835.txt" (POI list with POI number of 1500 on "BH_500835.xyz")
-- "BH_2000_poi_on_500835.txt" (POI list with POI number of 2000 on "BH_500835.xyz")
-- "BH_2500_poi_on_500835.txt" (POI list with POI number of 2500 on "BH_500835.xyz")
-- "EP_50_poi_on_10062.txt" (POI list with POI number of 50 on "EP_10062.xyz")
-- "EP_50_poi_on_20130.txt" (POI list with POI number of 50 on "EP_20130.xyz")
-- "EP_50_poi_on_30098.txt" (POI list with POI number of 50 on "EP_30098.xyz")
-- "EP_50_poi_on_40076.txt" (POI list with POI number of 50 on "EP_40076.xyz")
-- "EP_50_poi_on_50373.txt" (POI list with POI number of 50 on "EP_50373.xyz")
-- "EP_100_poi_on_10062.txt" (POI list with POI number of 100 on "EP_10062.xyz")
-- "EP_150_poi_on_10062.txt" (POI list with POI number of 150 on "EP_10062.xyz")
-- "EP_200_poi_on_10062.txt" (POI list with POI number of 200 on "EP_10062.xyz")
-- "EP_250_poi_on_10062.txt" (POI list with POI number of 250 on "EP_10062.xyz")
-- "EP_500_poi_on_500384.txt" (POI list with POI number of 500 on "EP_500384.xyz")
-- "EP_500_poi_on_1001040.txt" (POI list with POI number of 500 on "EP_1001040.xyz")
-- "EP_500_poi_on_1501578.txt" (POI list with POI number of 500 on "EP_1501578.xyz")
-- "EP_500_poi_on_2001536.txt" (POI list with POI number of 500 on "EP_2001536.xyz")
-- "EP_500_poi_on_2500560.txt" (POI list with POI number of 500 on "EP_2500560.xyz")
-- "EP_1000_poi_on_500384.txt" (POI list with POI number of 1000 on "EP_500384.xyz")
-- "EP_1500_poi_on_500384.txt" (POI list with POI number of 1500 on "EP_500384.xyz")
-- "EP_2000_poi_on_500384.txt" (POI list with POI number of 2000 on "EP_500384.xyz")
-- "EP_2500_poi_on_500384.txt" (POI list with POI number of 2500 on "EP_500384.xyz")
-- "GF_50_poi_on_10092.txt" (POI list with POI number of 50 on "GF_10092.xyz")
-- "GF_100_poi_on_10092.txt" (POI list with POI number of 100 on "GF_10092.xyz")
-- "GF_150_poi_on_10092.txt" (POI list with POI number of 150 on "GF_10092.xyz")
-- "GF_200_poi_on_10092.txt" (POI list with POI number of 200 on "GF_10092.xyz")
-- "GF_250_poi_on_10092.txt" (POI list with POI number of 250 on "GF_10092.xyz")
-- "GF_500_poi_on_500208.txt" (POI list with POI number of 500 on "GF_500208.xyz")
-- "GF_500_poi_on_1000518.txt" (POI list with POI number of 500 on "GF_1000518.xyz")
-- "GF_500_poi_on_1501668.txt" (POI list with POI number of 500 on "GF_1501668.xyz")
-- "GF_500_poi_on_2000832.txt" (POI list with POI number of 500 on "GF_2000832.xyz")
-- "GF_500_poi_on_2502075.txt" (POI list with POI number of 500 on "GF_2502075.xyz")
-- "GF_1000_poi_on_500208.txt" (POI list with POI number of 1000 on "GF_500208.xyz")
-- "GF_1500_poi_on_500208.txt" (POI list with POI number of 1500 on "GF_500208.xyz")
-- "GF_2000_poi_on_500208.txt" (POI list with POI number of 2000 on "GF_500208.xyz")
-- "GF_2500_poi_on_500208.txt" (POI list with POI number of 2500 on "GF_500208.xyz")
-- "LM_50_poi_on_10092.txt" (POI list with POI number of 50 on "LM_10092.xyz")
-- "LM_100_poi_on_10092.txt" (POI list with POI number of 100 on "LM_10092.xyz")
-- "LM_150_poi_on_10092.txt" (POI list with POI number of 150 on "LM_10092.xyz")
-- "LM_200_poi_on_10092.txt" (POI list with POI number of 200 on "LM_10092.xyz")
-- "LM_250_poi_on_10092.txt" (POI list with POI number of 250 on "LM_10092.xyz")
-- "LM_500_poi_on_500208.txt" (POI list with POI number of 500 on "LM_500208.xyz")
-- "LM_500_poi_on_1000518.txt" (POI list with POI number of 500 on "LM_1000518.xyz")
-- "LM_500_poi_on_1501668.txt" (POI list with POI number of 500 on "LM_1501668.xyz")
-- "LM_500_poi_on_2000832.txt" (POI list with POI number of 500 on "LM_2000832.xyz")
-- "LM_500_poi_on_2502075.txt" (POI list with POI number of 500 on "LM_2502075.xyz")
-- "LM_1000_poi_on_500208.txt" (POI list with POI number of 1000 on "LM_500208.xyz")
-- "LM_1500_poi_on_500208.txt" (POI list with POI number of 1500 on "LM_500208.xyz")
-- "LM_2000_poi_on_500208.txt" (POI list with POI number of 2000 on "LM_500208.xyz")
-- "LM_2500_poi_on_500208.txt" (POI list with POI number of 2500 on "LM_500208.xyz")
-- "RM_50_poi_on_10092.txt" (POI list with POI number of 50 on "RM_10092.xyz")
-- "RM_100_poi_on_10092.txt" (POI list with POI number of 100 on "RM_10092.xyz")
-- "RM_150_poi_on_10092.txt" (POI list with POI number of 150 on "RM_10092.xyz")
-- "RM_200_poi_on_10092.txt" (POI list with POI number of 200 on "RM_10092.xyz")
-- "RM_250_poi_on_10092.txt" (POI list with POI number of 250 on "RM_10092.xyz")
-- "RM_500_poi_on_500208.txt" (POI list with POI number of 500 on "RM_500208.xyz")
-- "RM_500_poi_on_1000518.txt" (POI list with POI number of 500 on "RM_1000518.xyz")
-- "RM_500_poi_on_1501668.txt" (POI list with POI number of 500 on "RM_1501668.xyz")
-- "RM_500_poi_on_2000832.txt" (POI list with POI number of 500 on "RM_2000832.xyz")
-- "RM_500_poi_on_2502075.txt" (POI list with POI number of 500 on "RM_2502075.xyz")
-- "RM_1000_poi_on_500208.txt" (POI list with POI number of 1000 on "RM_500208.xyz")
-- "RM_1500_poi_on_500208.txt" (POI list with POI number of 1500 on "RM_500208.xyz")
-- "RM_2000_poi_on_500208.txt" (POI list with POI number of 2000 on "RM_500208.xyz")
-- "RM_2500_poi_on_500208.txt" (POI list with POI number of 2500 on "RM_500208.xyz")
+- "BH_50_poi_on_1014.txt" (POI list with POI number of 50 on "BH_1014")
+- "BH_50_poi_on_10086.txt" (POI list with POI number of 50 on "BH_10086")
+- "BH_100_poi_on_10086.txt" (POI list with POI number of 100 on "BH_10086")
+- "BH_150_poi_on_10086.txt" (POI list with POI number of 150 on "BH_10086")
+- "BH_200_poi_on_10086.txt" (POI list with POI number of 200 on "BH_10086")
+- "BH_250_poi_on_10086.txt" (POI list with POI number of 250 on "BH_10086")
+- "BH_500_poi_on_500835.txt" (POI list with POI number of 500 on "BH_500835")
+- "BH_500_poi_on_1000414.txt" (POI list with POI number of 500 on "BH_1000414")
+- "BH_500_poi_on_1500996.txt" (POI list with POI number of 500 on "BH_1500996")
+- "BH_500_poi_on_2001610.txt" (POI list with POI number of 500 on "BH_2001610")
+- "BH_500_poi_on_2502596.txt" (POI list with POI number of 500 on "BH_2502596")
+- "BH_1000_poi_on_500835.txt" (POI list with POI number of 1000 on "BH_500835")
+- "BH_1500_poi_on_500835.txt" (POI list with POI number of 1500 on "BH_500835")
+- "BH_2000_poi_on_500835.txt" (POI list with POI number of 2000 on "BH_500835")
+- "BH_2500_poi_on_500835.txt" (POI list with POI number of 2500 on "BH_500835")
+- "EP_50_poi_on_10062.txt" (POI list with POI number of 50 on "EP_10062")
+- "EP_50_poi_on_20130.txt" (POI list with POI number of 50 on "EP_20130")
+- "EP_50_poi_on_30098.txt" (POI list with POI number of 50 on "EP_30098")
+- "EP_50_poi_on_40076.txt" (POI list with POI number of 50 on "EP_40076")
+- "EP_50_poi_on_50373.txt" (POI list with POI number of 50 on "EP_50373")
+- "EP_100_poi_on_10062.txt" (POI list with POI number of 100 on "EP_10062")
+- "EP_150_poi_on_10062.txt" (POI list with POI number of 150 on "EP_10062")
+- "EP_200_poi_on_10062.txt" (POI list with POI number of 200 on "EP_10062")
+- "EP_250_poi_on_10062.txt" (POI list with POI number of 250 on "EP_10062")
+- "EP_500_poi_on_500384.txt" (POI list with POI number of 500 on "EP_500384")
+- "EP_500_poi_on_1001040.txt" (POI list with POI number of 500 on "EP_1001040")
+- "EP_500_poi_on_1501578.txt" (POI list with POI number of 500 on "EP_1501578")
+- "EP_500_poi_on_2001536.txt" (POI list with POI number of 500 on "EP_2001536")
+- "EP_500_poi_on_2500560.txt" (POI list with POI number of 500 on "EP_2500560")
+- "EP_1000_poi_on_500384.txt" (POI list with POI number of 1000 on "EP_500384")
+- "EP_1500_poi_on_500384.txt" (POI list with POI number of 1500 on "EP_500384")
+- "EP_2000_poi_on_500384.txt" (POI list with POI number of 2000 on "EP_500384")
+- "EP_2500_poi_on_500384.txt" (POI list with POI number of 2500 on "EP_500384")
+- "GF_50_poi_on_10092.txt" (POI list with POI number of 50 on "GF_10092")
+- "GF_100_poi_on_10092.txt" (POI list with POI number of 100 on "GF_10092")
+- "GF_150_poi_on_10092.txt" (POI list with POI number of 150 on "GF_10092")
+- "GF_200_poi_on_10092.txt" (POI list with POI number of 200 on "GF_10092")
+- "GF_250_poi_on_10092.txt" (POI list with POI number of 250 on "GF_10092")
+- "GF_500_poi_on_500208.txt" (POI list with POI number of 500 on "GF_500208")
+- "GF_500_poi_on_1000518.txt" (POI list with POI number of 500 on "GF_1000518")
+- "GF_500_poi_on_1501668.txt" (POI list with POI number of 500 on "GF_1501668")
+- "GF_500_poi_on_2000832.txt" (POI list with POI number of 500 on "GF_2000832")
+- "GF_500_poi_on_2502075.txt" (POI list with POI number of 500 on "GF_2502075")
+- "GF_1000_poi_on_500208.txt" (POI list with POI number of 1000 on "GF_500208")
+- "GF_1500_poi_on_500208.txt" (POI list with POI number of 1500 on "GF_500208")
+- "GF_2000_poi_on_500208.txt" (POI list with POI number of 2000 on "GF_500208")
+- "GF_2500_poi_on_500208.txt" (POI list with POI number of 2500 on "GF_500208")
+- "LM_50_poi_on_10092.txt" (POI list with POI number of 50 on "LM_10092")
+- "LM_100_poi_on_10092.txt" (POI list with POI number of 100 on "LM_10092")
+- "LM_150_poi_on_10092.txt" (POI list with POI number of 150 on "LM_10092")
+- "LM_200_poi_on_10092.txt" (POI list with POI number of 200 on "LM_10092")
+- "LM_250_poi_on_10092.txt" (POI list with POI number of 250 on "LM_10092")
+- "LM_500_poi_on_500208.txt" (POI list with POI number of 500 on "LM_500208")
+- "LM_500_poi_on_1000518.txt" (POI list with POI number of 500 on "LM_1000518")
+- "LM_500_poi_on_1501668.txt" (POI list with POI number of 500 on "LM_1501668")
+- "LM_500_poi_on_2000832.txt" (POI list with POI number of 500 on "LM_2000832")
+- "LM_500_poi_on_2502075.txt" (POI list with POI number of 500 on "LM_2502075")
+- "LM_1000_poi_on_500208.txt" (POI list with POI number of 1000 on "LM_500208")
+- "LM_1500_poi_on_500208.txt" (POI list with POI number of 1500 on "LM_500208")
+- "LM_2000_poi_on_500208.txt" (POI list with POI number of 2000 on "LM_500208")
+- "LM_2500_poi_on_500208.txt" (POI list with POI number of 2500 on "LM_500208")
+- "RM_50_poi_on_10092.txt" (POI list with POI number of 50 on "RM_10092")
+- "RM_100_poi_on_10092.txt" (POI list with POI number of 100 on "RM_10092")
+- "RM_150_poi_on_10092.txt" (POI list with POI number of 150 on "RM_10092")
+- "RM_200_poi_on_10092.txt" (POI list with POI number of 200 on "RM_10092")
+- "RM_250_poi_on_10092.txt" (POI list with POI number of 250 on "RM_10092")
+- "RM_500_poi_on_500208.txt" (POI list with POI number of 500 on "RM_500208")
+- "RM_500_poi_on_1000518.txt" (POI list with POI number of 500 on "RM_1000518")
+- "RM_500_poi_on_1501668.txt" (POI list with POI number of 500 on "RM_1501668")
+- "RM_500_poi_on_2000832.txt" (POI list with POI number of 500 on "RM_2000832")
+- "RM_500_poi_on_2502075.txt" (POI list with POI number of 500 on "RM_2502075")
+- "RM_1000_poi_on_500208.txt" (POI list with POI number of 1000 on "RM_500208")
+- "RM_1500_poi_on_500208.txt" (POI list with POI number of 1500 on "RM_500208")
+- "RM_2000_poi_on_500208.txt" (POI list with POI number of 2000 on "RM_500208")
+- "RM_2500_poi_on_500208.txt" (POI list with POI number of 2500 on "RM_500208")
 
 Data Format:
 
 For the point cloud dataset, we used the .xyz format in the experiment. The content of the .xyz file is as follows:
 
 ```
-OFF
-
 points_num
 
 1st_point_x_coord 1st_point_y_coord 1st_point_z_coord
@@ -185,6 +191,30 @@ points_num
 ......
 
 last_point_x_coord last_point_y_coord last_point_z_coord
+```
+
+For the TIN dataset, we used the .off format in the experiment. The content of the .off file is as follows:
+
+```
+OFF
+
+vertices_num faces_num edges_num
+
+1st_vertex_x_coord 1st_vertex_y_coord 1st_vertex_z_coord
+
+2nd_vertex_x_coord 2nd_vertex_y_coord 2nd_vertex_z_coord
+
+......
+
+last_vertex_x_coord last_vertex_y_coord last_vertex_z_coord
+
+1st_face_1st_vertex_ID 1st_face_2nd_vertex_ID 1st_face_3td_vertex_ID
+
+2nd_face_1st_vertex_ID 2nd_face_2nd_vertex_ID 2nd_face_3td_vertex_ID
+
+......
+
+last_face_1st_vertex_ID last_face_2nd_vertex_ID last_face_3td_vertex_ID
 ```
 
 For the POI list, we used the .txt format in the experiment. The content of the .txt file is as follows:
@@ -199,7 +229,7 @@ POI_num
 
 ### Compile command
 
-The source code are stored in "src/" folder.
+Before you run, please download some of the datasets from https://drive.google.com/drive/folders/1_Sblnq9XOLFwvPI2lX_l8KJJzVWR828y?usp=drive_link, and save in the "input/" folder, since these datasets are very large, and they exceed the maximum file upload size in Github. The source code are stored in "src/" folder.
 
 ```
 cd src
@@ -209,19 +239,19 @@ g++ -o main main.cpp -std=c++11
 ### Run command
 
 ```
-./main [point_cloud_data_and_point_number_and_poi_number_map_index] [epsilon] [run_knn_query] [run_range_query]
+./main [data_and_dataset_size_and_poi_number_map_index] [epsilon] [run_knn_query] [run_range_query]
 ```
 
 The meaning for each parameter is as follows:
 
-- [point_cloud_data_and_point_number_and_poi_number_map_index]: an index for the map of point cloud data and dataset size and poi number (a integer from 0 to 119)
+- [data_and_dataset_size_and_poi_number_map_index]: an index for the map of point cloud or TIN data and dataset size and poi number (a integer from 0 to 119)
 - [epsilon]: the epsilon value (0 < epsilon <= 1)
 - [run_knn_query]: whether to run all POIs knn query (0 means not running knn query, 1 means running knn query)
 - [run_range_query]: whether to run all POIs range query (0 means not running range query, 1 means running range query)
 
-For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index value corresponding to a point cloud data, the dataset size of the point cloud and the poi number on the point cloud, their relationships are as follows:
+For the [data_and_dataset_size_and_poi_number_map_index], each index value corresponding to a point cloud or TIN data (each point cloud and TIN dataset represent the same region), the dataset size and the poi number, their relationships are as follows:
 
-| Index | Point cloud data | Point number | POI number |
+| Index | Point cloud or TIN data | Dataset size | POI number |
 | ----------- | ----------- | ----------- | ----------- |
 | 0 | BH | 1014 | 50 |
 | 1 | BH | 10086 | 50 |
@@ -299,7 +329,7 @@ For the [point_cloud_data_and_point_number_and_poi_number_map_index], each index
 | 73 | RM | 2000832 | 500 |
 | 74 | RM | 2502075 | 500 |
 
-Since SE-Oracle-Adapt, EAR-Oracle-Adapt, SU-Oracle-Adapt, RC-Oracle-Naive, SE-Oracle-Adapt, and RC-Oracle-Naive-A2A are time consuming, the project will run all algorithms on small-version dataset with default 50 POIs([point_cloud_data_and_point_number_and_poi_number_map_index] <= 29). The project will run all algorithms except the 6 mentioned algorithm on large-version dataset with default 500 POIs ([point_cloud_data_and_point_number_and_poi_number_map_index] > 29).
+Since SE-Oracle-Adapt, EAR-Oracle-Adapt, SE-Oracle, EAR-Oracle, SU-Oracle-Adapt, RC-Oracle-Naive, RC-Oracle-Naive-Adapt, SE-Oracle-Adapt-A2A, and RC-Oracle-Naive-A2A are time consuming, the project will run all algorithms on small-version dataset with default 50 POIs([data_and_dataset_size_and_poi_number_map_index] <= 29). The project will run all algorithms except the 8 mentioned algorithm on large-version dataset with default 500 POIs ([data_and_dataset_size_and_poi_number_map_index] > 29).
 
 In addition, we strongly encourage you to set [run_knn_query] and [run_range_query] to 0 if you are not conducting experiments. Otherwise, it will take a very long time to calculate them. 
 
@@ -309,7 +339,7 @@ An example:
 ./main 0 0.5 0 0
 ```
 
-In this example, [point_cloud_data_and_point_number_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud dataset, with point number equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run 17 algorithms.
+In this example, [data_and_dataset_size_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud and TIN dataset, with dataset size equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run all algorithms.
 
 Make sure there is a folder called "input/" and a folder called "output/" under the working directory. They will be used for storing the input/output files.
 
@@ -318,7 +348,7 @@ Make sure there is a folder called "input/" and a folder called "output/" under 
 The output will be stored in "output/output.txt" file. The format will be as follows:
 
 ```
-[dataset] [point_num] [poi_num] [epsilon] [point_cloud_to_terrain_time (ms)] [construction_time (ms)] [query_time (ms)] [point_cloud_to_terrain_memroy_usage (MB)] [memory_usage (MB)] [output_size (MB)] [distance_error_point_cloud] [distance_error_terrain] [knn_query_time] [knn_error_point_cloud] [knn_error_terrain] [range_query_time] [range_error_point_cloud] [range_error_terrain]
+[dataset] [dataset_size] [poi_num] [epsilon] [point_cloud_to_terrain_time (ms)] [construction_time (ms)] [query_time (ms)] [point_cloud_to_terrain_memroy_usage (MB)] [memory_usage (MB)] [output_size (MB)] [distance_error_point_cloud] [distance_error_terrain] [knn_query_time] [knn_error_point_cloud] [knn_error_terrain] [range_query_time] [range_error_point_cloud] [range_error_terrain]
 ```
 
 These information will also be shown in the terminal. 
