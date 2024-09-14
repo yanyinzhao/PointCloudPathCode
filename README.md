@@ -4,7 +4,7 @@
 
 This project provides the implementation for proximity queries on point cloud using rapid construction path oracle. We refer the readers to our paper for more details.
 
-We compared 25 algorithms as follows (the algorithm calculate the path passing on a point cloud as default):
+We compared 25 algorithms as follows (the algorithms calculate the path passing on a point cloud as default):
 
 - SE-Oracle-Adapt (oracle based baseline)
 - SE-Oracle-Adapt-A2A (oracle based baseline for A2A query)
