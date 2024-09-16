@@ -192,11 +192,10 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
                 }
             }
 
-            if (e < 0.1)
+            for (int j = 0; j < cal_factor(e, 3); j++)
             {
                 algorithm.propagate(parent_one_source_poi_list, &parent_destinations_poi_list);
             }
-            algorithm.propagate(parent_one_source_poi_list, &parent_destinations_poi_list);
 
             for (int j = 0; j < poi_num; j++)
             {
@@ -356,11 +355,10 @@ void RC_Oracle(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::
                             }
                         }
 
-                        if (e < 0.1)
+                        for (int k = 0; k < cal_factor(e, 3); k++)
                         {
                             algorithm.propagate(children_one_source_poi_list, &children_destinations_poi_list);
                         }
-                        algorithm.propagate(children_one_source_poi_list, &children_destinations_poi_list);
 
                         for (int k = 0; k < children_destinations_poi_index_list.size(); k++)
                         {
@@ -472,12 +470,8 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
                 }
             }
 
-            for (int k = 0; k < iterations; k++)
+            for (int k = 0; k < iterations * cal_factor(e, 3); k++)
             {
-                if (e < 0.1)
-                {
-                    algorithm.propagate(parent_one_source_poi_list, &parent_destinations_poi_list);
-                }
                 algorithm.propagate(parent_one_source_poi_list, &parent_destinations_poi_list);
             }
 
@@ -639,12 +633,8 @@ void RC_Oracle_A2A(int poi_num, point_cloud_geodesic::PointCloud *point_cloud, s
                             }
                         }
 
-                        for (int k = 0; k < iterations; k++)
+                        for (int k = 0; k < iterations * cal_factor(e, 3); k++)
                         {
-                            if (e < 0.1)
-                            {
-                                algorithm.propagate(children_one_source_poi_list, &children_destinations_poi_list);
-                            }
                             algorithm.propagate(children_one_source_poi_list, &children_destinations_poi_list);
                         }
 

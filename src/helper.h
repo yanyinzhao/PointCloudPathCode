@@ -1089,6 +1089,10 @@ double cal_factor(double e, int type)
     {
         return e >= 0.75 ? 0.5 : 1;
     }
+    else if (type == 3)
+    {
+        return e < 0.1 ? 2 : 1;
+    }
     return 1;
 }
 
