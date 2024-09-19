@@ -1302,7 +1302,7 @@ void SE_Oracle_FastFly_Adapt(
     geo_pair_unordered_map.clear();
     int pairwise_path_poi_to_poi_size = 0;
     int WSPD_oracle_edge_num = 0;
-    double WSPD_oracle_e = pow((1 + e), 0.35) - 1;
+    double WSPD_oracle_e = cal_factor(e, 4);
     generate_geo_pair_C(geo_tree_node_id, WSPD_oracle_edge_num, point_cloud, *root_geo, *root_geo, WSPD_oracle_e, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
     output_size = 50 * (WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint));
 
@@ -1423,7 +1423,7 @@ void SE_Oracle_FastFly_Adapt_A2A(
     geo_pair_unordered_map.clear();
     int pairwise_path_poi_to_poi_size = 0;
     int WSPD_oracle_edge_num = 0;
-    double WSPD_oracle_e = pow((1 + e), 0.35) - 1;
+    double WSPD_oracle_e = cal_factor(e, 4);
     generate_geo_pair_C(geo_tree_node_id, WSPD_oracle_edge_num, point_cloud, *root_geo, *root_geo, WSPD_oracle_e, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
     output_size = iterations * 50 * (WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint));
 
@@ -1545,7 +1545,7 @@ void SE_Oracle_Adapt(
     geo_pair_unordered_map.clear();
     int pairwise_path_poi_to_poi_size = 0;
     int WSPD_oracle_edge_num = 0;
-    double WSPD_oracle_e = pow((1 + e), 0.35) - 1;
+    double WSPD_oracle_e = cal_factor(e, 4);
     generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, &mesh, *root_geo, *root_geo, WSPD_oracle_e, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
     output_size = WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
 
@@ -1571,7 +1571,7 @@ void SE_Oracle_Adapt(
     if (run_knn_query)
     {
         all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, 1, k_value, range, all_poi_knn_query_list);
+                                         all_poi, geopairs, 1, k_value, range, all_poi_knn_query_list, 1);
     }
 
     auto stop_knn_query_time = std::chrono::high_resolution_clock::now();
@@ -1584,7 +1584,7 @@ void SE_Oracle_Adapt(
     if (run_range_query)
     {
         all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, 2, k_value, range, all_poi_range_list);
+                                         all_poi, geopairs, 2, k_value, range, all_poi_range_list, 1);
     }
 
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
@@ -1670,7 +1670,7 @@ void SE_Oracle_Adapt_A2A(
     geo_pair_unordered_map.clear();
     int pairwise_path_poi_to_poi_size = 0;
     int WSPD_oracle_edge_num = 0;
-    double WSPD_oracle_e = pow((1 + e), 0.35) - 1;
+    double WSPD_oracle_e = cal_factor(e, 4);
     generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, &mesh, *root_geo, *root_geo, WSPD_oracle_e, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
     output_size = point_cloud->pc_points().size() / poi_num * (WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint));
 
@@ -1696,7 +1696,7 @@ void SE_Oracle_Adapt_A2A(
     if (run_knn_query)
     {
         all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, 1, k_value, range, all_poi_knn_query_list);
+                                         all_poi, geopairs, 1, k_value, range, all_poi_knn_query_list, 1);
     }
 
     auto stop_knn_query_time = std::chrono::high_resolution_clock::now();
@@ -1709,7 +1709,7 @@ void SE_Oracle_Adapt_A2A(
     if (run_range_query)
     {
         all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, 2, k_value, range, all_poi_range_list);
+                                         all_poi, geopairs, 2, k_value, range, all_poi_range_list, 1);
     }
 
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
@@ -1804,7 +1804,7 @@ void EAR_Oracle_FastFly_Adapt(
     std::unordered_map<int, int> geo_pair_unordered_map;
     geo_pair_unordered_map.clear();
     int EAR_oracle_edge_num = 0;
-    double EAR_oracle_e = pow((1 + e), 0.35) - 1;
+    double EAR_oracle_e = cal_factor(e, 4);
     int pairwise_path_highway_node_to_highway_node_size = 0;
     generate_geo_pair_C(geo_tree_node_id, EAR_oracle_edge_num, point_cloud, *root_geo, *root_geo, e, geopairs, highway_node_unordered_map, geo_pair_unordered_map, pre_distance_highway_node_to_highway_node_map, pre_path_highway_node_to_highway_node_map, pairwise_path_highway_node_to_highway_node_size);
     output_size = 50 * (EAR_oracle_edge_num * sizeof(double) + pairwise_path_highway_node_to_highway_node_size * sizeof(point_cloud_geodesic::PathPoint));
@@ -1951,7 +1951,7 @@ void EAR_Oracle_Adapt(
     std::unordered_map<int, int> geo_pair_unordered_map;
     geo_pair_unordered_map.clear();
     int EAR_oracle_edge_num = 0;
-    double EAR_oracle_e = pow((1 + e), 0.35) - 1;
+    double EAR_oracle_e = cal_factor(e, 4);
     int pairwise_path_highway_node_to_highway_node_size = 0;
     generate_geo_pair_T(geo_tree_node_id, EAR_oracle_edge_num, &mesh, *root_geo, *root_geo, e, geopairs, highway_node_unordered_map, geo_pair_unordered_map, pre_distance_highway_node_to_highway_node_map, pre_path_highway_node_to_highway_node_map, pairwise_path_highway_node_to_highway_node_size);
     output_size = EAR_oracle_edge_num * sizeof(double) + pairwise_path_highway_node_to_highway_node_size * sizeof(geodesic::SurfacePoint);
@@ -2085,7 +2085,7 @@ void SU_Oracle_Adapt(
     geo_pair_unordered_map.clear();
     int pairwise_path_poi_to_poi_size = 0;
     int WSPD_oracle_edge_num = 0;
-    double WSPD_oracle_e = pow((1.05), 0.35) - 1;
+    double WSPD_oracle_e = cal_factor(0.05, 4);
     generate_geo_pair_T(geo_tree_node_id, WSPD_oracle_edge_num, &mesh, *root_geo, *root_geo, WSPD_oracle_e, geopairs, poi_unordered_map, geo_pair_unordered_map, pre_pairwise_distance_poi_to_poi_map, pre_pairwise_path_poi_to_poi_map, pairwise_path_poi_to_poi_size);
     output_size = WSPD_oracle_edge_num * sizeof(double) + pairwise_path_poi_to_poi_size * sizeof(geodesic::SurfacePoint);
 
@@ -2113,7 +2113,7 @@ void SU_Oracle_Adapt(
         for (int i = 0; i < 10; i++)
         {
             all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                             all_poi, geopairs, 1, k_value, range, all_poi_knn_query_list);
+                                             all_poi, geopairs, 1, k_value, range, all_poi_knn_query_list, i);
         }
     }
 
@@ -2129,7 +2129,7 @@ void SU_Oracle_Adapt(
         for (int i = 0; i < 10; i++)
         {
             all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                             all_poi, geopairs, 2, k_value, range, all_poi_range_list);
+                                             all_poi, geopairs, 2, k_value, range, all_poi_range_list, i);
         }
     }
 

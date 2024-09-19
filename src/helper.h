@@ -451,7 +451,7 @@ void all_poi_knn_or_range_query_geo_T(int poi_num, int geo_tree_node_id,
                                       std::unordered_map<int, GeoNode *> &geo_node_in_partition_tree_unordered_map,
                                       std::vector<GeoNode *> &all_poi, std::unordered_map<int, GeoPair_T *> &geopairs,
                                       int knn_one_range_two, int k_value, double range,
-                                      std::vector<std::vector<int>> &all_poi_knn_or_range_list)
+                                      std::vector<std::vector<int>> &all_poi_knn_or_range_list, int iteration)
 {
     std::vector<std::vector<std::pair<double, int>>> poi_to_other_poi_distance_and_index_list;
     poi_to_other_poi_distance_and_index_list.clear();
@@ -1092,6 +1092,10 @@ double cal_factor(double e, int type)
     else if (type == 3)
     {
         return e < 0.1 ? 2 : 1;
+    }
+    else if (type == 4)
+    {
+        return pow((1 + e), 0.35) - 1;
     }
     return 1;
 }
