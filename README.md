@@ -39,7 +39,7 @@ We compared 25 algorithms as follows (the algorithms calculate the path passing 
 
 ## Reproducible run
 
-We provide simple commands to run all experiments and plot all paper graphs. Running experiments for each one figure takes 2—3 days, and running experiments for all figures takes 3—4 months. We also provide the sample experiments data used for plot all paper graphs (in the case that you do not have enough time to run the experiments). We also provide simple examples to test all algorithms (takes 10 minutes), please see section called "normal run" below. Before you run, please download some of the datasets from https://drive.google.com/drive/folders/1_Sblnq9XOLFwvPI2lX_l8KJJzVWR828y?usp=drive_link, and save in the "input/" folder, since these datasets are very large, and they exceed the maximum file upload size in Github. 
+We provide simple commands to run all experiments and plot all paper graphs (including the graphs in our technical report). Running experiments for each one figure takes 2—3 days, and running experiments for all figures takes 3—4 months. We also provide the sample experiments data used for plot all paper graphs (in the case that you do not have enough time to run the experiments). We also provide simple examples to test all algorithms (takes 10 minutes), please see section called "normal run" below. Before you run, please download some of the datasets from https://drive.google.com/drive/folders/1_Sblnq9XOLFwvPI2lX_l8KJJzVWR828y?usp=drive_link, and save in the "input/" folder, since these datasets are very large, and they exceed the maximum file upload size in Github. 
 
 ### Run all experiments command
 
