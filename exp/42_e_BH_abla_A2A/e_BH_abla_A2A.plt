@@ -104,7 +104,7 @@ set key above
 set log y
 
 set xrange [-0.02: 1.02]
-set yrange [0.003: 1]
+set yrange [0.003: 10]
 set label 11 center at graph 0.5,char 1 "(d)" 
 set bmargin 5
 set format x "%g"
@@ -127,7 +127,7 @@ set key above
 set log y
 
 set xrange [-0.02: 1.02]
-set yrange [500: 500000]
+set yrange [500: 1000000]
 set label 11 center at graph 0.5,char 1 "(e)" offset 0,-0.4,0
 set bmargin 5
 set format x "%g"
@@ -150,7 +150,7 @@ set key above
 set log y
 
 set xrange [-0.02: 1.02]
-set yrange [500: 500000]
+set yrange [500: 1000000]
 set label 11 center at graph 0.5,char 1 "(f)" 
 set bmargin 5
 set format x "%g"

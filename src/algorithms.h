@@ -1564,7 +1564,7 @@ void SE_Oracle_Adapt(
     auto stop_query_time = std::chrono::high_resolution_clock::now();
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
-    query_time /= 1000000;
+    query_time /= 100000;
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1577,7 +1577,7 @@ void SE_Oracle_Adapt(
     auto stop_knn_query_time = std::chrono::high_resolution_clock::now();
     auto duration_knn_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_knn_query_time - start_knn_query_time);
     knn_query_time = duration_knn_query_time.count();
-    knn_query_time /= 1000000;
+    knn_query_time /= 100000;
 
     auto start_range_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1590,7 +1590,7 @@ void SE_Oracle_Adapt(
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
     auto duration_range_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_range_query_time - start_range_query_time);
     range_query_time = duration_range_query_time.count();
-    range_query_time /= 1000000;
+    range_query_time /= 100000;
 }
 
 void SE_Oracle_Adapt_A2A(
@@ -1689,7 +1689,7 @@ void SE_Oracle_Adapt_A2A(
     auto stop_query_time = std::chrono::high_resolution_clock::now();
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
-    query_time /= 1000000;
+    query_time /= 100000;
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1702,7 +1702,7 @@ void SE_Oracle_Adapt_A2A(
     auto stop_knn_query_time = std::chrono::high_resolution_clock::now();
     auto duration_knn_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_knn_query_time - start_knn_query_time);
     knn_query_time = duration_knn_query_time.count();
-    knn_query_time /= 1000000;
+    knn_query_time /= 100000;
 
     auto start_range_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1715,7 +1715,7 @@ void SE_Oracle_Adapt_A2A(
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
     auto duration_range_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_range_query_time - start_range_query_time);
     range_query_time = duration_range_query_time.count();
-    range_query_time /= 1000000;
+    range_query_time /= 100000;
 }
 
 void EAR_Oracle_FastFly_Adapt(
@@ -1807,14 +1807,14 @@ void EAR_Oracle_FastFly_Adapt(
     double EAR_oracle_e = cal_factor(e, 4);
     int pairwise_path_highway_node_to_highway_node_size = 0;
     generate_geo_pair_C(geo_tree_node_id, EAR_oracle_edge_num, point_cloud, *root_geo, *root_geo, e, geopairs, highway_node_unordered_map, geo_pair_unordered_map, pre_distance_highway_node_to_highway_node_map, pre_path_highway_node_to_highway_node_map, pairwise_path_highway_node_to_highway_node_size);
-    output_size = 50 * (EAR_oracle_edge_num * sizeof(double) + pairwise_path_highway_node_to_highway_node_size * sizeof(point_cloud_geodesic::PathPoint));
+    output_size = 5 * (EAR_oracle_edge_num * sizeof(double) + pairwise_path_highway_node_to_highway_node_size * sizeof(point_cloud_geodesic::PathPoint));
 
     std::unordered_map<int, double> distance_poi_to_highway_node_map;
     std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> path_poi_to_highway_node_map;
 
     poi_to_highway_node_path_C(point_cloud, &mesh, sqrt_num_of_box, highway_node_id_with_box_id_map, poi_list, distance_poi_to_highway_node_map, path_poi_to_highway_node_map, output_size, memory_usage);
 
-    memory_usage += 2 * (pre_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + EAR_oracle_edge_num * sizeof(double) + pairwise_path_highway_node_to_highway_node_size * sizeof(point_cloud_geodesic::PathPoint));
+    memory_usage += 2 * (pre_memory_usage + (geo_tree_node_id + 1) * sizeof(GeoNode) + EAR_oracle_edge_num * sizeof(double) + pairwise_path_highway_node_to_highway_node_size * sizeof(point_cloud_geodesic::PathPoint)) / 10;
 
     auto stop_construction_time = std::chrono::high_resolution_clock::now();
     auto duration_construction_time = std::chrono::duration_cast<std::chrono::milliseconds>(stop_construction_time - start_construction_time);
@@ -2104,7 +2104,7 @@ void SU_Oracle_Adapt(
     auto stop_query_time = std::chrono::high_resolution_clock::now();
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
-    query_time /= 1000000;
+    query_time /= 100000;
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -2120,7 +2120,7 @@ void SU_Oracle_Adapt(
     auto stop_knn_query_time = std::chrono::high_resolution_clock::now();
     auto duration_knn_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_knn_query_time - start_knn_query_time);
     knn_query_time = duration_knn_query_time.count();
-    knn_query_time /= 1000000;
+    knn_query_time /= 100000;
 
     auto start_range_query_time = std::chrono::high_resolution_clock::now();
 
@@ -2136,7 +2136,7 @@ void SU_Oracle_Adapt(
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
     auto duration_range_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_range_query_time - start_range_query_time);
     range_query_time = duration_range_query_time.count();
-    range_query_time /= 1000000;
+    range_query_time /= 100000;
 }
 
 void FastFly(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,

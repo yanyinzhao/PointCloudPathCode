@@ -41,7 +41,7 @@ set key above
 set log y
 
 set xrange [-0.02: 1.02]
-set yrange [0.005: 4000] 
+set yrange [0.005: 40000] 
 set xtics rotate by 45 right
 set label 11 center at graph 0.5,char 1 "(a)" offset 0,13.9,0
 set bmargin 5
@@ -65,7 +65,7 @@ set key above
 set log y
 
 set xrange [-0.02: 1.02]
-set yrange [0.01: 1600]
+set yrange [0.01: 3000]
 set label 11 center at graph 0.5,char 1 "(b)" 
 set bmargin 5
 set format x "%g"
@@ -93,7 +93,7 @@ set key above
 set log y
 
 set xrange [-0.02: 1.02]
-set yrange [0.02: 100]
+set yrange [0.02: 500]
 set label 11 center at graph 0.5,char 1 "(c)" 
 set bmargin 5
 set format x "%g"

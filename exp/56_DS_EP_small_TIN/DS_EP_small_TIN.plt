@@ -41,7 +41,7 @@ set key above
 set log y
 
 set xrange [9: 51]
-set yrange [0.01: 50000] 
+set yrange [0.01: 350000] 
 set label 11 center at graph 0.5,char 1 "(a)" offset 0,13.9,0
 set bmargin 5
 set format x "%g"
@@ -93,7 +93,7 @@ set key above
 set log y
 
 set xrange [9: 51]
-set yrange [0.05: 100]
+set yrange [0.05: 1000]
 set label 11 center at graph 0.5,char 1 "(c)" 
 set bmargin 5
 set format x "%g"
