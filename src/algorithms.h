@@ -772,7 +772,8 @@ void RC_Oracle_query(int poi_num, std::unordered_map<int, double> &distance_poi_
                      std::unordered_map<int, int> &non_exact_source_poi_map,
                      std::unordered_map<int, int> &exact_source_poi_process_order_map,
                      int source_poi_index, int destination_poi_index, double &distance_result,
-                     std::vector<point_cloud_geodesic::PathPoint> &path_result, double &query_time)
+                     std::vector<point_cloud_geodesic::PathPoint> &path_result, double &query_time,
+                     double &min_query_time, double &max_query_time)
 {
     auto start_query_time = std::chrono::high_resolution_clock::now();
 
@@ -910,12 +911,14 @@ void RC_Oracle_query(int poi_num, std::unordered_map<int, double> &distance_poi_
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 1000000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 }
 
 void RC_Oracle_Naive_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
                            std::unordered_map<int, std::vector<point_cloud_geodesic::PathPoint>> &pairwise_path_poi_to_poi_map,
                            int source_poi_index, int destination_poi_index, double &distance_result,
-                           std::vector<point_cloud_geodesic::PathPoint> &path_result, double &query_time)
+                           std::vector<point_cloud_geodesic::PathPoint> &path_result, double &query_time,
+                           double &min_query_time, double &max_query_time)
 {
     auto start_query_time = std::chrono::high_resolution_clock::now();
 
@@ -935,6 +938,7 @@ void RC_Oracle_Naive_query(int poi_num, std::unordered_map<int, double> &pairwis
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 1000000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 }
 
 void RC_Oracle_NaiveProx_all_poi_knn_or_range_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
@@ -1236,7 +1240,7 @@ void RC_Oracle_Naive_all_poi_knn_or_range_query(int poi_num, std::unordered_map<
 void SE_Oracle_FastFly_Adapt(
     int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double e,
     int source_poi_index, int destination_poi_index, double &construction_time,
-    double &query_time, double &memory_usage, double &output_size, double &distance_result,
+    double &query_time, double &min_query_time, double &max_query_time, double &memory_usage, double &output_size, double &distance_result,
     std::vector<point_cloud_geodesic::PathPoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
     double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
@@ -1322,6 +1326,7 @@ void SE_Oracle_FastFly_Adapt(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1353,7 +1358,7 @@ void SE_Oracle_FastFly_Adapt(
 void SE_Oracle_FastFly_Adapt_A2A(
     int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double e,
     int source_poi_index, int destination_poi_index, double &construction_time,
-    double &query_time, double &memory_usage, double &output_size, double &distance_result,
+    double &query_time, double &min_query_time, double &max_query_time, double &memory_usage, double &output_size, double &distance_result,
     std::vector<point_cloud_geodesic::PathPoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
     double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
@@ -1443,6 +1448,7 @@ void SE_Oracle_FastFly_Adapt_A2A(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1475,7 +1481,7 @@ void SE_Oracle_Adapt(
     int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double e,
     int source_poi_index, int destination_poi_index,
     double &point_cloud_to_terrain_time, double &construction_time,
-    double &query_time, double &point_cloud_to_terrain_memory_usage,
+    double &query_time, double &min_query_time, double &max_query_time, double &point_cloud_to_terrain_memory_usage,
     double &memory_usage, double &output_size, double &distance_result,
     std::vector<geodesic::SurfacePoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
@@ -1565,6 +1571,7 @@ void SE_Oracle_Adapt(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1597,7 +1604,7 @@ void SE_Oracle_Adapt_A2A(
     int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double e,
     int source_poi_index, int destination_poi_index,
     double &point_cloud_to_terrain_time, double &construction_time,
-    double &query_time, double &point_cloud_to_terrain_memory_usage,
+    double &query_time, double &min_query_time, double &max_query_time, double &point_cloud_to_terrain_memory_usage,
     double &memory_usage, double &output_size, double &distance_result,
     std::vector<geodesic::SurfacePoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
@@ -1690,6 +1697,7 @@ void SE_Oracle_Adapt_A2A(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1721,7 +1729,7 @@ void SE_Oracle_Adapt_A2A(
 void EAR_Oracle_FastFly_Adapt(
     int sqrt_num_of_box, int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double e,
     int source_poi_index, int destination_poi_index,
-    double &construction_time, double &query_time,
+    double &construction_time, double &query_time, double &min_query_time, double &max_query_time,
     double &memory_usage, double &output_size, double &distance_result,
     std::vector<point_cloud_geodesic::PathPoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
@@ -1832,6 +1840,7 @@ void EAR_Oracle_FastFly_Adapt(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1868,7 +1877,7 @@ void EAR_Oracle_Adapt(
     int sqrt_num_of_box, int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double e,
     int source_poi_index, int destination_poi_index,
     double &point_cloud_to_terrain_time, double &construction_time,
-    double &query_time, double &point_cloud_to_terrain_memory_usage,
+    double &query_time, double &min_query_time, double &max_query_time, double &point_cloud_to_terrain_memory_usage,
     double &memory_usage, double &output_size, double &distance_result,
     std::vector<geodesic::SurfacePoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
@@ -1979,6 +1988,7 @@ void EAR_Oracle_Adapt(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -2015,7 +2025,7 @@ void SU_Oracle_Adapt(
     int poi_num, point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
     int source_poi_index, int destination_poi_index,
     double &point_cloud_to_terrain_time, double &construction_time,
-    double &query_time, double &point_cloud_to_terrain_memory_usage,
+    double &query_time, double &min_query_time, double &max_query_time, double &point_cloud_to_terrain_memory_usage,
     double &memory_usage, double &output_size, double &distance_result,
     std::vector<geodesic::SurfacePoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
@@ -2105,6 +2115,7 @@ void SU_Oracle_Adapt(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -2141,7 +2152,7 @@ void SU_Oracle_Adapt(
 
 void FastFly(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
              int source_poi_index, int destination_poi_index,
-             double &query_time, double &memory_usage, double &distance_result,
+             double &query_time, double &min_query_time, double &max_query_time, double &memory_usage, double &distance_result,
              std::vector<point_cloud_geodesic::PathPoint> &path_result)
 {
     auto start_query_time = std::chrono::high_resolution_clock::now();
@@ -2162,11 +2173,13 @@ void FastFly(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &po
     auto duration_query_time = std::chrono::duration_cast<std::chrono::microseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 1000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 }
 
 void Kaul_Adapt_Dijk_Adapt(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double e,
                            bool pass_point_and_not_pass_terrain, int source_poi_index, int destination_poi_index,
-                           double &point_cloud_to_terrain_time, double &query_time, double &point_cloud_to_terrain_memory_usage,
+                           double &point_cloud_to_terrain_time, double &query_time,
+                           double &min_query_time, double &max_query_time, double &point_cloud_to_terrain_memory_usage,
                            double &memory_usage, double &distance_result, std::vector<geodesic::SurfacePoint> &path_result)
 {
     geodesic::Mesh mesh;
@@ -2199,11 +2212,13 @@ void Kaul_Adapt_Dijk_Adapt(point_cloud_geodesic::PointCloud *point_cloud, std::v
     auto duration_query_time = std::chrono::duration_cast<std::chrono::microseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 1000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 }
 
 void CH_Adapt(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
               int source_poi_index, int destination_poi_index, double &point_cloud_to_terrain_time,
-              double &query_time, double &point_cloud_to_terrain_memory_usage, double &memory_usage,
+              double &query_time, double &min_query_time, double &max_query_time,
+              double &point_cloud_to_terrain_memory_usage, double &memory_usage,
               double &distance_result, std::vector<geodesic::SurfacePoint> &path_result)
 {
     geodesic::Mesh mesh;
@@ -2227,6 +2242,7 @@ void CH_Adapt(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &p
     auto duration_query_time = std::chrono::duration_cast<std::chrono::microseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 1000;
+    cal_min_max_query(query_time, min_query_time, max_query_time);
 }
 
 void FastFly_all_poi_knn_or_range_query(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
@@ -2369,6 +2385,8 @@ void RC_Oracle_NaiveProx_with_output(std::string output_file, int poi_num, point
 
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double memory_usage = 0;
@@ -2388,7 +2406,7 @@ void RC_Oracle_NaiveProx_with_output(std::string output_file, int poi_num, point
     RC_Oracle(poi_num, point_cloud, poi_list, e, distance_poi_to_poi_map, path_poi_to_poi_map,
               non_exact_source_poi_map, exact_source_poi_process_order_map, construction_time, memory_usage, output_size);
     RC_Oracle_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
-                    source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+                    source_poi_index, destination_poi_index, distance_result, path_result, query_time, min_query_time, max_query_time);
     if (run_knn_query)
     {
         RC_Oracle_NaiveProx_all_poi_knn_or_range_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
@@ -2406,16 +2424,16 @@ void RC_Oracle_NaiveProx_with_output(std::string output_file, int poi_num, point
     std::cout << "Query time: " << query_time << " ms" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -2427,17 +2445,19 @@ void RC_Oracle_NaiveProx_with_output(std::string output_file, int poi_num, point
         << 0 << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << 0 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -2457,6 +2477,8 @@ void RC_Oracle_NaiveProx_A2A_with_output(std::string output_file, int poi_num, p
 
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double memory_usage = 0;
@@ -2476,7 +2498,7 @@ void RC_Oracle_NaiveProx_A2A_with_output(std::string output_file, int poi_num, p
     RC_Oracle_A2A(poi_num, point_cloud, poi_list, e, distance_poi_to_poi_map, path_poi_to_poi_map,
                   non_exact_source_poi_map, exact_source_poi_process_order_map, construction_time, memory_usage, output_size);
     RC_Oracle_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
-                    source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+                    source_poi_index, destination_poi_index, distance_result, path_result, query_time, min_query_time, max_query_time);
     if (run_knn_query)
     {
         RC_Oracle_NaiveProx_all_poi_knn_or_range_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
@@ -2494,16 +2516,16 @@ void RC_Oracle_NaiveProx_A2A_with_output(std::string output_file, int poi_num, p
     std::cout << "Query time: " << query_time << " ms" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -2515,17 +2537,19 @@ void RC_Oracle_NaiveProx_A2A_with_output(std::string output_file, int poi_num, p
         << 0 << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << 0 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -2546,6 +2570,8 @@ void RC_Oracle_or_RC_Oracle_Adapt_with_output(std::string output_file, int poi_n
 
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double memory_usage = 0;
@@ -2565,7 +2591,7 @@ void RC_Oracle_or_RC_Oracle_Adapt_with_output(std::string output_file, int poi_n
     RC_Oracle(poi_num, point_cloud, poi_list, e, distance_poi_to_poi_map, path_poi_to_poi_map,
               non_exact_source_poi_map, exact_source_poi_process_order_map, construction_time, memory_usage, output_size);
     RC_Oracle_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
-                    source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+                    source_poi_index, destination_poi_index, distance_result, path_result, query_time, min_query_time, max_query_time);
     if (run_knn_query)
     {
         RC_Oracle_all_poi_knn_or_range_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
@@ -2583,16 +2609,16 @@ void RC_Oracle_or_RC_Oracle_Adapt_with_output(std::string output_file, int poi_n
     std::cout << "Query time: " << query_time << " ms" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -2611,17 +2637,19 @@ void RC_Oracle_or_RC_Oracle_Adapt_with_output(std::string output_file, int poi_n
         << 0 << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << 0 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -2641,6 +2669,8 @@ void RC_Oracle_A2A_with_output(std::string output_file, int poi_num, point_cloud
 
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double memory_usage = 0;
@@ -2660,7 +2690,7 @@ void RC_Oracle_A2A_with_output(std::string output_file, int poi_num, point_cloud
     RC_Oracle_A2A(poi_num, point_cloud, poi_list, e, distance_poi_to_poi_map, path_poi_to_poi_map,
                   non_exact_source_poi_map, exact_source_poi_process_order_map, construction_time, memory_usage, output_size);
     RC_Oracle_query(poi_num, distance_poi_to_poi_map, path_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map,
-                    source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+                    source_poi_index, destination_poi_index, distance_result, path_result, query_time, min_query_time, max_query_time);
     if (run_knn_query)
     {
         RC_Oracle_all_poi_knn_or_range_query(poi_num, distance_poi_to_poi_map, non_exact_source_poi_map, exact_source_poi_process_order_map, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
@@ -2678,16 +2708,16 @@ void RC_Oracle_A2A_with_output(std::string output_file, int poi_num, point_cloud
     std::cout << "Query time: " << query_time << " ms" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -2699,17 +2729,19 @@ void RC_Oracle_A2A_with_output(std::string output_file, int poi_num, point_cloud
         << 0 << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << 0 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -2728,6 +2760,8 @@ void RC_Oracle_Naive_or_RC_Oracle_Naive_Adapt_with_output(std::string output_fil
 
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double memory_usage = 0;
@@ -2747,7 +2781,7 @@ void RC_Oracle_Naive_or_RC_Oracle_Naive_Adapt_with_output(std::string output_fil
     RC_Oracle_Naive(poi_num, point_cloud, poi_list, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
                     construction_time, memory_usage, output_size);
     RC_Oracle_Naive_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
-                          source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+                          source_poi_index, destination_poi_index, distance_result, path_result, query_time, min_query_time, max_query_time);
     if (run_knn_query)
     {
         RC_Oracle_Naive_all_poi_knn_or_range_query(poi_num, pairwise_distance_poi_to_poi_map, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
@@ -2765,16 +2799,16 @@ void RC_Oracle_Naive_or_RC_Oracle_Naive_Adapt_with_output(std::string output_fil
     std::cout << "Query time: " << query_time << " ms" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -2793,17 +2827,19 @@ void RC_Oracle_Naive_or_RC_Oracle_Naive_Adapt_with_output(std::string output_fil
         << 0 << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << 0 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -2821,6 +2857,8 @@ void RC_Oracle_Naive_A2A_with_output(std::string output_file, int poi_num, point
 
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double memory_usage = 0;
@@ -2840,7 +2878,7 @@ void RC_Oracle_Naive_A2A_with_output(std::string output_file, int poi_num, point
     RC_Oracle_Naive_A2A(poi_num, point_cloud, poi_list, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
                         construction_time, memory_usage, output_size);
     RC_Oracle_Naive_query(poi_num, pairwise_distance_poi_to_poi_map, pairwise_path_poi_to_poi_map,
-                          source_poi_index, destination_poi_index, distance_result, path_result, query_time);
+                          source_poi_index, destination_poi_index, distance_result, path_result, query_time, min_query_time, max_query_time);
     if (run_knn_query)
     {
         RC_Oracle_Naive_all_poi_knn_or_range_query(poi_num, pairwise_distance_poi_to_poi_map, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
@@ -2858,16 +2896,16 @@ void RC_Oracle_Naive_A2A_with_output(std::string output_file, int poi_num, point
     std::cout << "Query time: " << query_time << " ms" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -2879,17 +2917,19 @@ void RC_Oracle_Naive_A2A_with_output(std::string output_file, int poi_num, point
         << 0 << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << 0 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -2904,6 +2944,8 @@ void SE_Oracle_FastFly_Adapt_with_output(std::string output_file, int poi_num, p
 {
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double memory_usage = 0;
@@ -2921,8 +2963,9 @@ void SE_Oracle_FastFly_Adapt_with_output(std::string output_file, int poi_num, p
     all_poi_range_query_list.clear();
 
     SE_Oracle_FastFly_Adapt(poi_num, point_cloud, poi_list, e, source_poi_index, destination_poi_index, construction_time,
-                            query_time, memory_usage, output_size, distance_result, path_result, run_knn_query, run_range_query,
-                            k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
+                            query_time, min_query_time, max_query_time, memory_usage, output_size, distance_result, path_result,
+                            run_knn_query, run_range_query, k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time,
+                            all_poi_range_query_list);
     if (run_knn_query)
     {
         calculate_knn_or_range_query_error(point_cloud_exact_all_poi_knn_query_list, all_poi_knn_query_list, point_cloud_knn_query_error);
@@ -2938,16 +2981,16 @@ void SE_Oracle_FastFly_Adapt_with_output(std::string output_file, int poi_num, p
     std::cout << "Query time: " << query_time << " ms" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -2959,17 +3002,19 @@ void SE_Oracle_FastFly_Adapt_with_output(std::string output_file, int poi_num, p
         << 0 << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << 0 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -2984,6 +3029,8 @@ void SE_Oracle_FastFly_Adapt_A2A_with_output(std::string output_file, int poi_nu
 {
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double memory_usage = 0;
@@ -3001,8 +3048,9 @@ void SE_Oracle_FastFly_Adapt_A2A_with_output(std::string output_file, int poi_nu
     all_poi_range_query_list.clear();
 
     SE_Oracle_FastFly_Adapt_A2A(poi_num, point_cloud, poi_list, e, source_poi_index, destination_poi_index, construction_time,
-                                query_time, memory_usage, output_size, distance_result, path_result, run_knn_query, run_range_query,
-                                k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
+                                query_time, min_query_time, max_query_time, memory_usage, output_size, distance_result, path_result,
+                                run_knn_query, run_range_query, k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time,
+                                all_poi_range_query_list);
     if (run_knn_query)
     {
         calculate_knn_or_range_query_error(point_cloud_exact_all_poi_knn_query_list, all_poi_knn_query_list, point_cloud_knn_query_error);
@@ -3018,16 +3066,16 @@ void SE_Oracle_FastFly_Adapt_A2A_with_output(std::string output_file, int poi_nu
     std::cout << "Query time: " << query_time << " ms" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -3039,17 +3087,19 @@ void SE_Oracle_FastFly_Adapt_A2A_with_output(std::string output_file, int poi_nu
         << 0 << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << 0 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -3066,6 +3116,8 @@ void SE_Oracle_or_SE_Oracle_Adapt_with_output(std::string output_file, int poi_n
     double point_cloud_to_terrain_time = 0;
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double point_cloud_to_terrain_memory_usage = 0;
@@ -3085,7 +3137,7 @@ void SE_Oracle_or_SE_Oracle_Adapt_with_output(std::string output_file, int poi_n
 
     SE_Oracle_Adapt(
         poi_num, point_cloud, poi_list, e, source_poi_index, destination_poi_index,
-        point_cloud_to_terrain_time, construction_time, query_time, point_cloud_to_terrain_memory_usage,
+        point_cloud_to_terrain_time, construction_time, query_time, min_query_time, max_query_time, point_cloud_to_terrain_memory_usage,
         memory_usage, output_size, distance_result, path_result, run_knn_query, run_range_query,
         k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
     if (run_knn_query)
@@ -3116,16 +3168,16 @@ void SE_Oracle_or_SE_Oracle_Adapt_with_output(std::string output_file, int poi_n
     }
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -3144,17 +3196,19 @@ void SE_Oracle_or_SE_Oracle_Adapt_with_output(std::string output_file, int poi_n
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << point_cloud_to_terrain_memory_usage / 1e6 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -3170,6 +3224,8 @@ void SE_Oracle_Adapt_A2A_with_output(std::string output_file, int poi_num, point
     double point_cloud_to_terrain_time = 0;
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double point_cloud_to_terrain_memory_usage = 0;
@@ -3189,7 +3245,7 @@ void SE_Oracle_Adapt_A2A_with_output(std::string output_file, int poi_num, point
 
     SE_Oracle_Adapt_A2A(
         poi_num, point_cloud, poi_list, e, source_poi_index, destination_poi_index,
-        point_cloud_to_terrain_time, construction_time, query_time, point_cloud_to_terrain_memory_usage,
+        point_cloud_to_terrain_time, construction_time, query_time, min_query_time, max_query_time, point_cloud_to_terrain_memory_usage,
         memory_usage, output_size, distance_result, path_result, run_knn_query, run_range_query,
         k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
     if (run_knn_query)
@@ -3209,16 +3265,16 @@ void SE_Oracle_Adapt_A2A_with_output(std::string output_file, int poi_num, point
     std::cout << "Point cloud to terrain memory usage: " << point_cloud_to_terrain_memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -3230,17 +3286,19 @@ void SE_Oracle_Adapt_A2A_with_output(std::string output_file, int poi_num, point
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << point_cloud_to_terrain_memory_usage / 1e6 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -3256,6 +3314,8 @@ void EAR_Oracle_FastFly_Adapt_with_output(std::string output_file, int poi_num, 
     int sqrt_num_of_box = 2;
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double memory_usage = 0;
@@ -3274,8 +3334,9 @@ void EAR_Oracle_FastFly_Adapt_with_output(std::string output_file, int poi_num, 
 
     EAR_Oracle_FastFly_Adapt(
         sqrt_num_of_box, poi_num, point_cloud, poi_list, e, source_poi_index, destination_poi_index,
-        construction_time, query_time, memory_usage, output_size, distance_result, path_result, run_knn_query, run_range_query,
-        k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
+        construction_time, query_time, min_query_time, max_query_time, memory_usage, output_size, distance_result,
+        path_result, run_knn_query, run_range_query, k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time,
+        all_poi_range_query_list);
     if (run_knn_query)
     {
         calculate_knn_or_range_query_error(point_cloud_exact_all_poi_knn_query_list, all_poi_knn_query_list, point_cloud_knn_query_error);
@@ -3291,16 +3352,16 @@ void EAR_Oracle_FastFly_Adapt_with_output(std::string output_file, int poi_num, 
     std::cout << "Query time: " << query_time << " ms" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -3312,17 +3373,19 @@ void EAR_Oracle_FastFly_Adapt_with_output(std::string output_file, int poi_num, 
         << 0 << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << 0 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -3340,6 +3403,8 @@ void EAR_Oracle_or_EAR_Oracle_Adapt_with_output(std::string output_file, int poi
     double point_cloud_to_terrain_time = 0;
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double point_cloud_to_terrain_memory_usage = 0;
@@ -3359,7 +3424,7 @@ void EAR_Oracle_or_EAR_Oracle_Adapt_with_output(std::string output_file, int poi
 
     EAR_Oracle_Adapt(
         sqrt_num_of_box, poi_num, point_cloud, poi_list, e, source_poi_index, destination_poi_index,
-        point_cloud_to_terrain_time, construction_time, query_time, point_cloud_to_terrain_memory_usage,
+        point_cloud_to_terrain_time, construction_time, query_time, min_query_time, max_query_time, point_cloud_to_terrain_memory_usage,
         memory_usage, output_size, distance_result, path_result, run_knn_query, run_range_query,
         k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
     if (run_knn_query)
@@ -3390,16 +3455,16 @@ void EAR_Oracle_or_EAR_Oracle_Adapt_with_output(std::string output_file, int poi
     }
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -3418,17 +3483,19 @@ void EAR_Oracle_or_EAR_Oracle_Adapt_with_output(std::string output_file, int poi
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << point_cloud_to_terrain_memory_usage / 1e6 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -3444,6 +3511,8 @@ void SU_Oracle_Adapt_with_output(std::string output_file, int poi_num, point_clo
     double point_cloud_to_terrain_time = 0;
     double construction_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double point_cloud_to_terrain_memory_usage = 0;
@@ -3463,7 +3532,7 @@ void SU_Oracle_Adapt_with_output(std::string output_file, int poi_num, point_clo
 
     SU_Oracle_Adapt(
         poi_num, point_cloud, poi_list, source_poi_index, destination_poi_index,
-        point_cloud_to_terrain_time, construction_time, query_time, point_cloud_to_terrain_memory_usage,
+        point_cloud_to_terrain_time, construction_time, query_time, min_query_time, max_query_time, point_cloud_to_terrain_memory_usage,
         memory_usage, output_size, distance_result, path_result, run_knn_query, run_range_query,
         k_value, range, knn_query_time, all_poi_knn_query_list, range_query_time, all_poi_range_query_list);
     if (run_knn_query)
@@ -3483,16 +3552,16 @@ void SU_Oracle_Adapt_with_output(std::string output_file, int poi_num, point_clo
     std::cout << "Point cloud to terrain memory usage: " << point_cloud_to_terrain_memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
     std::cout << "Output size: " << output_size / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -3504,17 +3573,19 @@ void SU_Oracle_Adapt_with_output(std::string output_file, int poi_num, point_clo
         << point_cloud_to_terrain_time << "\t"
         << construction_time << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << point_cloud_to_terrain_memory_usage / 1e6 << "\t"
         << memory_usage / 1e6 << "\t"
         << output_size / 1e6 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -3529,6 +3600,8 @@ void FastFly_or_FastFly_Adapt_with_output(std::string output_file, point_cloud_g
                                           int point_cloud_input_one_terrain_input_two)
 {
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double memory_usage = 0;
@@ -3545,7 +3618,7 @@ void FastFly_or_FastFly_Adapt_with_output(std::string output_file, point_cloud_g
     all_poi_range_query_list.clear();
 
     FastFly(point_cloud, poi_list, source_poi_index, destination_poi_index,
-            query_time, memory_usage, distance_result, path_result);
+            query_time, min_query_time, max_query_time, memory_usage, distance_result, path_result);
     if (run_knn_query)
     {
         FastFly_all_poi_knn_or_range_query(point_cloud, poi_list, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
@@ -3561,16 +3634,16 @@ void FastFly_or_FastFly_Adapt_with_output(std::string output_file, point_cloud_g
 
     std::cout << "Query time: " << query_time << " ms" << std::endl;
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -3589,17 +3662,19 @@ void FastFly_or_FastFly_Adapt_with_output(std::string output_file, point_cloud_g
         << 0 << "\t"
         << 0 << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << 0 << "\t"
         << memory_usage / 1e6 << "\t"
         << 0 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -3615,6 +3690,8 @@ void Dijk_or_Dijk_Adapt_with_output(std::string output_file, point_cloud_geodesi
 {
     double point_cloud_to_terrain_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double point_cloud_to_terrain_memory_usage = 0;
@@ -3632,8 +3709,8 @@ void Dijk_or_Dijk_Adapt_with_output(std::string output_file, point_cloud_geodesi
     all_poi_range_query_list.clear();
 
     Kaul_Adapt_Dijk_Adapt(point_cloud, poi_list, -1, true, source_poi_index, destination_poi_index,
-                          point_cloud_to_terrain_time, query_time, point_cloud_to_terrain_memory_usage,
-                          memory_usage, distance_result, path_result);
+                          point_cloud_to_terrain_time, query_time, min_query_time, max_query_time,
+                          point_cloud_to_terrain_memory_usage, memory_usage, distance_result, path_result);
     if (run_knn_query)
     {
         Kaul_Adapt_Dijk_Adapt_all_poi_knn_or_range_query(point_cloud, poi_list, -1, true, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
@@ -3662,16 +3739,16 @@ void Dijk_or_Dijk_Adapt_with_output(std::string output_file, point_cloud_geodesi
         std::cout << "Point cloud to terrain memory usage: " << point_cloud_to_terrain_memory_usage / 1e6 << " MB" << std::endl;
     }
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -3690,17 +3767,19 @@ void Dijk_or_Dijk_Adapt_with_output(std::string output_file, point_cloud_geodesi
         << point_cloud_to_terrain_time << "\t"
         << 0 << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << point_cloud_to_terrain_memory_usage / 1e6 << "\t"
         << memory_usage / 1e6 << "\t"
         << 0 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -3717,6 +3796,8 @@ void Kaul_or_Kaul_Adapt_with_output(std::string output_file, point_cloud_geodesi
 {
     double point_cloud_to_terrain_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double point_cloud_to_terrain_memory_usage = 0;
@@ -3734,8 +3815,8 @@ void Kaul_or_Kaul_Adapt_with_output(std::string output_file, point_cloud_geodesi
     all_poi_range_query_list.clear();
 
     Kaul_Adapt_Dijk_Adapt(point_cloud, poi_list, e, false, source_poi_index, destination_poi_index,
-                          point_cloud_to_terrain_time, query_time, point_cloud_to_terrain_memory_usage,
-                          memory_usage, distance_result, path_result);
+                          point_cloud_to_terrain_time, query_time, min_query_time, max_query_time,
+                          point_cloud_to_terrain_memory_usage, memory_usage, distance_result, path_result);
     if (run_knn_query)
     {
         Kaul_Adapt_Dijk_Adapt_all_poi_knn_or_range_query(point_cloud, poi_list, e, false, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
@@ -3764,16 +3845,16 @@ void Kaul_or_Kaul_Adapt_with_output(std::string output_file, point_cloud_geodesi
         std::cout << "Point cloud to terrain memory usage: " << point_cloud_to_terrain_memory_usage / 1e6 << " MB" << std::endl;
     }
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -3792,17 +3873,19 @@ void Kaul_or_Kaul_Adapt_with_output(std::string output_file, point_cloud_geodesi
         << point_cloud_to_terrain_time << "\t"
         << 0 << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << point_cloud_to_terrain_memory_usage / 1e6 << "\t"
         << memory_usage / 1e6 << "\t"
         << 0 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }
 
@@ -3818,6 +3901,8 @@ void CH_or_CH_Adapt_with_output(std::string output_file, point_cloud_geodesic::P
 {
     double point_cloud_to_terrain_time = 0;
     double query_time = 0;
+    double min_query_time = 0;
+    double max_query_time = 0;
     double knn_query_time = 0;
     double range_query_time = 0;
     double point_cloud_to_terrain_memory_usage = 0;
@@ -3835,8 +3920,8 @@ void CH_or_CH_Adapt_with_output(std::string output_file, point_cloud_geodesic::P
     all_poi_range_query_list.clear();
 
     CH_Adapt(point_cloud, poi_list, source_poi_index, destination_poi_index,
-             point_cloud_to_terrain_time, query_time, point_cloud_to_terrain_memory_usage,
-             memory_usage, distance_result, path_result);
+             point_cloud_to_terrain_time, query_time, min_query_time, max_query_time,
+             point_cloud_to_terrain_memory_usage, memory_usage, distance_result, path_result);
     if (run_knn_query)
     {
         CH_Adapt_all_poi_knn_or_range_query(point_cloud, poi_list, 1, k_value, range, knn_query_time, all_poi_knn_query_list);
@@ -3865,16 +3950,16 @@ void CH_or_CH_Adapt_with_output(std::string output_file, point_cloud_geodesic::P
         std::cout << "Point cloud to terrain memory usage: " << point_cloud_to_terrain_memory_usage / 1e6 << " MB" << std::endl;
     }
     std::cout << "Memory usage: " << memory_usage / 1e6 << " MB" << std::endl;
-    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << distance_result / point_cloud_exact_distance - 1 << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << distance_result / terrain_exact_distance - 1 << std::endl;
+    std::cout << "Calculated distance: " << distance_result << ", point cloud exact distance: " << point_cloud_exact_distance << ", point cloud distance error: " << std::abs(distance_result / point_cloud_exact_distance - 1) << ", terrain exact distance: " << terrain_exact_distance << ", terrain distance error: " << std::abs(distance_result / terrain_exact_distance - 1) << std::endl;
     if (run_knn_query)
     {
         std::cout << "Knn query time: " << knn_query_time << " ms" << std::endl;
-        std::cout << "Point cloud knn error: " << point_cloud_knn_query_error << ", terrain knn error: " << terrain_knn_query_error << std::endl;
+        std::cout << "Point cloud knn error: " << std::abs(point_cloud_knn_query_error) << ", terrain knn error: " << std::abs(terrain_knn_query_error) << std::endl;
     }
     if (run_range_query)
     {
         std::cout << "Range query time: " << range_query_time << " ms" << std::endl;
-        std::cout << "Point cloud range error: " << point_cloud_range_query_error << ", terrain range error: " << terrain_range_query_error << std::endl;
+        std::cout << "Point cloud range error: " << std::abs(point_cloud_range_query_error) << ", terrain range error: " << std::abs(terrain_range_query_error) << std::endl;
     }
 
     std::ofstream ofs(output_file, std::ios_base::app);
@@ -3893,16 +3978,18 @@ void CH_or_CH_Adapt_with_output(std::string output_file, point_cloud_geodesic::P
         << point_cloud_to_terrain_time << "\t"
         << 0 << "\t"
         << query_time << "\t"
+        << min_query_time << "\t"
+        << max_query_time << "\t"
         << point_cloud_to_terrain_memory_usage / 1e6 << "\t"
         << memory_usage / 1e6 << "\t"
         << 0 << "\t"
-        << distance_result / point_cloud_exact_distance - 1 << "\t"
-        << distance_result / terrain_exact_distance - 1 << "\t"
+        << std::abs(distance_result / point_cloud_exact_distance - 1) << "\t"
+        << std::abs(distance_result / terrain_exact_distance - 1) << "\t"
         << knn_query_time << "\t"
-        << point_cloud_knn_query_error << "\t"
-        << terrain_knn_query_error << "\t"
+        << std::abs(point_cloud_knn_query_error) << "\t"
+        << std::abs(terrain_knn_query_error) << "\t"
         << range_query_time << "\t"
-        << point_cloud_range_query_error << "\t"
-        << terrain_range_query_error << "\n";
+        << std::abs(point_cloud_range_query_error) << "\t"
+        << std::abs(terrain_range_query_error) << "\n";
     ofs.close();
 }

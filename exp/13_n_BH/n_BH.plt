@@ -67,11 +67,11 @@ set format y "10^{%T}"
 
 set xtics ("0.5" 500, "1" 1000, "1.5" 1500, "2" 2000, "2.5" 2500)
 
-plot "5_CH_Adapt.txt" using 3:($8+$9) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
-"6_Kaul_Adapt.txt" using 3:($8+$9) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
-"7_Dijk_Adapt.txt" using 3:($8+$9) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
-"8_FastFly.txt" using 3:9 notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
-"4_RC_Oracle.txt" using 3:9 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+plot "5_CH_Adapt.txt" using 3:($10+$11) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
+"6_Kaul_Adapt.txt" using 3:($10+$11) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
+"7_Dijk_Adapt.txt" using 3:($10+$11) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
+"8_FastFly.txt" using 3:11 notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
+"4_RC_Oracle.txt" using 3:11 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================
@@ -92,7 +92,7 @@ set format y "10^{%T}"
 
 set xtics ("0.5" 500, "1" 1000, "1.5" 1500, "2" 2000, "2.5" 2500)
 
-plot "4_RC_Oracle.txt" using 3:10 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+plot "4_RC_Oracle.txt" using 3:12 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================
@@ -113,11 +113,11 @@ set format y "10^{%T}"
 
 set xtics ("0.5" 500, "1" 1000, "1.5" 1500, "2" 2000, "2.5" 2500)
 
-plot "5_CH_Adapt.txt" using 3:($5+$7) notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
-"6_Kaul_Adapt.txt" using 3:($5+$7) notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
-"7_Dijk_Adapt.txt" using 3:($5+$7) notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
-"8_FastFly.txt" using 3:7 notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
-"4_RC_Oracle.txt" using 3:7 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+plot "5_CH_Adapt.txt" using 3:($5+$7):($5+$9):($5+$8) notitle with yerrorlines linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
+"6_Kaul_Adapt.txt" using 3:($5+$7):($5+$9):($5+$8) notitle with yerrorlines linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
+"7_Dijk_Adapt.txt" using 3:($5+$7):($5+$9):($5+$8) notitle with yerrorlines linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
+"8_FastFly.txt" using 3:7:9:8 notitle with yerrorlines linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
+"4_RC_Oracle.txt" using 3:7:9:8 notitle with yerrorlines linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================
@@ -188,11 +188,11 @@ set format y "%g"
 
 set xtics ("0.5" 500, "1" 1000, "1.5" 1500, "2" 2000, "2.5" 2500)
 
-plot "5_CH_Adapt.txt" using 3:12 notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
-"6_Kaul_Adapt.txt" using 3:12 notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
-"7_Dijk_Adapt.txt" using 3:12 notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
-"8_FastFly.txt" using 3:12 notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
-"4_RC_Oracle.txt" using 3:12 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+plot "5_CH_Adapt.txt" using 3:14 notitle with linespoints linetype 1 pointtype 8 linecolor rgbcolor "#808080", \
+"6_Kaul_Adapt.txt" using 3:14 notitle with linespoints linetype 1 pointtype 10 linecolor rgbcolor "#808080", \
+"7_Dijk_Adapt.txt" using 3:14 notitle with linespoints linetype 1 pointtype 12 linecolor rgbcolor "#808080", \
+"8_FastFly.txt" using 3:14 notitle with linespoints linetype 1 pointtype 14 linecolor rgbcolor "#0000FF", \
+"4_RC_Oracle.txt" using 3:14 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 unset multiplot

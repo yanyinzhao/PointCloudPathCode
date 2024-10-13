@@ -67,9 +67,9 @@ set format y "10^{%T}"
 
 set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1)
 
-plot "11_SU_Oracle_Adapt.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
-"17_RC_Oracle_NaiveProx_A2A.txt" using 4:($8+$9) notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
-"15_RC_Oracle_A2A.txt" using 4:9 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+plot "11_SU_Oracle_Adapt.txt" using 4:($10+$11) notitle with linespoints linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
+"17_RC_Oracle_NaiveProx_A2A.txt" using 4:($10+$11) notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
+"15_RC_Oracle_A2A.txt" using 4:11 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================
@@ -90,9 +90,9 @@ set format y "10^{%T}"
 
 set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1)
 
-plot "11_SU_Oracle_Adapt.txt" using 4:10 notitle with linespoints linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
-"17_RC_Oracle_NaiveProx_A2A.txt" using 4:10 notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
-"15_RC_Oracle_A2A.txt" using 4:10 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+plot "11_SU_Oracle_Adapt.txt" using 4:12 notitle with linespoints linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
+"17_RC_Oracle_NaiveProx_A2A.txt" using 4:12 notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
+"15_RC_Oracle_A2A.txt" using 4:12 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================
@@ -113,8 +113,8 @@ set format y "%g"
 
 set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1)
 
-plot "17_RC_Oracle_NaiveProx_A2A.txt" using 4:7 notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
-"15_RC_Oracle_A2A.txt" using 4:7 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
+plot "17_RC_Oracle_NaiveProx_A2A.txt" using 4:7:9:8 notitle with yerrorlines linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
+"15_RC_Oracle_A2A.txt" using 4:7:9:8 notitle with yerrorlines linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 
 #=========================================
@@ -182,8 +182,8 @@ set format y "%g"
 set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1)
 set ytics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1)
 
-plot "17_RC_Oracle_NaiveProx_A2A.txt" using 4:12 notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
-"15_RC_Oracle_A2A.txt" using 4:12 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000", \
+plot "17_RC_Oracle_NaiveProx_A2A.txt" using 4:14 notitle with linespoints linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
+"15_RC_Oracle_A2A.txt" using 4:14 notitle with linespoints linetype 1 pointtype 4 linecolor rgbcolor "#FF0000", \
 x notitle with lines dashtype 2 linecolor rgbcolor "black"
 
 
