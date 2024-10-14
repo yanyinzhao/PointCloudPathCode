@@ -1105,10 +1105,10 @@ int cal_iteration(int a, int b)
     return a / b / (b > 300 ? 10 : 1);
 }
 
-void cal_min_max_query(double a, double &b, double &c)
+void cal_min_max_query(double a, double &b, double &c, double d)
 {
-    b = a / 2;
-    c = a * 2;
+    b = a / d;
+    c = a * d;
 }
 
 int cross_product(double p1_x, double p1_y, double p2_x, double p2_y)

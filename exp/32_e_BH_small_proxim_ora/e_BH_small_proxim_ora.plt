@@ -105,7 +105,7 @@ set key above
 unset log y
 
 set xrange [-0.02: 1.02]
-set yrange [0: 0.01]
+set yrange [0: 0.012]
 set label 11 center at graph 0.5,char 1 "(d)" 
 set bmargin 5
 set format x "%g"

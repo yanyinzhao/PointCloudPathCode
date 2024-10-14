@@ -104,7 +104,7 @@ set key above
 set log y
 
 set xrange [-0.02: 1.02]
-set yrange [0.003: 10]
+set yrange [0.001: 20]
 set label 11 center at graph 0.5,char 1 "(d)" 
 set bmargin 5
 set format x "%g"
@@ -112,8 +112,8 @@ set format y "10^{%T}"
 
 set xtics ("0" 0, "0.2" 0.2, "0.4" 0.4, "0.6" 0.6, "0.8" 0.8, "1" 1)
 
-plot "9_SE_Oracle_FastFly_Adapt.txt" using 4:7 notitle with yerrorlines linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
-"10_EAR_Oracle_FastFly_Adapt.txt" using 4:7 notitle with yerrorlines linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
+plot "9_SE_Oracle_FastFly_Adapt.txt" using 4:7:9:8 notitle with yerrorlines linetype 1 pointtype 1 linecolor rgbcolor "#000000", \
+"10_EAR_Oracle_FastFly_Adapt.txt" using 4:7:9:8 notitle with yerrorlines linetype 1 pointtype 2 linecolor rgbcolor "#000000", \
 "4_RC_Oracle.txt" using 4:7:9:8 notitle with yerrorlines linetype 1 pointtype 4 linecolor rgbcolor "#FF0000"
 
 

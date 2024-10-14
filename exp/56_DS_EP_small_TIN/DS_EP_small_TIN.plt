@@ -117,7 +117,7 @@ set key above
 set log y
 
 set xrange [9: 51]
-set yrange [0.0005: 100000]
+set yrange [0.0005: 200000]
 set label 11 center at graph 0.5,char 1 "(d)" 
 set bmargin 5
 set format x "%g"

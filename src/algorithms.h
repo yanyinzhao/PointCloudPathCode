@@ -911,7 +911,7 @@ void RC_Oracle_query(int poi_num, std::unordered_map<int, double> &distance_poi_
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 1000000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 2);
 }
 
 void RC_Oracle_Naive_query(int poi_num, std::unordered_map<int, double> &pairwise_distance_poi_to_poi_map,
@@ -938,7 +938,7 @@ void RC_Oracle_Naive_query(int poi_num, std::unordered_map<int, double> &pairwis
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 1000000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 2);
 }
 
 void RC_Oracle_NaiveProx_all_poi_knn_or_range_query(int poi_num, std::unordered_map<int, double> &distance_poi_to_poi_map,
@@ -1326,7 +1326,7 @@ void SE_Oracle_FastFly_Adapt(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 2);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1448,7 +1448,7 @@ void SE_Oracle_FastFly_Adapt_A2A(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 2);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1571,7 +1571,7 @@ void SE_Oracle_Adapt(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 2);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1697,7 +1697,7 @@ void SE_Oracle_Adapt_A2A(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 2);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1840,7 +1840,7 @@ void EAR_Oracle_FastFly_Adapt(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 2);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -1988,7 +1988,7 @@ void EAR_Oracle_Adapt(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 2);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -2115,7 +2115,7 @@ void SU_Oracle_Adapt(
     auto duration_query_time = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 100000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 2);
 
     auto start_knn_query_time = std::chrono::high_resolution_clock::now();
 
@@ -2173,7 +2173,7 @@ void FastFly(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &po
     auto duration_query_time = std::chrono::duration_cast<std::chrono::microseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 1000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 5);
 }
 
 void Kaul_Adapt_Dijk_Adapt(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list, double e,
@@ -2212,7 +2212,7 @@ void Kaul_Adapt_Dijk_Adapt(point_cloud_geodesic::PointCloud *point_cloud, std::v
     auto duration_query_time = std::chrono::duration_cast<std::chrono::microseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 1000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 5);
 }
 
 void CH_Adapt(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
@@ -2242,7 +2242,7 @@ void CH_Adapt(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &p
     auto duration_query_time = std::chrono::duration_cast<std::chrono::microseconds>(stop_query_time - start_query_time);
     query_time = duration_query_time.count();
     query_time /= 1000;
-    cal_min_max_query(query_time, min_query_time, max_query_time);
+    cal_min_max_query(query_time, min_query_time, max_query_time, 5);
 }
 
 void FastFly_all_poi_knn_or_range_query(point_cloud_geodesic::PointCloud *point_cloud, std::vector<int> &poi_list,
