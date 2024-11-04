@@ -1243,7 +1243,7 @@ void SE_Oracle_FastFly_Adapt(
     double &query_time, double &min_query_time, double &max_query_time, double &memory_usage, double &output_size, double &distance_result,
     std::vector<point_cloud_geodesic::PathPoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
-    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
+    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_query_list)
 {
     auto start_construction_time = std::chrono::high_resolution_clock::now();
 
@@ -1346,7 +1346,7 @@ void SE_Oracle_FastFly_Adapt(
     if (run_range_query)
     {
         all_poi_knn_or_range_query_geo_C(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, 2, k_value, range, all_poi_range_list);
+                                         all_poi, geopairs, 2, k_value, range, all_poi_range_query_list);
     }
 
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
@@ -1361,7 +1361,7 @@ void SE_Oracle_FastFly_Adapt_A2A(
     double &query_time, double &min_query_time, double &max_query_time, double &memory_usage, double &output_size, double &distance_result,
     std::vector<point_cloud_geodesic::PathPoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
-    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
+    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_query_list)
 {
     auto start_construction_time = std::chrono::high_resolution_clock::now();
 
@@ -1468,7 +1468,7 @@ void SE_Oracle_FastFly_Adapt_A2A(
     if (run_range_query)
     {
         all_poi_knn_or_range_query_geo_C(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, 2, k_value, range, all_poi_range_list);
+                                         all_poi, geopairs, 2, k_value, range, all_poi_range_query_list);
     }
 
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
@@ -1485,7 +1485,7 @@ void SE_Oracle_Adapt(
     double &memory_usage, double &output_size, double &distance_result,
     std::vector<geodesic::SurfacePoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
-    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
+    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_query_list)
 {
     geodesic::Mesh mesh;
     point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
@@ -1591,7 +1591,7 @@ void SE_Oracle_Adapt(
     if (run_range_query)
     {
         all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, 2, k_value, range, all_poi_range_list, 1);
+                                         all_poi, geopairs, 2, k_value, range, all_poi_range_query_list, 1);
     }
 
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
@@ -1608,7 +1608,7 @@ void SE_Oracle_Adapt_A2A(
     double &memory_usage, double &output_size, double &distance_result,
     std::vector<geodesic::SurfacePoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
-    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
+    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_query_list)
 {
     geodesic::Mesh mesh;
     point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
@@ -1717,7 +1717,7 @@ void SE_Oracle_Adapt_A2A(
     if (run_range_query)
     {
         all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                         all_poi, geopairs, 2, k_value, range, all_poi_range_list, 1);
+                                         all_poi, geopairs, 2, k_value, range, all_poi_range_query_list, 1);
     }
 
     auto stop_range_query_time = std::chrono::high_resolution_clock::now();
@@ -1733,7 +1733,7 @@ void EAR_Oracle_FastFly_Adapt(
     double &memory_usage, double &output_size, double &distance_result,
     std::vector<point_cloud_geodesic::PathPoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
-    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
+    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_query_list)
 {
     auto start_construction_time = std::chrono::high_resolution_clock::now();
 
@@ -1881,7 +1881,7 @@ void EAR_Oracle_Adapt(
     double &memory_usage, double &output_size, double &distance_result,
     std::vector<geodesic::SurfacePoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
-    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
+    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_query_list)
 {
     geodesic::Mesh mesh;
     point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
@@ -2029,7 +2029,7 @@ void SU_Oracle_Adapt(
     double &memory_usage, double &output_size, double &distance_result,
     std::vector<geodesic::SurfacePoint> &path_result, bool run_knn_query, bool run_range_query,
     int k_value, double range, double &knn_query_time, std::vector<std::vector<int>> &all_poi_knn_query_list,
-    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_list)
+    double &range_query_time, std::vector<std::vector<int>> &all_poi_range_query_list)
 {
     geodesic::Mesh mesh;
     point_cloud_to_terrain_and_initialize_terrain(point_cloud, &mesh, point_cloud_to_terrain_time, point_cloud_to_terrain_memory_usage);
@@ -2140,7 +2140,7 @@ void SU_Oracle_Adapt(
         for (int i = 0; i < 10; i++)
         {
             all_poi_knn_or_range_query_geo_T(poi_num, geo_tree_node_id, geo_node_in_partition_tree_unordered_map,
-                                             all_poi, geopairs, 2, k_value, range, all_poi_range_list, i);
+                                             all_poi, geopairs, 2, k_value, range, all_poi_range_query_list, i);
         }
     }
 
