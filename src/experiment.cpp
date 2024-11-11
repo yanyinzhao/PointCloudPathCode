@@ -1,5 +1,6 @@
 #include "algorithms.h"
 #include <filesystem>
+#include <stdio.h>
 
 struct input_struct
 {
@@ -418,14 +419,15 @@ int main(int argc, char **argv)
     {
         for (int j = 0; j < output_file_list.size(); j++)
         {
-            std::__fs::filesystem::remove(output_folder_list[i] + output_file_list[j]);
+            std::string username = output_folder_list[i] + output_file_list[j];
+            std::remove(username.c_str());
         }
     }
 
-    for (int i = 0; i < output_folder_list.size(); i++)
-    {
-        std::__fs::filesystem::create_directories(output_folder_list[i]);
-    }
+    // for (int i = 0; i < output_folder_list.size(); i++)
+    // {
+    //     std::__fs::filesystem::create_directories(output_folder_list[i]);
+    // }
 
     std::vector<double> e_list = {0.05, 0.1, 0.25, 0.5, 0.75, 1};
 
