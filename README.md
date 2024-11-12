@@ -352,7 +352,7 @@ An example:
 ./main 0 0.5 0 0
 ```
 
-In this example, [data_and_dataset_size_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud and TIN dataset, with dataset size equal to 10086 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run all algorithms.
+In this example, [data_and_dataset_size_and_poi_number_map_index] is 0, [epsilon] is 0.5, [run_knn_query] is 0, [run_range_query] is 0. So, it will run BH point cloud and TIN dataset, with dataset size equal to 1014 and poi number equal to 50, epsilon is 0.5, it will not run all POIs knn query and will not run all POIs range query. It will run all algorithms.
 
 Make sure there is a folder called "input/" and a folder called "output/" under the working directory. They will be used for storing the input/output files.
 
