@@ -76,6 +76,8 @@ If you do not have enough time to run the experiments, you can skip “run all e
 
 The dataset are stored in "input/" folder.
 
+Before you run, please download some of the datasets from https://drive.google.com/file/d/1vKRVx7iTKDhARKW4yn8PbimaDiDqvp3h/view, and save in the "input/" folder, since these datasets are very large, and they exceed the maximum file upload size in Github. 
+
 The datasets are as follows:
 
 - "BH_1014" (small version default resolution BH point cloud or TIN dataset with 1014 points or vertices)
@@ -241,8 +243,6 @@ POI_num
 ## Normal run 
 
 ### Compile command
-
-Before you run, please download some of the datasets from https://drive.google.com/drive/folders/1_Sblnq9XOLFwvPI2lX_l8KJJzVWR828y?usp=drive_link, and save in the "input/" folder, since these datasets are very large, and they exceed the maximum file upload size in Github. The source code are stored in "src/" folder.
 
 ```
 cd src
